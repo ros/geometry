@@ -312,8 +312,10 @@ bool Transformer::waitForTransform(const std::string& target_frame, const std::s
   if (!using_dedicated_thread_)
   {
     std::string error_string = "Do not call waitForTransform unless you are using another thread for populating data. Without a dedicated thread it will always timeout.  If you have a seperate thread servicing tf messages, call setUsingDedicatedThread(true)";
-    *error_msg = error_string;
     ROS_ERROR(error_string.c_str());
+    
+    if (error_msg) 
+      *error_msg = error_string;
     return false;
   }
   ros::Time start_time = ros::Time::now();

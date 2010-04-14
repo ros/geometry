@@ -24,7 +24,7 @@ include $(shell rospack find mk)/svn_checkout.mk
 installed: wiped $(SVN_DIR) Makefile
 	-mkdir -p $(SVN_DIR)/build
 	cd $(SVN_DIR)/build && $(CMAKE) $(CMAKE_ARGS) ..
-	cd $(SVN_DIR)/build && make $(ROS_PARALLEL_JOBS) && make install
+	cd $(SVN_DIR)/build && make $(ROS_PARALLEL_JOBS) && touch src/orocos-kdl.pc && make install
 	if [ `uname` = Darwin ]; then \
 		install_name_tool -id `rospack find kdl`/kdl/lib/liborocos-kdl.1.0.dylib kdl/lib/liborocos-kdl.1.0.dylib; \
 	fi

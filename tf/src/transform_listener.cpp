@@ -257,7 +257,7 @@ void TransformListener::transformPointCloud(const std::string & target_frame, co
 {
   boost::numeric::ublas::matrix<double> transform = transformAsMatrix(net_transform);
 
-  unsigned int length = cloudIn.get_points_size();
+  unsigned int length = cloudIn.points.size();
 
   boost::numeric::ublas::matrix<double> matIn(4, length);
 
@@ -277,9 +277,9 @@ void TransformListener::transformPointCloud(const std::string & target_frame, co
   if (&cloudIn != &cloudOut)
   {
     cloudOut.header = cloudIn.header;
-    cloudOut.set_points_size(length);
-    cloudOut.set_channels_size(cloudIn.get_channels_size());
-    for (unsigned int i = 0 ; i < cloudIn.get_channels_size() ; ++i)
+    cloudOut.points.resize(length);
+    cloudOut.channels.resize(cloudIn.channels.size());
+    for (unsigned int i = 0 ; i < cloudIn.channels.size() ; ++i)
       cloudOut.channels[i] = cloudIn.channels[i];
   }
 

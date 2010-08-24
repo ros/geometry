@@ -8,5 +8,4 @@
   <url>http://ros.org/wiki/geometry</url>
   <depend stack="common_msgs" /> <!-- sensor_msgs, geometry_msgs -->
   <depend stack="ros" /> <!-- rosconsole, roscpp, message_filters, rostest, rospy, roswtf -->
-
 </stack>

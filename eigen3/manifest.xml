@@ -1,0 +1,16 @@
+<package>
+  <description brief="Eigen 3">
+    This package contains the new 3.x version of the Eigen C++ template library for linear algebra. 
+  </description>
+
+  <author>Gaeal Guennebaud and Benoit Jacob</author>
+  <license>LGPL</license>
+  <review status="beta" notes=""/>
+  <url>http://eigen.tuxfamily.org/</url>
+  <export>
+    <cpp cflags="-I${prefix}/include -DEIGEN_USE_NEW_STDVECTOR" lflags="" />
+    <doxymaker external="http://eigen.tuxfamily.org/api/"/>
+  </export>
+  <platform os="ubuntu" version="10.04"/>
+  <platform os="ubuntu" version="10.10"/>
+</package>

@@ -3,4 +3,4 @@ include($ENV{ROS_ROOT}/core/rosbuild/rosbuild.cmake)
 set(ROS_BUILD_TYPE Release)
 rosbuild_init()
 
-rosbuild_add_rostest(test/run_tests.launch)
+rosbuild_add_rostest_future(test/run_tests.launch)

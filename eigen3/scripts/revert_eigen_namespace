@@ -12,4 +12,6 @@ for f in $(grep -lr 'namespace Eigen3\|Eigen3::\|Eigen3/' $1 | grep -v '.svn'); 
     sed -i -e 's/namespace Eigen3/namespace Eigen/g' $f
     sed -i -e 's/Eigen3::/Eigen::/g' $f
     sed -i -e 's/Eigen3\//Eigen\//g' $f
+    sed -i -e 's/^#ifndef EIGEN3_\(.*\)_H/#ifndef EIGEN_\1_H/g' $f 
+    sed -i -e 's/^#define EIGEN3_\(.*\)_H/#define EIGEN_\1_H/g' $f 
 done

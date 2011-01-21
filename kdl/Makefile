@@ -37,7 +37,7 @@ installed: wiped $(SOURCE_DIR)/unpacked
 	cd $(SOURCE_DIR)/build && $(CMAKE) $(CMAKE_ARGS) ..
 	cd $(SOURCE_DIR)/build && make $(ROS_PARALLEL_JOBS) && touch src/orocos-kdl.pc && make install
 	if [ `uname` = Darwin ]; then \
-		install_name_tool -id `rospack find kdl`/kdl/lib/liborocos-kdl.1.0.dylib kdl/lib/liborocos-kdl.1.0.dylib; \
+		install_name_tool -id `rospack find kdl`/lib/liborocos-kdl.1.0.dylib kdl/lib/liborocos-kdl.1.0.dylib; \
 	fi
 	touch installed
 

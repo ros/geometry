@@ -21,7 +21,7 @@ EIGEN2_DEFINE=`rospack cflags-only-other eigen`
 TINYXML_INCLUDE_DIR=`rospack cflags-only-I tinyxml| cut -d ' ' -f 1`
 CMAKE_ARGS = -DCMAKE_INSTALL_PREFIX=$(INSTALL_DIR)/ \
 		-DPYTHON_BINDINGS=ON \
-                -DCMAKE_CXX_FLAGS=$(EIGEN2_DEFINE) \
+                -DCMAKE_CXX_FLAGS="$(EIGEN2_DEFINE)" \
 	        -DPYTHON_SITE_PACKAGES_DIR=$(INSTALL_DIR)/lib \
 		-DBUILD_MODELS=OFF \
 		-DENABLE_TESTS=ON \

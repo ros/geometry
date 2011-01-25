@@ -54,3 +54,14 @@ Index: src/bindings/python/CMakeLists.txt
      }
      solver1.JntToCart(jnt1, f1);
      solver2.JntToCart(jnt2, f2);
+--- tests/inertiatest.cpp.orig	2011-01-25 13:51:30.895517720 -0800
++++ tests/inertiatest.cpp	2011-01-25 13:51:44.994484876 -0800
+@@ -136,7 +136,7 @@
+     RotationalInertia Ic;
+     random(mass);
+     random(c);
+-    Matrix3d::Map(Ic.data).part<SelfAdjoint>()= Matrix3d::Random().part<LowerTriangular>();
++    Matrix3d::Map(Ic.data) = Matrix3d::Random().eval().selfadjointView<Lower>();
+     RigidBodyInertia RBI2(mass,c,Ic);
+     ArticulatedBodyInertia I2(RBI2);
+     ArticulatedBodyInertia I1(mass,c,Ic);

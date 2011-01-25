@@ -26,6 +26,7 @@ HG_REVISION = default
 #	HG_REVISION: -
 
 $(HG_DIR):
+	mkdir -p build
 	hg clone $(HG_URL) $(HG_DIR)
 	cd $(HG_DIR) && hg up $(HG_REVISION)
 	touch rospack_nosubdirs

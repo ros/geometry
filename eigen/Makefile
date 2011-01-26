@@ -54,8 +54,6 @@ $(INSTALL_DIR)/installed: $(HG_DIR)
 	mkdir -p $(INSTALL_DIR)
 	cp -r $(HG_DIR)/Eigen $(INSTALL_DIR)
 	touch $(INSTALL_DIR)/installed
-	#hack for http://eigen.tuxfamily.org/bz/show_bug.cgi?id=160
-	touch $(INSTALL_DIR)/Eigen/src/Eigen2Support/QR.h
 
 clean:
 	rm -rf $(HG_DIR) $(INSTALL_DIR)

@@ -15,7 +15,7 @@
   <review status="3rdparty doc reviewed" notes="ticket:2879"/>
   <url>http://eigen.tuxfamily.org/</url>
   <export>
-    <cpp cflags="-I${prefix}/include -DEIGEN_USE_NEW_STDVECTOR -DEIGEN2_SUPPORT_STAGE10_FULL_EIGEN2_API" lflags="" />
+    <cpp cflags="-I${prefix}/include -DEIGEN_USE_NEW_STDVECTOR -DEIGEN2_SUPPORT_STAGE30_FULL_EIGEN3_API" lflags="" />
     <doxymaker external="http://eigen.tuxfamily.org/api/"/>
   </export>
   <platform os="ubuntu" version="9.04"/>

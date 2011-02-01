@@ -20,6 +20,7 @@
     <cpp cflags="-I${prefix}/include -DEIGEN_USE_NEW_STDVECTOR -DEIGEN2_SUPPORT_STAGE10_FULL_EIGEN2_API" lflags="" />
     <doxymaker external="http://eigen.tuxfamily.org/api/"/>
   </export>
+  <rosdep name="mercurial"/>
   <platform os="ubuntu" version="9.04"/>
   <platform os="ubuntu" version="9.10"/>
   <platform os="ubuntu" version="10.04"/>

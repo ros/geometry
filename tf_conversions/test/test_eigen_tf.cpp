@@ -63,7 +63,7 @@ TEST(TFEigenConversions, tf_eigen_quaternion)
   t[2] = gen_rand(-1.0,1.0);
   t[3] = gen_rand(-1.0,1.0);
   t.normalize();
-  Eigen::Quaterniond k;
+  Eigen::eigen2_Quaterniond k;
   RotationTFToEigen(t,k);
 
   ASSERT_NEAR(t[0],k.coeffs()(0),1e-6);
@@ -85,7 +85,7 @@ TEST(TFEigenConversions, tf_eigen_transform)
   t.setOrigin(tf::Vector3(gen_rand(-10,10),gen_rand(-10,10),gen_rand(-10,10)));
   t.setRotation(tq);
 
-  Eigen::Transform3d k;
+  Eigen::eigen2_Transform3d k;
   TransformTFToEigen(t,k);
 
   for(int i=0; i < 3; i++)
@@ -105,8 +105,8 @@ TEST(TFEigenConversions, tf_eigen_transform)
 TEST(TFEigenConversions, eigen_tf_transform)
 {
   tf::Transform t;
-  Eigen::Transform3d k;
-  Eigen::Quaterniond kq;
+  Eigen::eigen2_Transform3d k;
+  Eigen::eigen2_Quaterniond kq;
   kq.coeffs()(0) = gen_rand(-1.0,1.0);
   kq.coeffs()(1) = gen_rand(-1.0,1.0);
   kq.coeffs()(2) = gen_rand(-1.0,1.0);

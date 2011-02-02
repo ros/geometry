@@ -1,4 +1,4 @@
-for p in $(rospack depends-on1 eigen); do
+for p in $(rospack depends-on eigen); do
     echo "Converting $p to Eigen2 support "
     path=$(rospack find $p)
 

@@ -24,7 +24,7 @@ for p in $(rospack depends-on1 eigen); do
         # Transform/Translation/Scaling   # Not doing Bare instances
         sed -i -e 's/Eigen::\(Transform\|Translation\|Scaling\)/Eigen::eigen2_\1/g' $f
         # Transform/Translation/Scaling [23][fd] 
-        sed -i -e 's/\([^a-zA-Z0-9_:]\)\(Transform\|Translation\|Scaling\)\([23]\?[fd]\?[^a-zA-Z0-9_]\)/\1eigen2_\2\3/g' $f
+        sed -i -e 's/\([^a-zA-Z0-9_:]\)\(Transform\|Translation\|Scaling\)\([23][fd][^a-zA-Z0-9_]\)/\1eigen2_\2\3/g' $f
         
         sed -i -e 's/AlignedBox/eigen2_AlignedBox/g' $f
         sed -i -e 's/Hyperplane/eigen2_Hyperplane/g' $f

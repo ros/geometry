@@ -43,16 +43,16 @@ void VectorTFToEigen(const tf::Vector3& t, Eigen::Vector3d& k);
 void VectorEigenToTF(const Eigen::Vector3d& k, tf::Vector3& t);
 
 /// Converts a tf Quaternion into an Eigen Quaternion
-void RotationTFToEigen(const tf::Quaternion& t, Eigen::Quaterniond& k);
+void RotationTFToEigen(const tf::Quaternion& t, Eigen::eigen2_Quaterniond& k);
 
 /// Converts an Eigen Quaternion into a tf Quaternion
-void RotationEigenToTF(const Eigen::Quaterniond& k, tf::Quaternion& t);
+void RotationEigenToTF(const Eigen::eigen2_Quaterniond& k, tf::Quaternion& t);
 
-/// Converts a tf Transform into an Eigen Transform3d
-void TransformTFToEigen(const tf::Transform &t, Eigen::Transform3d &k);
+/// Converts a tf eigen2_Transform into an Eigen Transform3d
+void TransformTFToEigen(const tf::Transform &t, Eigen::eigen2_Transform3d &k);
 
-/// Converts an Eigen Transform3d into a tf Transform
-void TransformEigenToTF(const Eigen::Transform3d &k, tf::Transform &t);
+/// Converts an Eigen eigen2_Transform3d into a tf Transform
+void TransformEigenToTF(const Eigen::eigen2_Transform3d &k, tf::Transform &t);
 
 }
 

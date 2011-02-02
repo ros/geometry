@@ -45,7 +45,7 @@ namespace tf {
 void twistKDLToEigen(const KDL::Twist &k, Eigen::Matrix<double, 6, 1> &e);
 
 /// Converts a KDL frame into an Eigen transform
-void transformKDLToEigen(const KDL::Frame &k, Eigen::Transform3d &e);
+void transformKDLToEigen(const KDL::Frame &k, Eigen::eigen2_Transform3d &e);
 
 } // namespace
 

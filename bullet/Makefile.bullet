@@ -54,7 +54,11 @@ installed: wiped $(SOURCE_DIR)/unpacked
 	cd $(SOURCE_DIR) && cmake -DCMAKE_INSTALL_PREFIX=$(CURDIR) -DCMAKE_CXX_FLAGS="-fPIC -DBT_USE_DOUBLE_PRECISION" -D BUILD_SHARED_LIBS=on . 
 	# Bullet appears not be parallel-make safe
 	#cd $(SOURCE_DIR) && make $(PARALLEL_JOBS) 
+ifneq ($(MAKE),)
+	cd $(SOURCE_DIR) && $(MAKE) $(BULLET_TARGETS) 
+else
 	cd $(SOURCE_DIR) && make $(BULLET_TARGETS) 
+endif
 	# The 'install' target only works with cmake 2.6 for some reason
 	#cd $(SOURCE_DIR) && make $(PARALLEL_JOBS) install
 	mkdir -p lib
@@ -64,14 +68,23 @@ installed: wiped $(SOURCE_DIR)/unpacked
 	touch installed
 
 wiped: Makefile.bullet
+ifneq ($(MAKE),)
+	$(MAKE) -f Makefile.bullet wipe
+else
 	make -f Makefile.bullet wipe
+endif
 	touch wiped
 
 clean:
 	rm -f installed
 	rm -fr lib include
+ifneq ($(MAKE),)
+	-$(MAKE) -C $(SVN_DIR) clean
+	-cd $(SOURCE_DIR) && $(MAKE) clean
+else
 	-make -C $(SVN_DIR) clean
 	-cd $(SOURCE_DIR) && make clean
+endif
 
 wipe: clean
 	-rm -f patched

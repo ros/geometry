@@ -8,8 +8,13 @@ rosbuild_add_boost_directories()
 MAKE_DIRECTORY(${PROJECT_SOURCE_DIR}/src/)
 
 # Build Bullet
+if($ENV{MAKE})
+execute_process(COMMAND cmake -E chdir ${PROJECT_SOURCE_DIR} $ENV{MAKE} -f Makefile.bullet
+                RESULT_VARIABLE _make_failed)
+else($ENV{MAKE})
 execute_process(COMMAND cmake -E chdir ${PROJECT_SOURCE_DIR} make -f Makefile.bullet
                 RESULT_VARIABLE _make_failed)
+endif($ENV{MAKE})
 if(_make_failed)
   message(FATAL_ERROR "Build of Bullet failed")
 endif(_make_failed)

@@ -51,7 +51,7 @@ build_tarball: $(SVN_DIR) patched
 
 
 installed: wiped $(SOURCE_DIR)/unpacked
-	cd $(SOURCE_DIR) && cmake -DCMAKE_INSTALL_PREFIX=$(CURDIR) -DCMAKE_CXX_FLAGS="-fPIC -DBT_USE_DOUBLE_PRECISION" -D BUILD_SHARED_LIBS=on . 
+	cd $(SOURCE_DIR) && cmake -DCMAKE_INSTALL_PREFIX=$(CURDIR) -DCMAKE_CXX_FLAGS="-fPIC -DBT_USE_DOUBLE_PRECISION" -D BUILD_SHARED_LIBS=on -DCMAKE_TOOLCHAIN_FILE=`rospack find rosbuild`/rostoolchain.cmake . 
 	# Bullet appears not be parallel-make safe
 	#cd $(SOURCE_DIR) && make $(PARALLEL_JOBS) 
 ifneq ($(MAKE),)

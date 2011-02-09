@@ -71,7 +71,7 @@
 <rosdep name="glut"/>
 <export>
 <cpp cflags="-I${prefix}/include -DBT_USE_DOUBLE_PRECISION -DBT_EULER_DEFAULT_ZYX" lflags="-L${prefix}/lib -Wl,-rpath,${prefix}/lib -lBulletDynamics -lBulletCollision -lLinearMath" />
-  <doxymaker external="http://www.continuousphysics.com/Bullet/BulletFull/index.html" />
+    <rosdoc config="rosdoc.yaml" />
 <swig flags="-python -c++ -I${prefix}/include -DBT_USE_DOUBLE_PRECISION -DBT_EULER_DEFAULT_ZYX "/>
 </export>
   <platform os="ubuntu" version="9.04"/>

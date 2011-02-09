@@ -88,6 +88,12 @@ endif
 
 wipe: clean
 	-rm -f patched
-	-rm -rf bullet_svn
+	-rm -rf $(SVN_DIR)
 	-rm -rf build
 
+preclean: Makefile.bullet
+	make -f Makefile.bullet preclean
+	touch preclean
+
+preclean_svn: clean
+	-rm -rf $(SVN_DIR)

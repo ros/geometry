@@ -2,12 +2,15 @@
   <description brief="Eigen">
     This package contains version 3 of the Eigen C++ template
     library for linear algebra. It automatically downloads, extracts
-    and compiles a tarball. For each major release of the Eigen
+    a tarball. For each major release of the Eigen
     library, the tarball will get updated. This ROS package does not
     intend to modify Eigen in any way, it simply provides a convenient
     way to download and compile the Eigen library. When Eigen becomes
     available from the major OS package managers, this ROS package is
     likely to be replaced by a system dependency.
+
+    This package contains Eigen3 with EIGEN2_SUPPORT enabled.  In
+    future versions EIGEN2_SUPPORT will be removed. 
   </description>
 
   <author>Gaeal Guennebaud and Benoit Jacob</author>
@@ -16,8 +19,6 @@
   <url>http://eigen.tuxfamily.org/</url>
   <export>
     <cpp cflags="-I${prefix}/include -DEIGEN_USE_NEW_STDVECTOR -DEIGEN2_SUPPORT" lflags="" /> <!-- stage 30 -->
-    <!--cpp cflags="-I${prefix}/include -DEIGEN_USE_NEW_STDVECTOR -DEIGEN2_SUPPORT_STAGE20_RESOLVE_API_CONFLICTS" lflags="" /-->
-    <!--cpp cflags="-I${prefix}/include -DEIGEN_USE_NEW_STDVECTOR -DEIGEN2_SUPPORT_STAGE10_FULL_EIGEN2_API" lflags="" /-->
     <doxymaker external="http://eigen.tuxfamily.org/api/"/>
   </export>
   <rosdep name="mercurial"/>

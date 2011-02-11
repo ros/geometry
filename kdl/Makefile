@@ -40,7 +40,8 @@ else
 	cd $(SOURCE_DIR)/build && make $(ROS_PARALLEL_JOBS) && touch src/orocos-kdl.pc && make install
 endif
 	if [ `uname` = Darwin ]; then \
-		install_name_tool -id kdl/lib/liborocos-kdl.1.0.dylib `rospack find kdl`/lib/liborocos-kdl.1.0.dylib ; \
+		install_name_tool -id `rospack find kdl`/lib/liborocos-kdl.1.0.dylib lib/liborocos-kdl.1.0.dylib; \
+
 	fi
 	touch installed
 

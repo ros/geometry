@@ -41,7 +41,6 @@ else
 endif
 	if [ `uname` = Darwin ]; then \
 		install_name_tool -id `rospack find kdl`/lib/liborocos-kdl.1.0.dylib lib/liborocos-kdl.1.0.dylib; \
-
 	fi
 	touch installed
 

@@ -261,9 +261,9 @@ Frame
 
    Construct an identity frame
 
-  .. method:: __init__(pos, rot)
+  .. method:: __init__(rot, pos)
 
-   Construct a frame from a vector and a rotation
+   Construct a frame from a rotation and a vector
 
    :param pos: the position of the frame origin
 

@@ -93,6 +93,8 @@ TransformListener::TransformListener(const ros::NodeHandle& nh, ros::Duration ma
     init();
 }
 
+bool TransformListener::ok() const { return ros::ok(); }
+
 TransformListener::~TransformListener()
 {
   using_dedicated_thread_ = false;

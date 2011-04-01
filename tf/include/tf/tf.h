@@ -394,6 +394,10 @@ protected:
       return ros::Time(wt.sec, wt.nsec);
     };
   }
+
+  // Allows broadcaster to check ok() before wait for transform
+  // Always returns true in base class 
+  virtual bool ok() const;
    
   /************************* Internal Functions ****************************/
 

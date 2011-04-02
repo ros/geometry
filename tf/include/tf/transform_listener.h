@@ -185,6 +185,9 @@ private:
     }
   };
 
+protected:
+  bool ok() const; // For #4882
+  
 };
 }
 

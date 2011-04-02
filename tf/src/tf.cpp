@@ -383,6 +383,9 @@ bool Transformer::waitForTransform(const std::string& target_frame, const std::s
   ros::Time start_time = now();
   while (!canTransform(target_frame, source_frame, time, error_msg))
   {
+    if (!ok())
+      return false;
+
     if ((now() - start_time) >= timeout)
       return false;
     usleep(polling_sleep_duration.sec * 1000000 + polling_sleep_duration.nsec / 1000); //hack to avoid calling ros::Time::now() in Duration.sleep
@@ -1052,6 +1055,8 @@ std::string Transformer::allFramesAsDot() const
   mstream << "}";
   return mstream.str();
 }
+
+bool Transformer::ok() const { return true; }
 
 void Transformer::getFrameStrings(std::vector<std::string> & vec) const
 {

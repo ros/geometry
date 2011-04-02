@@ -385,6 +385,9 @@ protected:
   bool fall_back_to_wall_time_;
   
  protected:
+  // A pass through, which on the listener will call ros::ok() ticket:4882
+  virtual bool ok() const;
+
   /** Hack method to work around #4150 */
   ros::Time now() const { 
     if (!fall_back_to_wall_time_) 

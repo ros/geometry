@@ -103,6 +103,9 @@ TransformListener::~TransformListener()
   }
 }
 
+//Override Transformer::ok() for ticket:4882
+bool TransformListener::ok() const { return ros::ok(); }
+
 void TransformListener::init()
 {
   message_subscriber_tf_ = node_.subscribe<tf::tfMessage>("/tf", 100, boost::bind(&TransformListener::subscription_callback, this, _1)); ///\todo magic number

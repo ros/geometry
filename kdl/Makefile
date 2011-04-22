@@ -49,7 +49,7 @@ docs:
 	cd $(SOURCE_DIR)/build && make docs
 	ln -s $(SOURCE_DIR)/build/doc doc
 
-wiped: Makefile $(PATCH) kdl-31715.tar.gz.md5sum
+wiped: Makefile $(PATCH) $(MD5SUM_FILE)
 ifneq ($(MAKE),)
 	$(MAKE) wipe
 else

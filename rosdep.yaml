@@ -6,8 +6,8 @@ glut:
   gentoo: freeglut
   freebsd: libglut
 python-sip4:
-  ubuntu: python-sip4-dev sip4
-  debian: python-sip4-dev sip4
+  ubuntu: python-sip-dev
+  debian: python-sip-dev
   fedora: sip-devel
   macports: py26-sip
   gentoo: dev-python/sip

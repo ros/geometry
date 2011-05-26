@@ -356,7 +356,7 @@ private:
     {
       const std::string& target_frame = *target_it;
 
-      if (target_frame != frame_id)
+      if (target_frame != frame_id && stamp != ros::Time(0))
       {
         ros::Time latest_transform_time ;
 

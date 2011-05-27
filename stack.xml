@@ -8,6 +8,7 @@
   <url>http://ros.org/wiki/geometry</url>
   <depend stack="common_msgs" /> <!-- sensor_msgs, geometry_msgs -->
   <depend stack="orocos_kinematics_dynamics" /> <!-- kdl -->
+  <depend stack="eigen" />
   <depend stack="ros" />
   <depend stack="ros_comm" /> <!-- rosconsole, roscpp, message_filters, rostest, rospy, roswtf -->
 

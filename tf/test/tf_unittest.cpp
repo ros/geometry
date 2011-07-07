@@ -278,6 +278,130 @@ void setupTree(tf::Transformer& mTR, const std::string& mode, const ros::Time & 
   CHECK_QUATERNION_NEAR(_out.getRotation(),  _expected.getRotation(), _eps);
 
 
+// Simple test with compound transform
+TEST(tf, lookupTransform_compount)
+{
+	/*
+	 * Frames
+	 *
+	 * root->a
+	 *
+	 * root->b->c->d
+	 *
+	 */
+
+	double epsilon = 2e-5; // Larger epsilon for interpolation values
+
+    tf::Transformer mTR;
+
+    StampedTransform tsa;
+    tsa.frame_id_ = "root";
+    tsa.child_frame_id_  = "a";
+    tsa.setOrigin(btVector3(1,1,1));
+    btQuaternion q1;
+    q1.setRPY(0.25, .5, .75);
+    tsa.setRotation(q1);
+    EXPECT_TRUE(mTR.setTransform(tsa, "authority"));
+
+    StampedTransform tsb;
+    tsb.frame_id_ = "root";
+    tsb.child_frame_id_  = "b";
+    tsb.setOrigin(btVector3(-1, 0, -1));
+    btQuaternion q2;
+    q2.setRPY(1.0, 0.25, 0.5);
+    tsb.setRotation(q2);
+    EXPECT_TRUE(mTR.setTransform(tsb, "authority"));
+
+    StampedTransform tsc;
+    tsc.frame_id_ = "b";
+    tsc.child_frame_id_  = "c";
+    tsc.setOrigin(btVector3(0.0, 2.0, 0.5));
+    btQuaternion q3;
+    q3.setRPY(0.25, 0.75, 1.25);
+    tsc.setRotation(q3);
+    EXPECT_TRUE(mTR.setTransform(tsc, "authority"));
+
+    StampedTransform tsd;
+    tsd.frame_id_ = "c";
+    tsd.child_frame_id_  = "d";
+    tsd.setOrigin(btVector3(0.5, -1, 1.5));
+    btQuaternion q4;
+    q4.setRPY(-0.5, 1.0, -0.75);
+    tsd.setRotation(q4);
+    EXPECT_TRUE(mTR.setTransform(tsd, "authority"));
+
+
+    btTransform expected_ab, expected_bc, expected_cb, expected_ac, expected_ba, expected_ca, expected_ad, expected_da, expected_bd, expected_db, expected_rootd, expected_rootc;
+
+    expected_ab = tsa.inverse() * tsb;
+    expected_ac = tsa.inverse() * tsb * tsc;
+    expected_ad = tsa.inverse() * tsb * tsc * tsd;
+    expected_cb = tsc.inverse();
+    expected_bc = tsc;
+    expected_bd = tsc * tsd;
+    expected_db = expected_bd.inverse();
+    expected_ba = tsb.inverse() * tsa;
+    expected_ca = tsc.inverse() * tsb.inverse() * tsa;
+    expected_da = tsd.inverse() * tsc.inverse() * tsb.inverse() * tsa;
+    expected_rootd = tsb * tsc * tsd;
+    expected_rootc = tsb * tsc;
+
+    // root -> b -> c
+    StampedTransform out_rootc;
+    mTR.lookupTransform("root", "c", ros::Time(), out_rootc);
+    CHECK_TRANSFORMS_NEAR(out_rootc, expected_rootc, epsilon);
+
+    // root -> b -> c -> d
+    StampedTransform out_rootd;
+    mTR.lookupTransform("root", "d", ros::Time(), out_rootd);
+    CHECK_TRANSFORMS_NEAR(out_rootd, expected_rootd, epsilon);
+
+    // a <- root -> b
+    StampedTransform out_ab;
+    mTR.lookupTransform("a", "b", ros::Time(), out_ab);
+    CHECK_TRANSFORMS_NEAR(out_ab, expected_ab, epsilon);
+
+    StampedTransform out_ba;
+    mTR.lookupTransform("b", "a", ros::Time(), out_ba);
+    CHECK_TRANSFORMS_NEAR(out_ba, expected_ba, epsilon);
+
+    // a <- root -> b -> c
+    StampedTransform out_ac;
+    mTR.lookupTransform("a", "c", ros::Time(), out_ac);
+    CHECK_TRANSFORMS_NEAR(out_ac, expected_ac, epsilon);
+
+    StampedTransform out_ca;
+    mTR.lookupTransform("c", "a", ros::Time(), out_ca);
+    CHECK_TRANSFORMS_NEAR(out_ca, expected_ca, epsilon);
+
+    // a <- root -> b -> c -> d
+    StampedTransform out_ad;
+    mTR.lookupTransform("a", "d", ros::Time(), out_ad);
+    CHECK_TRANSFORMS_NEAR(out_ad, expected_ad, epsilon);
+
+    StampedTransform out_da; 
+    mTR.lookupTransform("d", "a", ros::Time(), out_da);
+    CHECK_TRANSFORMS_NEAR(out_da, expected_da, epsilon);
+
+    // b -> c
+    StampedTransform out_cb;
+    mTR.lookupTransform("c", "b", ros::Time(), out_cb);
+    CHECK_TRANSFORMS_NEAR(out_cb, expected_cb, epsilon);
+
+    StampedTransform out_bc;
+    mTR.lookupTransform("b", "c", ros::Time(), out_bc);
+    CHECK_TRANSFORMS_NEAR(out_bc, expected_bc, epsilon);
+
+    // b -> c -> d
+    StampedTransform out_bd;
+    mTR.lookupTransform("b", "d", ros::Time(), out_bd);
+    CHECK_TRANSFORMS_NEAR(out_bd, expected_bd, epsilon);
+
+    StampedTransform out_db;
+    mTR.lookupTransform("d", "b", ros::Time(), out_db);
+    CHECK_TRANSFORMS_NEAR(out_db, expected_db, epsilon);
+}
+
 // Time varying transforms, testing interpolation
 TEST(tf, lookupTransform_helix_configuration)
 {

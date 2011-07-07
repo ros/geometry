@@ -278,6 +278,123 @@ void setupTree(tf::Transformer& mTR, const std::string& mode, const ros::Time & 
   CHECK_QUATERNION_NEAR(_out.getRotation(),  _expected.getRotation(), _eps);
 
 
+// Time varying transforms, testing interpolation
+TEST(tf, lookupTransform_helix_configuration)
+{
+	double epsilon = 2e-5; // Larger epsilon for interpolation values
+
+    tf::Transformer mTR;
+
+    ros::Time     t0        = ros::Time() + ros::Duration(10);
+    ros::Duration step      = ros::Duration(0.05);
+    ros::Duration half_step = ros::Duration(0.025);
+    ros::Time     t1        = t0 + ros::Duration(5.0);
+
+    /*
+     * a->b->c
+     *
+     * b.z = vel * (t - t0)
+     * c.x = cos(theta * (t - t0))
+     * c.y = sin(theta * (t - t0))
+     *
+     * a->d
+     *
+     * d.z = 2 * cos(theta * (t - t0))
+     * a->d transforms are at half-step between a->b->c transforms
+     */
+
+    double theta = 0.25;
+    double vel   = 1.0;
+
+    for (ros::Time t = t0; t <= t1; t += step)
+    {
+    	ros::Time t2 = t + half_step;
+    	double dt  = (t - t0).toSec();
+    	double dt2 = (t2 - t0).toSec();
+
+        StampedTransform ts;
+        ts.setIdentity();
+        ts.frame_id_        = "a";
+        ts.stamp_           = t;
+        ts.child_frame_id_  = "b";
+        ts.setOrigin(btVector3(0.0, 0.0, vel * dt));
+        EXPECT_TRUE(mTR.setTransform(ts, "authority"));
+
+        StampedTransform ts2;
+        ts2.setIdentity();
+        ts2.frame_id_        = "b";
+        ts2.stamp_           = t;
+        ts2.child_frame_id_  = "c";
+        ts2.setOrigin(btVector3(cos(theta*dt), sin(theta*dt),0));
+        btQuaternion q;
+        q.setRPY(0,0,theta*dt);
+        ts2.setRotation(q);
+        EXPECT_TRUE(mTR.setTransform(ts2, "authority"));
+
+        StampedTransform ts3;
+        ts3.setIdentity();
+        ts3.frame_id_        = "a";
+        ts3.stamp_           = t2;
+        ts3.child_frame_id_  = "d";
+        ts3.setOrigin(btVector3(0, 0, cos(theta*dt2)));
+        EXPECT_TRUE(mTR.setTransform(ts3, "authority"));
+    }
+
+    for (ros::Time t = t0 + half_step; t < t1; t += step)
+    {
+    	ros::Time t2 = t + half_step;
+    	double dt  = (t - t0).toSec();
+    	double dt2 = (t2 - t0).toSec();
+
+        StampedTransform out_ab;
+        mTR.lookupTransform("a", "b", t, out_ab);
+        btTransform expected_ab;
+        expected_ab.setIdentity();
+        expected_ab.setOrigin(btVector3(0.0, 0.0, vel*dt));
+        CHECK_TRANSFORMS_NEAR(out_ab, expected_ab, epsilon);
+
+        StampedTransform out_ac;
+        mTR.lookupTransform("a", "c", t, out_ac);
+        btTransform expected_ac;
+        expected_ac.setOrigin(btVector3(cos(theta*dt), sin(theta*dt), vel*dt));
+        btQuaternion q;
+        q.setRPY(0,0,theta*dt);
+        expected_ac.setRotation(q);
+        CHECK_TRANSFORMS_NEAR(out_ac, expected_ac, epsilon);
+
+        StampedTransform out_ad;
+        mTR.lookupTransform("a", "d", t, out_ad);
+        EXPECT_NEAR(out_ad.getOrigin().z(), cos(theta*dt), epsilon);
+
+        StampedTransform out_cd;
+        mTR.lookupTransform("c", "d", t2, out_cd);
+        btTransform expected_cd;
+        expected_cd.setOrigin(btVector3(-1, 0, cos(theta * dt2) - vel * dt2));
+        btQuaternion q2;
+        q2.setRPY(0,0,-theta*dt2);
+        expected_cd.setRotation(q2);
+        CHECK_TRANSFORMS_NEAR(out_cd, expected_cd, epsilon);
+    }
+
+    // Advanced API
+    for (ros::Time t = t0 + half_step; t < t1; t += (step + step))
+    {
+    	ros::Time t2 = t + step;
+    	double dt  = (t - t0).toSec();
+    	double dt2 = (t2 - t0).toSec();
+
+        StampedTransform out_cd2;
+        mTR.lookupTransform("c", t, "d", t2, "a", out_cd2);
+        btTransform expected_cd2;
+        expected_cd2.setOrigin(btVector3(-1, 0, cos(theta*dt2) - vel*dt));
+        btQuaternion mq2;
+        mq2.setRPY(0,0,-theta*dt);
+        expected_cd2.setRotation(mq2);
+        CHECK_TRANSFORMS_NEAR(out_cd2, expected_cd2, epsilon);
+    }
+
+}
+
 TEST(tf, lookupTransform_ring45)
 {
   double epsilon = 1e-6;

@@ -556,7 +556,6 @@ TEST(tf, lookupTransform_ring45)
 
   while  (permuter.step())
   {
-
     tf::Transformer mTR;
     setupTree(mTR, "ring_45", eval_time, interpolation_space);
 
@@ -564,9 +563,10 @@ TEST(tf, lookupTransform_ring45)
     mTR.lookupTransform(source_frame, target_frame, eval_time, out_xfm);
 
     //printf("source_frame %s target_frame %s time %f\n", source_frame.c_str(), target_frame.c_str(), eval_time.toSec());
-    EXPECT_EQ(out_xfm.stamp_, eval_time); // WTF
-    EXPECT_TRUE(out_xfm.frame_id_       == source_frame || out_xfm.frame_id_       == "/" + source_frame);
-    EXPECT_TRUE(out_xfm.child_frame_id_ == target_frame || out_xfm.child_frame_id_ == "/" + target_frame);
+    if (source_frame != target_frame)
+    	EXPECT_EQ(out_xfm.stamp_, 		eval_time);
+    EXPECT_TRUE(out_xfm.frame_id_       == source_frame || out_xfm.frame_id_       == "/" + source_frame) << "Expected frame_id_ to equal source_frame: " << out_xfm.frame_id_ << ", " << source_frame << std::endl;
+    EXPECT_TRUE(out_xfm.child_frame_id_ == target_frame || out_xfm.child_frame_id_ == "/" + target_frame) << "Expected child_frame_id_ to equal target_frame: " << out_xfm.child_frame_id_ << ", " << target_frame << std::endl;
 
     //Zero distance or all the way
     if (source_frame == target_frame               ||
@@ -1534,8 +1534,6 @@ TEST(tf, NO_PARENT_SET)
   std::vector<std::string> children;
   std::vector<std::string> parents;
 
-
-
   children.push_back("b");
   parents.push_back("a");
   children.push_back("a");
@@ -1950,6 +1948,8 @@ TEST(tf, getLatestCommonTime)
   mTR.getLatestCommonTime("f", "e", t, NULL);
   EXPECT_EQ(t, ros::Time().fromNSec(5000));
 
+  /*
+  // DISABLE EXTRAPOLATION TESTS, NOT SUPPORTED
 
   mTR.setExtrapolationLimit(ros::Duration().fromNSec(20000));
 
@@ -1968,6 +1968,7 @@ TEST(tf, getLatestCommonTime)
 
   EXPECT_EQ(output.stamp_, ros::Time().fromNSec(4000));
   EXPECT_EQ(output2.stamp_, ros::Time().fromNSec(3000));
+  */
 
 
   //zero length lookup zero time

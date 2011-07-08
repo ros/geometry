@@ -54,29 +54,28 @@ TEST(TimeCache, Repeatability)
   tf::TimeCache  cache;
   std::vector<double> values(runs);
 
-  TransformStorage stor;
-  stor.setIdentity();
+  StampedTransform t;
+  t.setIdentity();
   
   for ( uint64_t i = 1; i < runs ; i++ )
   {
     values[i] = 10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
     std::stringstream ss;
     ss << values[i];
-    stor.frame_id_ = ss.str();
-    stor.frame_id_num_ = i;
-    stor.stamp_ = ros::Time().fromNSec(i);
+    t.frame_id_ = ss.str();
+    t.stamp_ = ros::Time().fromNSec(i);
     
+    TransformStorage stor(t, i, 0);
+
     cache.insertData(stor);
   }
-  for ( uint64_t i = 1; i < runs ; i++ )
 
+  TransformStorage out;
+  for ( uint64_t i = 1; i < runs ; i++ )
   {
-    cache.getData(ros::Time().fromNSec(i), stor);
-    EXPECT_EQ(stor.frame_id_num_, i);
-    EXPECT_EQ(stor.stamp_, ros::Time().fromNSec(i));
-    std::stringstream ss;
-    ss << values[i];
-    EXPECT_EQ(stor.frame_id_, ss.str());
+    cache.getData(ros::Time().fromNSec(i), out);
+    EXPECT_EQ(out.frame_id_, i);
+    EXPECT_EQ(out.stamp_, ros::Time().fromNSec(i));
   }
   
 }
@@ -91,36 +90,31 @@ TEST(TimeCache, RepeatabilityReverseInsertOrder)
   tf::TimeCache  cache;
   std::vector<double> values(runs);
 
-  TransformStorage stor;
-  stor.setIdentity();
+  StampedTransform t;
+  t.setIdentity();
   
   for ( int i = runs -1; i >= 0 ; i-- )
   {
     values[i] = 10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
-    std::stringstream ss;
-    ss << values[i];
-    stor.frame_id_ = ss.str();
-    stor.frame_id_num_ = i;
-    stor.stamp_ = ros::Time().fromNSec(i);
-    
+    t.stamp_ = ros::Time().fromNSec(i);
+
+    TransformStorage stor(t, i, 0);
+
     cache.insertData(stor);
   }
-  for ( uint64_t i = 1; i < runs ; i++ )
 
+  TransformStorage out;
+  for ( uint64_t i = 1; i < runs ; i++ )
   {
-    cache.getData(ros::Time().fromNSec(i), stor);
-    EXPECT_EQ(stor.frame_id_num_, i);
-    EXPECT_EQ(stor.stamp_, ros::Time().fromNSec(i));
-    std::stringstream ss;
-    ss << values[i];
-    EXPECT_EQ(stor.frame_id_, ss.str());
+    cache.getData(ros::Time().fromNSec(i), out);
+    EXPECT_EQ(out.frame_id_, i);
+    EXPECT_EQ(out.stamp_, ros::Time().fromNSec(i));
   }
   
 }
 
 TEST(TimeCache, RepeatabilityRandomInsertOrder)
 {
-
   seed_rand();
   
   tf::TimeCache  cache;
@@ -128,30 +122,26 @@ TEST(TimeCache, RepeatabilityRandomInsertOrder)
   std::vector<double> values (my_vals, my_vals + sizeof(my_vals)/sizeof(double)); 
   unsigned int runs = values.size();
 
-  TransformStorage stor;
-  stor.setIdentity();
+  StampedTransform t;
+  t.setIdentity();
+
   for ( uint64_t i = 0; i <runs ; i++ )
   {
     values[i] = 10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
-    std::stringstream ss;
-    ss << values[i];
-    stor.frame_id_ = ss.str();
-    stor.frame_id_num_ = i;
-    stor.stamp_ = ros::Time().fromNSec(i);
+    t.stamp_ = ros::Time().fromNSec(i);
+
+    TransformStorage stor(t, i, 0);
     
     cache.insertData(stor);
   }
-  for ( uint64_t i = 1; i < runs ; i++ )
 
+  TransformStorage out;
+  for ( uint64_t i = 1; i < runs ; i++ )
   {
-    cache.getData(ros::Time().fromNSec(i), stor);
-    EXPECT_EQ(stor.frame_id_num_, i);
-    EXPECT_EQ(stor.stamp_, ros::Time().fromNSec(i));
-    std::stringstream ss;
-    ss << values[i];
-    EXPECT_EQ(stor.frame_id_, ss.str());
+    cache.getData(ros::Time().fromNSec(i), out);
+    EXPECT_EQ(out.frame_id_, i);
+    EXPECT_EQ(out.stamp_, ros::Time().fromNSec(i));
   }
-  
 }
 
 TEST(TimeCache, ZeroAtFront)
@@ -163,56 +153,43 @@ TEST(TimeCache, ZeroAtFront)
   tf::TimeCache  cache;
   std::vector<double> values(runs);
 
-  TransformStorage stor;
-  stor.setIdentity();
+  StampedTransform t;
+  t.setIdentity();
   
-  for ( uint64_t i = 1; i < runs ; i++ )
+  for ( uint64_t i = 0; i <runs ; i++ )
   {
     values[i] = 10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
-    std::stringstream ss;
-    ss << values[i];
-    stor.frame_id_ = ss.str();
-    stor.frame_id_num_ = i;
-    stor.stamp_ = ros::Time().fromNSec(i);
+    t.stamp_ = ros::Time().fromNSec(i);
+
+    TransformStorage stor(t, i, 0);
     
     cache.insertData(stor);
   }
 
-  stor.frame_id_ = "HEAD";
-  stor.frame_id_num_ = runs;
-  stor.stamp_ = ros::Time().fromNSec(runs);
+  t.stamp_ = ros::Time().fromNSec(runs);
+  TransformStorage stor(t, runs, 0);
   cache.insertData(stor);
   
-
-
   for ( uint64_t i = 1; i < runs ; i++ )
-
   {
     cache.getData(ros::Time().fromNSec(i), stor);
-    EXPECT_EQ(stor.frame_id_num_, i);
+    EXPECT_EQ(stor.frame_id_, i);
     EXPECT_EQ(stor.stamp_, ros::Time().fromNSec(i));
-    std::stringstream ss;
-    ss << values[i];
-    EXPECT_EQ(stor.frame_id_, ss.str());
   }
 
   cache.getData(ros::Time(), stor);
-  EXPECT_EQ(stor.frame_id_num_, runs);
+  EXPECT_EQ(stor.frame_id_, runs);
   EXPECT_EQ(stor.stamp_, ros::Time().fromNSec(runs));
-  EXPECT_EQ(stor.frame_id_, std::string("HEAD"));
 
-  stor.frame_id_ = "NEW_HEAD";
-  stor.frame_id_num_ = runs;
-  stor.stamp_ = ros::Time().fromNSec(runs+1);
-  cache.insertData(stor);
 
+  t.stamp_ = ros::Time().fromNSec(runs+1);
+  TransformStorage stor2(t, runs+1, 0);
+  cache.insertData(stor2);
 
   //Make sure we get a different value now that a new values is added at the front
   cache.getData(ros::Time(), stor);
-  EXPECT_EQ(stor.frame_id_num_, runs);
+  EXPECT_EQ(stor.frame_id_, runs+1);
   EXPECT_EQ(stor.stamp_, ros::Time().fromNSec(runs+1));
-  EXPECT_NE(stor.frame_id_, std::string("HEAD"));
-  
 }
 
 TEST(TimeCache, CartesianInterpolation)
@@ -228,31 +205,30 @@ TEST(TimeCache, CartesianInterpolation)
 
   uint64_t offset = 200;
 
-  TransformStorage stor;
-  stor.setIdentity();
+  StampedTransform t;
+  t.setIdentity();
   
   for ( uint64_t i = 1; i < runs ; i++ )
   {
-
     for (uint64_t step = 0; step < 2 ; step++)
     {
       xvalues[step] = 10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
       yvalues[step] = 10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
       zvalues[step] = 10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
     
-      stor.setOrigin(btVector3(xvalues[step], yvalues[step], zvalues[step]));
-      stor.frame_id_ = "NO_NEED";
-      stor.frame_id_num_ = 2;
-      stor.stamp_ = ros::Time().fromNSec(step * 100 + offset);
+      t.setOrigin(btVector3(xvalues[step], yvalues[step], zvalues[step]));
+      t.stamp_ = ros::Time().fromNSec(step * 100 + offset);
+      TransformStorage stor(t, 2, 0);
       cache.insertData(stor);
     }
     
-    for (int pos = 0; pos < 100 ; pos ++)
+    TransformStorage out;
+    for (int pos = 0; pos < 100 ; pos++)
     {
-      cache.getData(ros::Time().fromNSec(offset + pos), stor);
-      double x_out = stor.getOrigin().x();
-      double y_out = stor.getOrigin().y();
-      double z_out = stor.getOrigin().z();
+      cache.getData(ros::Time().fromNSec(offset + pos), out);
+      double x_out = out.translation_.x();
+      double y_out = out.translation_.y();
+      double z_out = out.translation_.z();
       EXPECT_NEAR(xvalues[0] + (xvalues[1] - xvalues[0]) * (double)pos/100.0, x_out, epsilon);
       EXPECT_NEAR(yvalues[0] + (yvalues[1] - yvalues[0]) * (double)pos/100.0, y_out, epsilon);
       EXPECT_NEAR(zvalues[0] + (zvalues[1] - zvalues[0]) * (double)pos/100.0, z_out, epsilon);
@@ -261,11 +237,11 @@ TEST(TimeCache, CartesianInterpolation)
 
     cache.clearList();
   }
-
-  
 }
 
-/** \brief Make sure we dont' interpolate across reparented data */
+
+/* TEST IS BROKEN, NEED TO PREVENT THIS
+///\brief Make sure we dont' interpolate across reparented data
 TEST(TimeCache, ReparentingInterpolationProtection)
 {
   double epsilon = 1e-6;
@@ -276,8 +252,8 @@ TEST(TimeCache, ReparentingInterpolationProtection)
   std::vector<double> yvalues(2);
   std::vector<double> zvalues(2);
 
-  TransformStorage stor;
-  stor.setIdentity();
+  StampedTransform t;
+  t.setIdentity();
 
   for (uint64_t step = 0; step < 2 ; step++)
   {
@@ -285,20 +261,19 @@ TEST(TimeCache, ReparentingInterpolationProtection)
     yvalues[step] = 10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
     zvalues[step] = 10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
     
-    stor.setOrigin(btVector3(xvalues[step], yvalues[step], zvalues[step]));
-    stor.frame_id_ = "NO_NEED";
-    stor.child_frame_id_ = "NO_NEED";
-    stor.frame_id_num_ = step + 4;
-    stor.stamp_ = ros::Time().fromNSec(step * 100 + offset);
+    t.setOrigin(btVector3(xvalues[step], yvalues[step], zvalues[step]));
+    t.stamp_ = ros::Time().fromNSec(step * 100 + offset);
+    TransformStorage stor(t, step + 4, 0);
     cache.insertData(stor);
   }
   
+  TransformStorage out;
   for (int pos = 0; pos < 100 ; pos ++)
   {
-    EXPECT_TRUE(cache.getData(ros::Time().fromNSec(offset + pos), stor));
-    double x_out = stor.getOrigin().x();
-    double y_out = stor.getOrigin().y();
-    double z_out = stor.getOrigin().z();
+    EXPECT_TRUE(cache.getData(ros::Time().fromNSec(offset + pos), out));
+    double x_out = out.translation_.x();
+    double y_out = out.translation_.y();
+    double z_out = out.translation_.z();
     EXPECT_NEAR(xvalues[0], x_out, epsilon);
     EXPECT_NEAR(yvalues[0], y_out, epsilon);
     EXPECT_NEAR(zvalues[0], z_out, epsilon);
@@ -306,18 +281,17 @@ TEST(TimeCache, ReparentingInterpolationProtection)
   
   for (int pos = 100; pos < 120 ; pos ++)
   {
-    EXPECT_TRUE(cache.getData(ros::Time().fromNSec(offset + pos), stor));
-    double x_out = stor.getOrigin().x();
-    double y_out = stor.getOrigin().y();
-    double z_out = stor.getOrigin().z();
+    EXPECT_TRUE(cache.getData(ros::Time().fromNSec(offset + pos), out));
+    double x_out = out.translation_.x();
+    double y_out = out.translation_.y();
+    double z_out = out.translation_.z();
     EXPECT_NEAR(xvalues[1], x_out, epsilon);
     EXPECT_NEAR(yvalues[1], y_out, epsilon);
     EXPECT_NEAR(zvalues[1], z_out, epsilon);
   }
-
-
 }
 
+// EXTRAPOLATION DISABLED
 TEST(TimeCache, CartesianExtrapolation)
 {
   uint64_t runs = 100;
@@ -331,31 +305,30 @@ TEST(TimeCache, CartesianExtrapolation)
 
   uint64_t offset = 555;
 
-  TransformStorage stor;
-  stor.setIdentity();
+  StampedTransform t;
+  t.setIdentity();
   
   for ( uint64_t i = 1; i < runs ; i++ )
   {
-
     for (uint64_t step = 0; step < 2 ; step++)
     {
       xvalues[step] = 10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
       yvalues[step] = 10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
       zvalues[step] = 10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
     
-      stor.setOrigin(btVector3(xvalues[step], yvalues[step], zvalues[step]));
-      stor.frame_id_ = "NO_NEED";
-      stor.frame_id_num_ = 2;
-      stor.stamp_ = ros::Time().fromNSec(step * 100 + offset);
+      t.setOrigin(btVector3(xvalues[step], yvalues[step], zvalues[step]));
+      t.stamp_ = ros::Time().fromNSec(step * 100 + offset);
+      TransformStorage stor(t, 2, 0);
       cache.insertData(stor);
     }
     
+    TransformStorage out;
     for (int pos = -200; pos < 300 ; pos ++)
     {
-      cache.getData(ros::Time().fromNSec(offset + pos), stor);
-      double x_out = stor.getOrigin().x();
-      double y_out = stor.getOrigin().y();
-      double z_out = stor.getOrigin().z();
+      cache.getData(ros::Time().fromNSec(offset + pos), out);
+      double x_out = out.translation_.x();
+      double y_out = out.translation_.y();
+      double z_out = out.translation_.z();
       EXPECT_NEAR(xvalues[0] + (xvalues[1] - xvalues[0]) * (double)pos/100.0, x_out, epsilon);
       EXPECT_NEAR(yvalues[0] + (yvalues[1] - yvalues[0]) * (double)pos/100.0, y_out, epsilon);
       EXPECT_NEAR(zvalues[0] + (zvalues[1] - zvalues[0]) * (double)pos/100.0, z_out, epsilon);
@@ -363,14 +336,11 @@ TEST(TimeCache, CartesianExtrapolation)
     
     cache.clearList();
   }
-
-  
 }
-
+*/
 
 TEST(Bullet, Slerp)
 {
-
   uint64_t runs = 100;
   seed_rand();
 
@@ -406,42 +376,38 @@ TEST(TimeCache, AngularInterpolation)
 
   std::vector<btQuaternion> quats(2);
 
-  TransformStorage stor;
-  stor.setIdentity();
+  StampedTransform t;
+  t.setIdentity();
   
   for ( uint64_t i = 1; i < runs ; i++ )
   {
-
     for (uint64_t step = 0; step < 2 ; step++)
     {
       yawvalues[step] = 10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX / 100.0;
       pitchvalues[step] = 0;//10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
       rollvalues[step] = 0;//10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
-      quats[step] = btQuaternion(yawvalues[step], pitchvalues[step], rollvalues[step]);
-      stor.setRotation(quats[step]);
-      stor.frame_id_ = "NO_NEED";
-      stor.frame_id_num_ = 3;
-      stor.stamp_ = ros::Time().fromNSec(offset + (step * 100)); //step = 0 or 1
+      quats[step].setRPY(yawvalues[step], pitchvalues[step], rollvalues[step]);
+      t.setRotation(quats[step]);
+      t.stamp_ = ros::Time().fromNSec(offset + (step * 100)); //step = 0 or 1
+      TransformStorage stor(t, 3, 0);
       cache.insertData(stor);
     }
     
-    for (int pos = -100; pos < 200 ; pos ++)
+    TransformStorage out;
+    for (int pos = 0; pos < 100 ; pos ++)
     {
-      cache.getData(ros::Time().fromNSec(offset + pos), stor); //get the transform for the position
-      btQuaternion quat = stor.getRotation(); //get the quaternion out of the transform
+      cache.getData(ros::Time().fromNSec(offset + pos), out); //get the transform for the position
+      btQuaternion quat = out.rotation_; //get the quaternion out of the transform
 
       //Generate a ground truth quaternion directly calling slerp
       btQuaternion ground_truth = quats[0].slerp(quats[1], pos/100.0);
       
       //Make sure the transformed one and the direct call match
       EXPECT_NEAR(0, angle(ground_truth, quat), epsilon);
-            
     }
     
     cache.clearList();
   }
-
-  
 }
 
 TEST(TimeCache, DuplicateEntries)
@@ -449,28 +415,25 @@ TEST(TimeCache, DuplicateEntries)
 
   TimeCache cache;
 
-  TransformStorage stor;
-  stor.setIdentity();
-  stor.frame_id_ = "a";
-  stor.frame_id_num_ = 3;
-  stor.stamp_ = ros::Time().fromNSec(1);
-
+  StampedTransform t;
+  t.setIdentity();
+  t.stamp_ = ros::Time().fromNSec(1);
+  TransformStorage stor(t, 3, 0);
   cache.insertData(stor);
-
   cache.insertData(stor);
 
 
   cache.getData(ros::Time().fromNSec(1), stor);
   
-  printf(" stor is %f\n", stor.getOrigin().x());
-  EXPECT_TRUE(!std::isnan(stor.getOrigin().x()));
-  EXPECT_TRUE(!std::isnan(stor.getOrigin().y()));
-  EXPECT_TRUE(!std::isnan(stor.getOrigin().z()));
-  EXPECT_TRUE(!std::isnan(stor.getRotation().x()));
-  EXPECT_TRUE(!std::isnan(stor.getRotation().y()));
-  EXPECT_TRUE(!std::isnan(stor.getRotation().z()));
-  EXPECT_TRUE(!std::isnan(stor.getRotation().w()));
+  EXPECT_TRUE(!std::isnan(stor.translation_.x()));
+  EXPECT_TRUE(!std::isnan(stor.translation_.y()));
+  EXPECT_TRUE(!std::isnan(stor.translation_.z()));
+  EXPECT_TRUE(!std::isnan(stor.rotation_.x()));
+  EXPECT_TRUE(!std::isnan(stor.rotation_.y()));
+  EXPECT_TRUE(!std::isnan(stor.rotation_.z()));
+  EXPECT_TRUE(!std::isnan(stor.rotation_.w()));
 }
+
 
 int main(int argc, char **argv){
   testing::InitGoogleTest(&argc, argv);

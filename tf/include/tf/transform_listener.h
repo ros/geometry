@@ -153,6 +153,9 @@ public:
     return tf::resolve(tf_prefix_, frame_name);
   };
 
+protected:
+  bool ok() const;
+
 private:
   /// last time
   ros::Time last_update_ros_time_;
@@ -185,9 +188,6 @@ private:
     }
   };
 
-protected:
-  bool ok() const; // For #4882
-  
 };
 }
 

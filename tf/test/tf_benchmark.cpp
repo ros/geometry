@@ -71,12 +71,10 @@ TEST(tf_benchmark, canTransformCacheLength0)
   }
   ros::WallDuration run_duration = ros::WallTime::now() - start_time;
   double frequency = (double)runs / run_duration.toSec() ;
-  printf("frequency %f\n", frequency);
+  printf("can frequency %.2f KHz\n", frequency / 1000.0);
   EXPECT_GT( frequency, 10000.0);
-
-
-  
 }
+
 
 TEST(tf_benchmark, canTransformCacheLength10000)
 {
@@ -85,10 +83,9 @@ TEST(tf_benchmark, canTransformCacheLength10000)
   unsigned int cache_length = 10000;
   for (unsigned int i = 0; i < cache_length; i++)
   {
-    StampedTransform tranStamped(btTransform(btQuaternion(0,0,0), btVector3(0,0,0)), ros::Time().fromNSec(10.0+i), "my_parent", "child");
+    StampedTransform tranStamped(btTransform(btQuaternion(0,0,0,1), btVector3(0,0,0)), ros::Time().fromNSec(10.0+i), "my_parent", "child");
     mTR.setTransform(tranStamped);
   }
-
 
   uint64_t runs = 100000;
   ros::WallTime start_time = ros::WallTime::now();
@@ -102,7 +99,7 @@ TEST(tf_benchmark, canTransformCacheLength10000)
   }
   ros::WallDuration run_duration = ros::WallTime::now() - start_time;
   double frequency = (double)runs / run_duration.toSec() ;
-  printf("Worst Case Frequency %f\n", frequency);
+  printf("Worst Case Frequency %.2f KHz\n", frequency / 1000.0);
   EXPECT_GT( frequency, 10000.0);
 
   //Worst case
@@ -113,7 +110,7 @@ TEST(tf_benchmark, canTransformCacheLength10000)
   }
   run_duration = ros::WallTime::now() - start_time;
   frequency = (double)runs / run_duration.toSec() ;
-  printf("Intermediate Case Frequency %f\n", frequency);
+  printf("Intermediate Case Frequency %.2f KHz\n", frequency / 1000.0);
   EXPECT_GT( frequency, 10000.0);
 
   //Best case
@@ -124,16 +121,61 @@ TEST(tf_benchmark, canTransformCacheLength10000)
   }
   run_duration = ros::WallTime::now() - start_time;
   frequency = (double)runs / run_duration.toSec() ;
-  printf("Best Case Frequency %f\n", frequency);
+  printf("Best Case Frequency %.2f KHz\n", frequency / 1000.0);
+  EXPECT_GT( frequency, 10000.0);
+}
+
+TEST(tf_benchmark, lookupTransformCacheLength10000)
+{
+  tf::Transformer mTR(true);
+
+  unsigned int cache_length = 10000;
+  for (unsigned int i = 0; i < cache_length; i++)
+  {
+    StampedTransform tranStamped(btTransform(btQuaternion(0,0,0,1), btVector3(0,0,0)), ros::Time().fromNSec(10.0+i), "my_parent", "child");
+    mTR.setTransform(tranStamped);
+  }
+
+  uint64_t runs = 100000;
+  ros::WallTime start_time = ros::WallTime::now();
+
+  StampedTransform rv;
+  //Worst case
+  start_time = ros::WallTime::now();
+  for (uint64_t i = 0 ; i < runs; i++)
+  {
+    mTR.lookupTransform("child","my_parent", ros::Time().fromNSec(10), rv);
+  }
+  ros::WallDuration run_duration = ros::WallTime::now() - start_time;
+  double frequency = (double)runs / run_duration.toSec() ;
+  printf("Worst Case Lookup Frequency %.2f KHz\n", frequency / 1000.0);
   EXPECT_GT( frequency, 10000.0);
 
+  //Worst case
+  start_time = ros::WallTime::now();
+  for (uint64_t i = 0 ; i < runs; i++)
+  {
+    mTR.lookupTransform("child","my_parent", ros::Time().fromNSec(10+cache_length/2), rv);
+  }
+  run_duration = ros::WallTime::now() - start_time;
+  frequency = (double)runs / run_duration.toSec() ;
+  printf("Intermediate Case Lookup Frequency %.2f KHz\n", frequency / 1000.0);
+  EXPECT_GT( frequency, 10000.0);
 
-  
+  //Best case
+  start_time = ros::WallTime::now();
+  for (uint64_t i = 0 ; i < runs; i++)
+  {
+    mTR.lookupTransform("child","my_parent", ros::Time().fromNSec(10+cache_length -1), rv);
+  }
+  run_duration = ros::WallTime::now() - start_time;
+  frequency = (double)runs / run_duration.toSec() ;
+  printf("Best Case Lookup Frequency %.2f KHz\n", frequency / 1000.0);
+  EXPECT_GT( frequency, 10000.0);
 }
 
 TEST(tf_benchmark, benchmarkExhaustiveSearch)
 {
-
   uint64_t runs = 40000;
   double epsilon = 1e-6;
   seed_rand();
@@ -146,19 +188,15 @@ TEST(tf_benchmark, benchmarkExhaustiveSearch)
     yvalues[i] = 10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
     zvalues[i] = 10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
 
-    StampedTransform tranStamped(btTransform(btQuaternion(0,0,0), btVector3(xvalues[i],yvalues[i],zvalues[i])), ros::Time().fromNSec(10.0 + i), "my_parent", "child");
+    StampedTransform tranStamped(btTransform(btQuaternion(0,0,0,1), btVector3(xvalues[i],yvalues[i],zvalues[i])), ros::Time().fromNSec(10.0 + i), "my_parent", "child");
     mTR.setTransform(tranStamped);
-
   }
-
-  //std::cout << mTR.allFramesAsString() << std::endl;
-  //  std::cout << mTR.chainAsString("child", 0, "my_parent2", 0, "my_parent2") << std::endl
 
   ros::WallTime start_time = ros::WallTime::now();
   for ( uint64_t i = 0; i < runs ; i++ )
 
   {
-    Stamped<btTransform> inpose (btTransform(btQuaternion(0,0,0), btVector3(0,0,0)), ros::Time().fromNSec(10.0 + i), "child");
+    Stamped<btTransform> inpose (btTransform(btQuaternion(0,0,0,1), btVector3(0,0,0)), ros::Time().fromNSec(10.0 + i), "child");
 
     try{
     Stamped<Pose> outpose;
@@ -176,7 +214,7 @@ TEST(tf_benchmark, benchmarkExhaustiveSearch)
     }
   }
   
-  Stamped<Pose> inpose (btTransform(btQuaternion(0,0,0), btVector3(0,0,0)), ros::Time().fromNSec(runs), "child");
+  Stamped<Pose> inpose (btTransform(btQuaternion(0,0,0,1), btVector3(0,0,0)), ros::Time().fromNSec(runs), "child");
   Stamped<Pose> outpose;
   outpose.setIdentity(); //to make sure things are getting mutated
   mTR.transformPose("child",inpose, outpose);
@@ -186,7 +224,7 @@ TEST(tf_benchmark, benchmarkExhaustiveSearch)
   
   ros::WallDuration run_duration = ros::WallTime::now() - start_time;
   double frequency = (double)runs / run_duration.toSec() ;
-  printf("frequency %f\n", frequency);
+  printf("exhaustive search frequency %.2f KHz\n", frequency / 1000.0);
   EXPECT_GT( frequency, 500.0);
   
 }

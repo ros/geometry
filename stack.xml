@@ -6,8 +6,14 @@
   <license>BSD,LGPL,ZLib</license>  
   <review status="doc reviewed" notes="2009-10-07"/>
   <url>http://ros.org/wiki/geometry</url>
+  <depend stack="bullet" /> <!-- bullet -->
   <depend stack="common_msgs" /> <!-- sensor_msgs, geometry_msgs -->
-  <depend stack="common_rosdeps" /> 
-  <depend stack="ros" /> <!-- rosconsole, roscpp, message_filters, rostest, rospy, roswtf -->
+  <depend stack="ros" />
+  <depend stack="ros_comm" /> <!-- rosconsole, roscpp, message_filters, rostest, rospy, roswtf -->
+  <depend stack="eigen" /> <!-- eigen -->
+
+  <depend stack="orocos_kinematics_dynamics" /> <!-- kdl for backwards compatibility-->
+  <depend stack="common_rosdeps" />
+
 
 </stack>

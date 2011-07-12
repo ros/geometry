@@ -8,7 +8,7 @@ transform points, vectors, etc between any two coordinate frames at
 any desired point in time.
 
   </description>
-  <author>Tully Foote</author>
+  <author>Tully Foote, Eitan Marder-Eppstein, Wim Meeussen</author>
   <license>BSD</license>
   <review status="doc reviewed" notes="http://www.ros.org/wiki/tf/Reviews/2009-10-07_Doc_Review"/>
   <url>http://www.ros.org/wiki/tf</url>
@@ -23,7 +23,7 @@ any desired point in time.
   <depend package="roswtf"/>
   <depend package="message_filters"/>
   <export>
-    <cpp cflags="-I${prefix}/include -I${prefix}/msg/cpp -I${prefix}/srv/cpp `rosboost-cfg --cflags`" lflags="-Wl,-rpath,${prefix}/lib -L${prefix}/lib -ltf `rosboost-cfg --lflags thread`"/>
+    <cpp cflags="-I${prefix}/include `rosboost-cfg --cflags`" lflags="-Wl,-rpath,${prefix}/lib -L${prefix}/lib -ltf `rosboost-cfg --lflags thread`"/>
     <roswtf plugin="tf.tfwtf" />
     <rosdoc config="rosdoc.yaml" />
   </export>

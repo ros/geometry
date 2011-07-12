@@ -42,6 +42,7 @@
 #include <tf/exceptions.h>
 #include "tf/time_cache.h"
 #include <boost/thread/mutex.hpp>
+#include <boost/unordered_map.hpp>
 #include <boost/signals.hpp>
 #include "geometry_msgs/TwistStamped.h"
 
@@ -229,8 +230,7 @@ public:
 
   /**@brief Return the latest rostime which is common across the spanning set
    * zero if fails to cross */
-  int getLatestCommonTime(const std::string& source, const std::string& dest, ros::Time& time, std::string * error_string) const;
-
+  int getLatestCommonTime(const std::string &source_frame, const std::string &target_frame, ros::Time& time, std::string* error_string) const;
 
   /** \brief Transform a Stamped Quaternion into the target frame
    * This can throw anything a lookupTransform can throw as well as tf::InvalidArgument. */
@@ -274,7 +274,7 @@ public:
    * Possible exceptions tf::LookupException, tf::ConnectivityException,
    * tf::MaxDepthException
    */
-  std::string chainAsString(const std::string & target_frame, ros::Time target_time, const std::string & source_frame, ros::Time source_time, const std::string & fixed_frame) const;
+  //std::string chainAsString(const std::string & target_frame, ros::Time target_time, const std::string & source_frame, ros::Time source_time, const std::string & fixed_frame) const;
 
   /** \brief Debugging function that will print the spanning chain of transforms.
    * Possible exceptions tf::LookupException, tf::ConnectivityException,
@@ -348,16 +348,26 @@ protected:
 
   /******************** Internal Storage ****************/
 
+  /** \brief A map from string frame ids to CompactFrameID */
+  typedef boost::unordered_map<std::string, CompactFrameID> M_StringToCompactFrameID;
+  M_StringToCompactFrameID frameIDs_;
+  /** \brief A map from CompactFrameID frame_id_numbers to string for debugging and output */
+  std::vector<std::string> frameIDs_reverse;
+  /** \brief A map to lookup the most recent authority for a given frame */
+  std::map<CompactFrameID, std::string> frame_authority_;
+
+  /// How long to cache transform history
+  ros::Duration cache_time_;
+
+  mutable std::vector<P_TimeAndFrameID> lct_cache_;
+
+
   /** \brief The pointers to potential frames that the tree can be made of.
    * The frames will be dynamically allocated at run time when set the first time. */
-  std::vector< TimeCache*> frames_;
+  std::vector<TimeCache*> frames_;
 
-  /** \brief A mutex to protect testing and allocating new frames */
-  boost::mutex frame_mutex_;
-
-  std::map<std::string, unsigned int> frameIDs_;
-  std::map<unsigned int, std::string> frame_authority_;
-  std::vector<std::string> frameIDs_reverse;
+  /** \brief A mutex to protect testing and allocating new frames on the above vector. */
+  mutable boost::mutex frame_mutex_;
 
   /// How long to cache transform history
   ros::Duration cache_time;
@@ -410,15 +420,15 @@ protected:
   TimeCache* getFrame(unsigned int frame_number) const;
 
   /// String to number for frame lookup with dynamic allocation of new frames
-  unsigned int lookupFrameNumber(const std::string& frameid_str) const
+  CompactFrameID lookupFrameNumber(const std::string& frameid_str) const
   {
     unsigned int retval = 0;
     boost::mutex::scoped_lock(frame_mutex_);
-    std::map<std::string, unsigned int>::const_iterator map_it = frameIDs_.find(frameid_str);
+    M_StringToCompactFrameID::const_iterator map_it = frameIDs_.find(frameid_str);
     if (map_it == frameIDs_.end())
     {
       std::stringstream ss;
-      ss << "Frame id " << frameid_str << " does not exist!";
+      ss << "Frame id " << frameid_str << " does not exist! Frames (" << frameIDs_.size() << "): " << allFramesAsString();
       throw tf::LookupException(ss.str());
     }
     else
@@ -427,16 +437,16 @@ protected:
   };
 
   /// String to number for frame lookup with dynamic allocation of new frames
-  unsigned int lookupOrInsertFrameNumber(const std::string& frameid_str)
+  CompactFrameID lookupOrInsertFrameNumber(const std::string& frameid_str)
   {
     unsigned int retval = 0;
     boost::mutex::scoped_lock(frame_mutex_);
-    std::map<std::string, unsigned int>::iterator map_it = frameIDs_.find(frameid_str);
+    M_StringToCompactFrameID::iterator map_it = frameIDs_.find(frameid_str);
     if (map_it == frameIDs_.end())
     {
       retval = frames_.size();
       frameIDs_[frameid_str] = retval;
-      frames_.push_back( new TimeCache(interpolating, cache_time, max_extrapolation_distance_));
+      frames_.push_back( new TimeCache(cache_time));
       frameIDs_reverse.push_back(frameid_str);
     }
     else
@@ -457,18 +467,27 @@ protected:
 
   };
 
-
-  /** Find the list of connected frames necessary to connect two different frames */
-  int lookupLists(unsigned int target_frame, ros::Time time, unsigned int source_frame, TransformLists & lists, std::string* error_string) const;
-
+  /*
   bool test_extrapolation_one_value(const ros::Time& target_time, const TransformStorage& tr, std::string* error_string) const;
   bool test_extrapolation_past(const ros::Time& target_time, const TransformStorage& tr, std::string* error_string) const;
   bool test_extrapolation_future(const ros::Time& target_time, const TransformStorage& tr, std::string* error_string) const;
   bool test_extrapolation(const ros::Time& target_time, const TransformLists& t_lists, std::string * error_string) const;
+	*/
 
-  /** Compute the transform based on the list of frames */
-  btTransform computeTransformFromList(const TransformLists & list) const;
+ private:
+  /**@brief Return the latest rostime which is common across the spanning set
+   * zero if fails to cross */
+  int getLatestCommonTime(CompactFrameID target_frame, CompactFrameID source_frame, ros::Time& time, std::string* error_string) const;
 
+  template<typename F>
+  int walkToTopParent(F& f, ros::Time time, CompactFrameID target_id, CompactFrameID source_id, std::string* error_string) const;
+
+  bool canTransformInternal(CompactFrameID target_id, CompactFrameID source_id,
+                    const ros::Time& time, std::string* error_msg) const;
+  bool canTransformNoLock(CompactFrameID target_id, CompactFrameID source_id,
+                      const ros::Time& time, std::string* error_msg) const;
+
+  void createConnectivityErrorString(CompactFrameID source_frame, CompactFrameID target_frame, std::string* out) const;
 };
 
 

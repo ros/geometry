@@ -11,6 +11,7 @@
   <depend stack="eigen" /> <!-- eigen -->
   <depend stack="orocos_kinematics_dynamics" /> <!-- kdl -->
   <depend stack="ros" />
+  <depend stack="common_rosdeps" />
   <depend stack="ros_comm" /> <!-- rosconsole, roscpp, message_filters, rostest, rospy, roswtf -->
 
 </stack>

@@ -35,6 +35,8 @@
 #include "LinearMath/btTransform.h"
 #include <geometry_msgs/TransformStamped.h>
 
+#include "ros/assert.h"
+
 using namespace tf;
 
 TransformStorage::TransformStorage()

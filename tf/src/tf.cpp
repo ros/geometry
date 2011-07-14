@@ -449,7 +449,7 @@ void Transformer::lookupTransform(const std::string& target_frame, const std::st
 		  transform.setIdentity();
 		  transform.child_frame_id_ = mapped_src;
 		  transform.frame_id_       = mapped_tgt;
-		  transform.stamp_          = ros::Time::now();
+		  transform.stamp_          = now();
 		  return;
 	  }
 
@@ -763,7 +763,7 @@ int Transformer::getLatestCommonTime(CompactFrameID target_id, CompactFrameID so
   if (source_id == target_id)
   {
     //Set time to latest timestamp of frameid in case of target and source frame id are the same
-    time = ros::Time::now();
+    time = now();
     return NO_ERROR;
   }
 

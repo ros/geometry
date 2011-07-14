@@ -11,6 +11,10 @@ rosbuild_gensrv()
 rosbuild_add_library(tf src/tf.cpp src/transform_listener.cpp src/cache.cpp src/transform_broadcaster.cpp)
 rosbuild_link_boost(tf thread signals)
 
+# Debug
+rosbuild_add_executable(bin/empty_listener src/empty_listener.cpp)
+target_link_libraries(bin/empty_listener tf)
+
 rosbuild_add_executable(bin/tf_echo src/tf_echo.cpp)
 target_link_libraries(bin/tf_echo tf)
 

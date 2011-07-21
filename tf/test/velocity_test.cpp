@@ -236,7 +236,7 @@ TEST_F(AngularVelocitySquareTest, AngularVelocityAlone)
 
 TEST_F(AngularVelocitySquareTest, AngularVelocityOffsetChildFrameInX)
 {
-  double epsilon = 1e-14;
+  double epsilon = 1e-6;
   geometry_msgs::Twist twist;
   try
   {

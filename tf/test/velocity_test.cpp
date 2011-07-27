@@ -176,7 +176,7 @@ TEST_F(LinearVelocitySquareTest, LinearVelocityToThreeFrames)
 
 TEST_F(AngularVelocitySquareTest, AngularVelocityAlone)
 {
-  double epsilon = 1e-14;
+  double epsilon = 1e-10;
   geometry_msgs::Twist twist;
   try
   {
@@ -236,7 +236,7 @@ TEST_F(AngularVelocitySquareTest, AngularVelocityAlone)
 
 TEST_F(AngularVelocitySquareTest, AngularVelocityOffsetChildFrameInX)
 {
-  double epsilon = 1e-14;
+  double epsilon = 1e-10;
   geometry_msgs::Twist twist;
   try
   {
@@ -296,7 +296,7 @@ TEST_F(AngularVelocitySquareTest, AngularVelocityOffsetChildFrameInX)
 
 TEST_F(AngularVelocitySquareTest, AngularVelocityOffsetParentFrameInZ)
 {
-  double epsilon = 1e-14;
+  double epsilon = 1e-10;
   geometry_msgs::Twist twist;
   try
   {

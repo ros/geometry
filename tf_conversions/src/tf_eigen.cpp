@@ -45,13 +45,13 @@ void VectorEigenToTF(const Eigen::Vector3d& k, tf::Vector3& t)
   t[2] = k(2);
 }
 
-  void RotationTFToEigen(const tf::Quaternion& t, Eigen::eigen2_Quaterniond& k)
+  void RotationTFToEigen(const tf::Quaternion& t, Eigen::Quaterniond& k)
   {
-    Eigen::eigen2_Quaterniond m(t[3],t[0],t[1],t[2]);
+    Eigen::Quaterniond m(t[3],t[0],t[1],t[2]);
     k = m;
   };
 
-void RotationEigenToTF(const Eigen::eigen2_Quaterniond& k, tf::Quaternion& t)
+void RotationEigenToTF(const Eigen::Quaterniond& k, tf::Quaternion& t)
 {
   t[0] = k.x();
   t[1] = k.y();
@@ -59,7 +59,7 @@ void RotationEigenToTF(const Eigen::eigen2_Quaterniond& k, tf::Quaternion& t)
   t[3] = k.w();
 }
 
-  void TransformTFToEigen(const tf::Transform &t, Eigen::eigen2_Transform3d &k)
+  void TransformTFToEigen(const tf::Transform &t, Eigen::Affine3d &k)
   {
     for(int i=0; i<3; i++)
     {
@@ -76,7 +76,7 @@ void RotationEigenToTF(const Eigen::eigen2_Quaterniond& k, tf::Quaternion& t)
 
   };
 
-  void TransformEigenToTF(const Eigen::eigen2_Transform3d &k, tf::Transform &t)
+  void TransformEigenToTF(const Eigen::Affine3d &k, tf::Transform &t)
   {
     t.setOrigin(tf::Vector3(k.matrix()(0,3), k.matrix()(1,3), k.matrix()(2,3)));
     t.setBasis(btMatrix3x3(k.matrix()(0,0), k.matrix()(0,1),k.matrix()(0,2),k.matrix()(1,0), k.matrix()(1,1),k.matrix()(1,2),k.matrix()(2,0), k.matrix()(2,1),k.matrix()(2,2)));

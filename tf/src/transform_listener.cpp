@@ -43,38 +43,6 @@ std::string tf::remap(const std::string& frame_id)
 };
 
 
-/** \brief Convert the transform to a Homogeneous matrix for large operations */
-static boost::numeric::ublas::matrix<double> transformAsMatrix(const Transform& bt) 
-{
-  boost::numeric::ublas::matrix<double> outMat(4,4);
-
-  //  double * mat = outMat.Store();
-
-  double mv[12];
-  bt.getBasis().getOpenGLSubMatrix(mv);
-
-  Vector3 origin = bt.getOrigin();
-
-  outMat(0,0)= mv[0];
-  outMat(0,1)  = mv[4];
-  outMat(0,2)  = mv[8];
-  outMat(1,0)  = mv[1];
-  outMat(1,1)  = mv[5];
-  outMat(1,2)  = mv[9];
-  outMat(2,0)  = mv[2];
-  outMat(2,1)  = mv[6];
-  outMat(2,2) = mv[10];
-
-  outMat(3,0)  = outMat(3,1) = outMat(3,2) = 0;
-  outMat(0,3) = origin.x();
-  outMat(1,3) = origin.y();
-  outMat(2,3) = origin.z();
-  outMat(3,3) = 1;
-
-
-  return outMat;
-};
-
 TransformListener::TransformListener(ros::Duration max_cache_time, bool spin_thread):
   Transformer(true, max_cache_time), dedicated_listener_thread_(NULL)
 {
@@ -284,52 +252,43 @@ void TransformListener::transformPointCloud(const std::string& target_frame, con
 
 }
 
-
-void TransformListener::transformPointCloud(const std::string & target_frame, const Transform& net_transform, 
-                                            const ros::Time& target_time, const sensor_msgs::PointCloud & cloudIn, sensor_msgs::PointCloud & cloudOut) const
+inline void transformPointMatVec(const tf::Vector3 &origin, const btMatrix3x3 &basis, const geometry_msgs::Point32 &in, geometry_msgs::Point32 &out)
 {
-  boost::numeric::ublas::matrix<double> transform = transformAsMatrix(net_transform);
+  // Use temporary variables in case &in == &out
+  double x = basis[0].x() * in.x + basis[0].y() * in.y + basis[0].z() * in.z + origin.x();
+  double y = basis[1].x() * in.x + basis[1].y() * in.y + basis[1].z() * in.z + origin.y();
+  double z = basis[2].x() * in.x + basis[2].y() * in.y + basis[2].z() * in.z + origin.z();
+  
+  out.x = x; out.y = y; out.z = z;
+}
 
-  unsigned int length = cloudIn.get_points_size();
 
-  boost::numeric::ublas::matrix<double> matIn(4, length);
+void TransformListener::transformPointCloud(const std::string & target_frame, const tf::Transform& net_transform,
+                                            const ros::Time& target_time, const sensor_msgs::PointCloud & cloudIn, 
+                                            sensor_msgs::PointCloud & cloudOut) const
+{
+  tf::Vector3 origin = net_transform.getOrigin();
+  btMatrix3x3 basis  = net_transform.getBasis();
 
-  double * matrixPtr = matIn.data().begin();
-
-  for (unsigned int i = 0; i < length ; i++)
-  {
-    matrixPtr[i] = cloudIn.points[i].x;
-    matrixPtr[i+length] = cloudIn.points[i].y;
-    matrixPtr[i+ 2* length] = cloudIn.points[i].z;
-    matrixPtr[i+ 3* length] = 1;
-  };
-
-  boost::numeric::ublas::matrix<double> matOut = prod(transform, matIn);
+  unsigned int length = cloudIn.points.size();
 
   // Copy relevant data from cloudIn, if needed
   if (&cloudIn != &cloudOut)
   {
     cloudOut.header = cloudIn.header;
-    cloudOut.set_points_size(length);
-    cloudOut.set_channels_size(cloudIn.get_channels_size());
-    for (unsigned int i = 0 ; i < cloudIn.get_channels_size() ; ++i)
+    cloudOut.points.resize(length);
+    cloudOut.channels.resize(cloudIn.channels.size());
+    for (unsigned int i = 0 ; i < cloudIn.channels.size() ; ++i)
       cloudOut.channels[i] = cloudIn.channels[i];
   }
 
-  matrixPtr = matOut.data().begin();
-
-  //Override the positions
+  // Transform points
   cloudOut.header.stamp = target_time;
   cloudOut.header.frame_id = target_frame;
-  for (unsigned int i = 0; i < length ; i++)
-  {
-    cloudOut.points[i].x = matrixPtr[i];
-    cloudOut.points[i].y = matrixPtr[i + length];
-    cloudOut.points[i].z = matrixPtr[i + 2* length];
-  };
+  for (unsigned int i = 0; i < length ; i++) {
+    transformPointMatVec(origin, basis, cloudIn.points[i], cloudOut.points[i]);
+  }
 }
-
-
 
 
 void TransformListener::subscription_callback(const tf::tfMessageConstPtr& msg)

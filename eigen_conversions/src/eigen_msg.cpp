@@ -32,23 +32,23 @@
 
 namespace tf {
 
-void poseMsgToEigen(const geometry_msgs::Pose &m, Eigen::eigen2_Transform3d &e)
+void poseMsgToEigen(const geometry_msgs::Pose &m, Eigen::Affine3d &e)
 {
-  e = Eigen::eigen2_Translation3d(m.position.x,
+  e = Eigen::Translation3d(m.position.x,
                            m.position.y,
                            m.position.z) *
-    Eigen::eigen2_Quaternion<double>(m.orientation.w,
-                              m.orientation.x,
-                              m.orientation.y,
-                              m.orientation.z);
+    Eigen::Quaterniond(m.orientation.w,
+                       m.orientation.x,
+                       m.orientation.y,
+                       m.orientation.z);
 }
 
-void poseEigenToMsg(const Eigen::eigen2_Transform3d &e, geometry_msgs::Pose &m)
+void poseEigenToMsg(const Eigen::Affine3d &e, geometry_msgs::Pose &m)
 {
   m.position.x = e.translation()[0];
   m.position.y = e.translation()[1];
   m.position.z = e.translation()[2];
-  Eigen::eigen2_Quaterniond q = (Eigen::eigen2_Quaterniond)e.linear();
+  Eigen::Quaterniond q = (Eigen::Quaterniond)e.linear();
   m.orientation.x = q.x();
   m.orientation.y = q.y();
   m.orientation.z = q.z();

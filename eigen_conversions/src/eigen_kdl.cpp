@@ -41,7 +41,7 @@ void twistKDLToEigen(const KDL::Twist &k, Eigen::Matrix<double, 6, 1> &e)
   e[5] = k.rot.z();
 }
 
-void transformKDLToEigen(const KDL::Frame &k, Eigen::eigen2_Transform3d &e)
+void transformKDLToEigen(const KDL::Frame &k, Eigen::Affine3d &e)
 {
   e(0,3) = k.p[0];
   e(1,3) = k.p[1];

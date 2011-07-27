@@ -46,10 +46,10 @@
 namespace tf {
 
 /// Converts a Pose message into an Eigen Transform
-void poseMsgToEigen(const geometry_msgs::Pose &m, Eigen::eigen2_Transform3d &e);
+void poseMsgToEigen(const geometry_msgs::Pose &m, Eigen::Affine3d &e);
 
 /// Converts an Eigen transform into a Pose message
-void poseEigenToMsg(const Eigen::eigen2_Transform3d &e, geometry_msgs::Pose &m);
+void poseEigenToMsg(const Eigen::Affine3d &e, geometry_msgs::Pose &m);
 
 /// Converts a Twist message into an Eigen matrix
 void twistMsgToEigen(const geometry_msgs::Twist &m, Eigen::Matrix<double,6,1> &e);

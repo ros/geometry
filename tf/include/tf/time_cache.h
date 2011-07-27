@@ -46,15 +46,41 @@ namespace tf
 {
 enum ExtrapolationMode {  ONE_VALUE, INTERPOLATE, EXTRAPOLATE_BACK, EXTRAPOLATE_FORWARD };
 
+
+typedef uint32_t CompactFrameID;
+typedef std::pair<ros::Time, CompactFrameID> P_TimeAndFrameID;
+
 /** \brief Storage for transforms and their parent */
-class  TransformStorage : public StampedTransform
+class TransformStorage
 {
 public:
-  TransformStorage(){};
-  TransformStorage(const StampedTransform& data, unsigned int frame_id_num): StampedTransform(data), frame_id_num_(frame_id_num){};
-  unsigned int frame_id_num_;
-  ExtrapolationMode mode_;
+  TransformStorage();
+  TransformStorage(const StampedTransform& data, CompactFrameID frame_id, CompactFrameID child_frame_id);
+
+  TransformStorage(const TransformStorage& rhs)
+  {
+    *this = rhs;
+  }
+
+  TransformStorage& operator=(const TransformStorage& rhs)
+  {
+#if 01
+    rotation_ = rhs.rotation_;
+    translation_ = rhs.translation_;
+    stamp_ = rhs.stamp_;
+    frame_id_ = rhs.frame_id_;
+    child_frame_id_ = rhs.child_frame_id_;
+#endif
+    return *this;
+  }
+
+  btQuaternion rotation_;
+  btVector3 translation_;
+  ros::Time stamp_;
+  CompactFrameID frame_id_;
+  CompactFrameID child_frame_id_;
 };
+
 
 
 /** \brief A class to keep a sorted linked list in time
@@ -67,96 +93,36 @@ class TimeCache
   static const int MIN_INTERPOLATION_DISTANCE = 5; //!< Number of nano-seconds to not interpolate below.
   static const unsigned int MAX_LENGTH_LINKED_LIST = 1000000; //!< Maximum length of linked list, to make sure not to be able to use unlimited memory.
   static const int64_t DEFAULT_MAX_STORAGE_TIME = 1ULL * 1000000000LL; //!< default value of 10 seconds storage
-  static const int64_t DEFAULT_MAX_EXTRAPOLATION_TIME = 0LL; //!< default max extrapolation of 0 nanoseconds \todo remove and make not optional??
+
+  TimeCache(ros::Duration max_storage_time = ros::Duration().fromNSec(DEFAULT_MAX_STORAGE_TIME));
+
+  bool getData(ros::Time time, TransformStorage & data_out, std::string* error_str = 0);
+  bool insertData(const TransformStorage& new_data);
+  void clearList();
+  CompactFrameID getParent(ros::Time time, std::string* error_str);
+  P_TimeAndFrameID getLatestTimeAndParent();
+
+  /// Debugging information methods
+  unsigned int getListLength();
+  ros::Time getLatestTimestamp();
+  ros::Time getOldestTimestamp();
 
 
-  TimeCache(bool interpolating = true, ros::Duration  max_storage_time = ros::Duration().fromNSec(DEFAULT_MAX_STORAGE_TIME),
-            ros::Duration  max_extrapolation_time = ros::Duration().fromNSec(DEFAULT_MAX_EXTRAPOLATION_TIME)):
-    interpolating_(interpolating),
-    max_storage_time_(max_storage_time),
-    max_extrapolation_time_(max_extrapolation_time)
-    {};
+private:
+  typedef std::list<TransformStorage> L_TransformStorage;
+  L_TransformStorage storage_;
 
-
-  bool getData(ros::Time time, TransformStorage & data_out); //returns false if data unavailable (should be thrown as lookup exception
-
-  bool insertData(const TransformStorage& new_data)
-  {
-    
-    boost::mutex::scoped_lock lock(storage_lock_);
-    
-    std::list<TransformStorage >::iterator storage_it = storage_.begin();
-    
-    if(storage_it != storage_.end())
-    {
-      if (storage_it->stamp_ > new_data.stamp_ + max_storage_time_)
-      {
-        return false;
-      }
-    }
-    
-    
-    while(storage_it != storage_.end())
-    {
-      if (storage_it->stamp_ <= new_data.stamp_)
-        break;
-      storage_it++;
-    }
-    storage_.insert(storage_it, new_data);
-
-    pruneList();
-    return true;
-  };
-
-
-  void interpolate(const TransformStorage& one, const TransformStorage& two, ros::Time time, TransformStorage& output);  
-
-  /** @brief Clear the list of stored values */
-  void clearList() {   boost::mutex::scoped_lock lock(storage_lock_); storage_.clear(); };
-
-  /** @brief Get the length of the stored list */
-  unsigned int getListLength() {   boost::mutex::scoped_lock lock(storage_lock_); return storage_.size(); };
-
-  /** @brief Get the latest timestamp cached */
-  ros::Time getLatestTimestamp() 
-  {   
-    boost::mutex::scoped_lock lock(storage_lock_); 
-    if (storage_.empty()) return ros::Time(); //empty list case
-    return storage_.front().stamp_; 
-  };
-
-  /** @brief Get the oldest timestamp cached */
-  ros::Time getOldestTimestamp() 
-  {   
-    boost::mutex::scoped_lock lock(storage_lock_); 
-    if (storage_.empty()) return ros::Time(); //empty list case
-    return storage_.back().stamp_; 
-  };
- private:
-  std::list<TransformStorage > storage_;
-
-  bool interpolating_;
   ros::Duration max_storage_time_;
-  ros::Duration max_extrapolation_time_;
-
-  boost::mutex storage_lock_;  ///!< The mutex to protect the linked list
-
 
 
   /// A helper function for getData
   //Assumes storage is already locked for it
-  uint8_t findClosest(TransformStorage& one, TransformStorage& two, ros::Time target_time, ExtrapolationMode& mode);
+  inline uint8_t findClosest(TransformStorage*& one, TransformStorage*& two, ros::Time target_time, std::string* error_str);
 
-  void pruneList()
-    {
-      ros::Time latest_time = storage_.begin()->stamp_;
+  inline void interpolate(const TransformStorage& one, const TransformStorage& two, ros::Time time, TransformStorage& output);
 
-      while(!storage_.empty() && storage_.back().stamp_ + max_storage_time_ < latest_time)
-      {
-        storage_.pop_back();
-      }
 
-    };
+  void pruneList();
 
 
 

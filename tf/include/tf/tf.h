@@ -359,9 +359,6 @@ protected:
   /// How long to cache transform history
   ros::Duration cache_time_;
 
-  mutable std::vector<P_TimeAndFrameID> lct_cache_;
-
-
   /** \brief The pointers to potential frames that the tree can be made of.
    * The frames will be dynamically allocated at run time when set the first time. */
   std::vector<TimeCache*> frames_;

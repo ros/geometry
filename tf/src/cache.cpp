@@ -57,6 +57,14 @@ TimeCache::TimeCache(ros::Duration max_storage_time)
 {}
 
 // hoisting these into separate functions causes an ~8% speedup.  Removing calling them altogether adds another ~10%
+void createEmptyException(std::string *error_str) 
+{
+  if (error_str)
+  {
+    *error_str = "Unable to lookup transform, cache is empty";
+  }
+}
+
 void createExtrapolationException1(ros::Time t0, ros::Time t1, std::string* error_str)
 {
   if (error_str)
@@ -92,6 +100,7 @@ uint8_t TimeCache::findClosest(TransformStorage*& one, TransformStorage*& two, r
   //No values stored
   if (storage_.empty())
   {
+    createEmptyException(error_str);
     return 0;
   }
 

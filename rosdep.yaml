@@ -4,3 +4,7 @@ glut:
   fedora: freeglut-devel
   arch: freeglut
   gentoo: freeglut
+  osxbrew:
+    lion:
+      homebrew:
+        packages: |

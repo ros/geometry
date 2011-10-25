@@ -41,7 +41,7 @@
 
 #include <tf/exceptions.h>
 #include "tf/time_cache.h"
-#include <boost/thread/mutex.hpp>
+#include <boost/thread/recursive_mutex.hpp>
 #include <boost/unordered_map.hpp>
 #include <boost/signals.hpp>
 #include "geometry_msgs/TwistStamped.h"
@@ -364,7 +364,7 @@ protected:
   std::vector<TimeCache*> frames_;
 
   /** \brief A mutex to protect testing and allocating new frames on the above vector. */
-  mutable boost::mutex frame_mutex_;
+  mutable boost::recursive_mutex frame_mutex_;
 
   /// How long to cache transform history
   ros::Duration cache_time;
@@ -420,7 +420,7 @@ protected:
   CompactFrameID lookupFrameNumber(const std::string& frameid_str) const
   {
     unsigned int retval = 0;
-    boost::mutex::scoped_lock(frame_mutex_);
+    boost::recursive_mutex::scoped_lock(frame_mutex_);
     M_StringToCompactFrameID::const_iterator map_it = frameIDs_.find(frameid_str);
     if (map_it == frameIDs_.end())
     {
@@ -437,7 +437,7 @@ protected:
   CompactFrameID lookupOrInsertFrameNumber(const std::string& frameid_str)
   {
     unsigned int retval = 0;
-    boost::mutex::scoped_lock(frame_mutex_);
+    boost::recursive_mutex::scoped_lock(frame_mutex_);
     M_StringToCompactFrameID::iterator map_it = frameIDs_.find(frameid_str);
     if (map_it == frameIDs_.end())
     {

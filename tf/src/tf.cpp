@@ -214,7 +214,7 @@ Transformer::Transformer(bool interpolating,
 Transformer::~Transformer()
 {
   /* deallocate all frames */
-  boost::mutex::scoped_lock(frame_mutex_);
+  boost::recursive_mutex::scoped_lock lock(frame_mutex_);
   for (std::vector<TimeCache*>::iterator  cache_it = frames_.begin(); cache_it != frames_.end(); ++cache_it)
   {
     delete (*cache_it);
@@ -225,7 +225,7 @@ Transformer::~Transformer()
 
 void Transformer::clear()
 {
-  boost::mutex::scoped_lock(frame_mutex_);
+  boost::recursive_mutex::scoped_lock lock(frame_mutex_);
   if ( frames_.size() > 1 )
   {
     for (std::vector< TimeCache*>::iterator  cache_it = frames_.begin() + 1; cache_it != frames_.end(); ++cache_it)
@@ -410,7 +410,7 @@ bool Transformer::setTransform(const StampedTransform& transform, const std::str
     return false;
 
   {
-    boost::mutex::scoped_lock lock(frame_mutex_);
+    boost::recursive_mutex::scoped_lock lock(frame_mutex_);
     CompactFrameID frame_number = lookupOrInsertFrameNumber(mapped_transform.child_frame_id_);
     TimeCache* frame = getFrame(frame_number);
     if (frame == NULL)
@@ -453,7 +453,7 @@ void Transformer::lookupTransform(const std::string& target_frame, const std::st
 		  return;
 	  }
 
-	  boost::mutex::scoped_lock lock(frame_mutex_);
+	  boost::recursive_mutex::scoped_lock lock(frame_mutex_);
 
 	  CompactFrameID target_id = lookupFrameNumber(mapped_tgt);
 	  CompactFrameID source_id = lookupFrameNumber(mapped_src);
@@ -633,7 +633,7 @@ bool Transformer::canTransformNoLock(CompactFrameID target_id, CompactFrameID so
 bool Transformer::canTransformInternal(CompactFrameID target_id, CompactFrameID source_id,
                                   const ros::Time& time, std::string* error_msg) const
 {
-  boost::mutex::scoped_lock lock(frame_mutex_);
+  boost::recursive_mutex::scoped_lock lock(frame_mutex_);
   return canTransformNoLock(target_id, source_id, time, error_msg);
 }
 
@@ -646,7 +646,7 @@ bool Transformer::canTransform(const std::string& target_frame, const std::strin
 	if (mapped_tgt == mapped_src)
 		return true;
 
-	boost::mutex::scoped_lock lock(frame_mutex_);
+	boost::recursive_mutex::scoped_lock lock(frame_mutex_);
 
   if (!frameExists(mapped_tgt) || !frameExists(mapped_src))
 	  return false;
@@ -706,7 +706,7 @@ bool Transformer::getParent(const std::string& frame_id, ros::Time time, std::st
 
 bool Transformer::frameExists(const std::string& frame_id_str) const
 {
-  boost::mutex::scoped_lock(frame_mutex_);
+  boost::recursive_mutex::scoped_lock lock(frame_mutex_);
   std::string frame_id_resolveped = assert_resolved(tf_prefix_, frame_id_str);
   
   return frameIDs_.count(frame_id_resolveped);
@@ -1254,7 +1254,7 @@ void Transformer::chainAsVector(const std::string & target_frame, ros::Time targ
   output.clear(); //empty vector
 
   std::stringstream mstream;
-  boost::mutex::scoped_lock(frame_mutex_);
+  boost::recursive_mutex::scoped_lock lock(frame_mutex_);
 
   TransformStorage temp;
 
@@ -1278,7 +1278,7 @@ void Transformer::chainAsVector(const std::string & target_frame, ros::Time targ
 std::string Transformer::allFramesAsString() const
 {
   std::stringstream mstream;
-  boost::mutex::scoped_lock(frame_mutex_);
+  boost::recursive_mutex::scoped_lock lock(frame_mutex_);
 
   TransformStorage temp;
 
@@ -1305,7 +1305,7 @@ std::string Transformer::allFramesAsDot() const
 {
   std::stringstream mstream;
   mstream << "digraph G {" << std::endl;
-  boost::mutex::scoped_lock(frame_mutex_);
+  boost::recursive_mutex::scoped_lock lock(frame_mutex_);
 
   TransformStorage temp;
 
@@ -1382,7 +1382,7 @@ void Transformer::getFrameStrings(std::vector<std::string> & vec) const
 {
   vec.clear();
 
-  boost::mutex::scoped_lock(frame_mutex_);
+  boost::recursive_mutex::scoped_lock lock(frame_mutex_);
 
   TransformStorage temp;
 

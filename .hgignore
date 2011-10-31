@@ -27,3 +27,5 @@ syntax: regexp
 ^tf/test/testListener
 ^tf/test/transform_listener_unittest
 ^tf2_msgs/src/tf2_msgs/__init__.py
+^tf_conversions/test_eigen_tf
+^tf_conversions/test_kdl_tf

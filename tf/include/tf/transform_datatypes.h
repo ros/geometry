@@ -45,15 +45,8 @@
 
 namespace tf
 {
-/** \brief A representaton of orientation or rotation depending on context*/
-typedef btQuaternion Quaternion; ///\todo differentiate?
-/** \brief A representation of a translation */
-typedef btVector3 Vector3;
-/** \brief  The transform library representation of a point(Position)*/
+
 typedef btVector3 Point;
-/** \brief A representation of a translation and rotation */
-typedef btTransform Transform;
-/** \brief A representation of pose (A position and orientation)*/
 typedef btTransform Pose;
 
 static const double QUATERNION_TOLERANCE = 0.1f;

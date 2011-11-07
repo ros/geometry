@@ -14,8 +14,8 @@ subject to the following restrictions:
 
 
 
-#ifndef GEN_MINMAX_H
-#define GEN_MINMAX_H
+#ifndef TF_MINMAX_H
+#define TF_MINMAX_H
 
 template <class T>
 SIMD_FORCE_INLINE const T& btMin(const T& a, const T& b) 

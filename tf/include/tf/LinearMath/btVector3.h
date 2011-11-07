@@ -14,8 +14,8 @@ subject to the following restrictions:
 
 
 
-#ifndef SIMD__VECTOR3_H
-#define SIMD__VECTOR3_H
+#ifndef TF_VECTOR3_H
+#define TF_VECTOR3_H
 
 
 #include "btScalar.h"

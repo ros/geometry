@@ -13,8 +13,8 @@ subject to the following restrictions:
 */
 
 
-#ifndef SIMD_QUADWORD_H
-#define SIMD_QUADWORD_H
+#ifndef TF_QUADWORD_H
+#define TF_QUADWORD_H
 
 #include "btScalar.h"
 #include "btMinMax.h"

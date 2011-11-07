@@ -14,8 +14,8 @@ subject to the following restrictions:
 
 
 
-#ifndef SIMD__QUATERNION_H_
-#define SIMD__QUATERNION_H_
+#ifndef TF_QUATERNION_H_
+#define TF_QUATERNION_H_
 
 
 #include "btVector3.h"

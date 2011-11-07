@@ -14,8 +14,8 @@ subject to the following restrictions:
 
 
 
-#ifndef btTransform_H
-#define btTransform_H
+#ifndef tfTransform_H
+#define tfTransform_H
 
 
 #include "btMatrix3x3.h"

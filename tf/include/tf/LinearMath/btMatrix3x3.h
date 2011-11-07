@@ -13,8 +13,8 @@ subject to the following restrictions:
 */
 
 
-#ifndef	BT_MATRIX3x3_H
-#define BT_MATRIX3x3_H
+#ifndef	TF_MATRIX3x3_H
+#define TF_MATRIX3x3_H
 
 #include "btVector3.h"
 #include "btQuaternion.h"

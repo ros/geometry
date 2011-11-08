@@ -79,6 +79,7 @@ public:
 		m_floats[1] = other.m_floats[1];
 		m_floats[2] = other.m_floats[2];
 		m_floats[3] = other.m_floats[3];
+                return *this;
 	}
 
   /**@brief Constructor from scalars 
@@ -671,7 +672,7 @@ TFSIMD_FORCE_INLINE void	tfUnSwapVector3Endian(Vector3& vector)
 
 TFSIMD_FORCE_INLINE void tfPlaneSpace1 (const Vector3& n, Vector3& p, Vector3& q)
 {
-  if (tfFabs(n.z()) > SIMDSQRT12) {
+  if (tfFabs(n.z()) > TFSIMDSQRT12) {
     // choose p in y-z plane
     tfScalar a = n[1]*n[1] + n[2]*n[2];
     tfScalar k = tfRecipSqrt (a);

@@ -196,7 +196,7 @@ TFSIMD_FORCE_INLINE tfScalar tfFmod(tfScalar x,tfScalar y) { return fmod(x,y); }
 #define TFSIMD_HALF_PI      (TFSIMD_2_PI * tfScalar(0.25))
 #define TFSIMD_RADS_PER_DEG (TFSIMD_2_PI / tfScalar(360.0))
 #define TFSIMD_DEGS_PER_RAD  (tfScalar(360.0) / TFSIMD_2_PI)
-#define SIMDSQRT12 tfScalar(0.7071067811865475244008443621048490)
+#define TFSIMDSQRT12 tfScalar(0.7071067811865475244008443621048490)
 
 #define tfRecipSqrt(x) ((tfScalar)(tfScalar(1.0)/tfSqrt(tfScalar(x))))		/* reciprocal square root */
 

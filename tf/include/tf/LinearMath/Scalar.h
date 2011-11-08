@@ -29,14 +29,6 @@ subject to the following restrictions:
 #include <cfloat>
 #include <float.h>
 
-/* SVN $Revision$ on $Date$ from http://bullet.googlecode.com*/
-#define BT_BULLET_VERSION 276
-
-inline int	tfGetVersion()
-{
-	return BT_BULLET_VERSION;
-}
-
 #if defined(DEBUG) || defined (_DEBUG)
 #define BT_DEBUG
 #endif

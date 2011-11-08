@@ -85,7 +85,7 @@ public:
 	*  @param i Row number 0 indexed */
 	SIMD_FORCE_INLINE const Vector3& getRow(int i) const
 	{
-		btFullAssert(0 <= i && i < 3);
+		tfFullAssert(0 <= i && i < 3);
 		return m_el[i];
 	}
 
@@ -93,7 +93,7 @@ public:
 	*  @param i Row number 0 indexed */
 	SIMD_FORCE_INLINE Vector3&  operator[](int i)
 	{ 
-		btFullAssert(0 <= i && i < 3);
+		tfFullAssert(0 <= i && i < 3);
 		return m_el[i]; 
 	}
 
@@ -101,7 +101,7 @@ public:
 	*  @param i Row number 0 indexed */
 	SIMD_FORCE_INLINE const Vector3& operator[](int i) const
 	{
-		btFullAssert(0 <= i && i < 3);
+		tfFullAssert(0 <= i && i < 3);
 		return m_el[i]; 
 	}
 
@@ -143,7 +143,7 @@ public:
 	void setRotation(const Quaternion& q) 
 	{
 		tfScalar d = q.length2();
-		btFullAssert(d != tfScalar(0.0));
+		tfFullAssert(d != tfScalar(0.0));
 		tfScalar s = tfScalar(2.0) / d;
 		tfScalar xs = q.x() * s,   ys = q.y() * s,   zs = q.z() * s;
 		tfScalar wx = q.w() * xs,  wy = q.w() * ys,  wz = q.w() * zs;
@@ -175,12 +175,12 @@ public:
 	* about X then Y and then Z
 	**/
 	void setEulerYPR(tfScalar eulerZ, tfScalar eulerY,tfScalar eulerX)  { 
-		tfScalar ci ( btCos(eulerX)); 
-		tfScalar cj ( btCos(eulerY)); 
-		tfScalar ch ( btCos(eulerZ)); 
-		tfScalar si ( btSin(eulerX)); 
-		tfScalar sj ( btSin(eulerY)); 
-		tfScalar sh ( btSin(eulerZ)); 
+		tfScalar ci ( tfCos(eulerX)); 
+		tfScalar cj ( tfCos(eulerY)); 
+		tfScalar ch ( tfCos(eulerZ)); 
+		tfScalar si ( tfSin(eulerX)); 
+		tfScalar sj ( tfSin(eulerY)); 
+		tfScalar sh ( tfSin(eulerZ)); 
 		tfScalar cc = ci * ch; 
 		tfScalar cs = ci * sh; 
 		tfScalar sc = si * ch; 
@@ -244,7 +244,7 @@ public:
 
 		if (trace > tfScalar(0.0)) 
 		{
-			tfScalar s = btSqrt(trace + tfScalar(1.0));
+			tfScalar s = tfSqrt(trace + tfScalar(1.0));
 			temp[3]=(s * tfScalar(0.5));
 			s = tfScalar(0.5) / s;
 
@@ -260,7 +260,7 @@ public:
 			int j = (i + 1) % 3;  
 			int k = (i + 2) % 3;
 
-			tfScalar s = btSqrt(m_el[i][i] - m_el[j][j] - m_el[k][k] + tfScalar(1.0));
+			tfScalar s = tfSqrt(m_el[i][i] - m_el[j][j] - m_el[k][k] + tfScalar(1.0));
 			temp[i] = s * tfScalar(0.5);
 			s = tfScalar(0.5) / s;
 
@@ -301,13 +301,13 @@ public:
 
 		// Check that pitch is not at a singularity
   		// Check that pitch is not at a singularity
-		if (btFabs(m_el[2].x()) >= 1)
+		if (tfFabs(m_el[2].x()) >= 1)
 		{
 			euler_out.yaw = 0;
 			euler_out2.yaw = 0;
 	
 			// From difference of angles formula
-			tfScalar delta = btAtan2(m_el[2].y(),m_el[2].z());
+			tfScalar delta = tfAtan2(m_el[2].y(),m_el[2].z());
 			if (m_el[2].x() < 0)  //gimbal locked down
 			{
 				euler_out.pitch = SIMD_PI / tfScalar(2.0);
@@ -325,18 +325,18 @@ public:
 		}
 		else
 		{
-			euler_out.pitch = - btAsin(m_el[2].x());
+			euler_out.pitch = - tfAsin(m_el[2].x());
 			euler_out2.pitch = SIMD_PI - euler_out.pitch;
 
-			euler_out.roll = btAtan2(m_el[2].y()/btCos(euler_out.pitch), 
-				m_el[2].z()/btCos(euler_out.pitch));
-			euler_out2.roll = btAtan2(m_el[2].y()/btCos(euler_out2.pitch), 
-				m_el[2].z()/btCos(euler_out2.pitch));
+			euler_out.roll = tfAtan2(m_el[2].y()/tfCos(euler_out.pitch), 
+				m_el[2].z()/tfCos(euler_out.pitch));
+			euler_out2.roll = tfAtan2(m_el[2].y()/tfCos(euler_out2.pitch), 
+				m_el[2].z()/tfCos(euler_out2.pitch));
 
-			euler_out.yaw = btAtan2(m_el[1].x()/btCos(euler_out.pitch), 
-				m_el[0].x()/btCos(euler_out.pitch));
-			euler_out2.yaw = btAtan2(m_el[1].x()/btCos(euler_out2.pitch), 
-				m_el[0].x()/btCos(euler_out2.pitch));
+			euler_out.yaw = tfAtan2(m_el[1].x()/tfCos(euler_out.pitch), 
+				m_el[0].x()/tfCos(euler_out.pitch));
+			euler_out2.yaw = tfAtan2(m_el[1].x()/tfCos(euler_out2.pitch), 
+				m_el[0].x()/tfCos(euler_out2.pitch));
 		}
 
 		if (solution_number == 1)
@@ -419,15 +419,15 @@ public:
 			int p = 0;
 			int q = 1;
 			int r = 2;
-			tfScalar max = btFabs(m_el[0][1]);
-			tfScalar v = btFabs(m_el[0][2]);
+			tfScalar max = tfFabs(m_el[0][1]);
+			tfScalar v = tfFabs(m_el[0][2]);
 			if (v > max)
 			{
 				q = 2;
 				r = 1;
 				max = v;
 			}
-			v = btFabs(m_el[1][2]);
+			v = tfFabs(m_el[1][2]);
 			if (v > max)
 			{
 				p = 1;
@@ -436,7 +436,7 @@ public:
 				max = v;
 			}
 
-			tfScalar t = threshold * (btFabs(m_el[0][0]) + btFabs(m_el[1][1]) + btFabs(m_el[2][2]));
+			tfScalar t = threshold * (tfFabs(m_el[0][0]) + tfFabs(m_el[1][1]) + tfFabs(m_el[2][2]));
 			if (max <= t)
 			{
 				if (max <= SIMD_EPSILON * t)
@@ -454,9 +454,9 @@ public:
 			tfScalar sin;
 			if (theta2 * theta2 < tfScalar(10 / SIMD_EPSILON))
 			{
-				t = (theta >= 0) ? 1 / (theta + btSqrt(1 + theta2))
-					: 1 / (theta - btSqrt(1 + theta2));
-				cos = 1 / btSqrt(1 + t * t);
+				t = (theta >= 0) ? 1 / (theta + tfSqrt(1 + theta2))
+					: 1 / (theta - tfSqrt(1 + theta2));
+				cos = 1 / tfSqrt(1 + t * t);
 				sin = cos * t;
 			}
 			else
@@ -528,7 +528,7 @@ Matrix3x3::operator*=(const Matrix3x3& m)
 SIMD_FORCE_INLINE tfScalar 
 Matrix3x3::determinant() const
 { 
-	return btTriple((*this)[0], (*this)[1], (*this)[2]);
+	return tfTriple((*this)[0], (*this)[1], (*this)[2]);
 }
 
 
@@ -536,9 +536,9 @@ SIMD_FORCE_INLINE Matrix3x3
 Matrix3x3::absolute() const
 {
 	return Matrix3x3(
-		btFabs(m_el[0].x()), btFabs(m_el[0].y()), btFabs(m_el[0].z()),
-		btFabs(m_el[1].x()), btFabs(m_el[1].y()), btFabs(m_el[1].z()),
-		btFabs(m_el[2].x()), btFabs(m_el[2].y()), btFabs(m_el[2].z()));
+		tfFabs(m_el[0].x()), tfFabs(m_el[0].y()), tfFabs(m_el[0].z()),
+		tfFabs(m_el[1].x()), tfFabs(m_el[1].y()), tfFabs(m_el[1].z()),
+		tfFabs(m_el[2].x()), tfFabs(m_el[2].y()), tfFabs(m_el[2].z()));
 }
 
 SIMD_FORCE_INLINE Matrix3x3 
@@ -562,7 +562,7 @@ Matrix3x3::inverse() const
 {
 	Vector3 co(cofac(1, 1, 2, 2), cofac(1, 2, 2, 0), cofac(1, 0, 2, 1));
 	tfScalar det = (*this)[0].dot(co);
-	btFullAssert(det != tfScalar(0.0));
+	tfFullAssert(det != tfScalar(0.0));
 	tfScalar s = tfScalar(1.0) / det;
 	return Matrix3x3(co.x() * s, cofac(0, 2, 2, 1) * s, cofac(0, 1, 1, 2) * s,
 		co.y() * s, cofac(0, 0, 2, 2) * s, cofac(0, 2, 1, 0) * s,
@@ -617,7 +617,7 @@ operator*(const Matrix3x3& m1, const Matrix3x3& m2)
 }
 
 /*
-SIMD_FORCE_INLINE Matrix3x3 btMultTransposeLeft(const Matrix3x3& m1, const Matrix3x3& m2) {
+SIMD_FORCE_INLINE Matrix3x3 tfMultTransposeLeft(const Matrix3x3& m1, const Matrix3x3& m2) {
 return Matrix3x3(
 m1[0][0] * m2[0][0] + m1[1][0] * m2[1][0] + m1[2][0] * m2[2][0],
 m1[0][0] * m2[0][1] + m1[1][0] * m2[1][1] + m1[2][0] * m2[2][1],

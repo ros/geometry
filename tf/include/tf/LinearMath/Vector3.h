@@ -95,8 +95,8 @@ public:
 	}
 
 
-  /**@brief Subtract a vector from this one
-   * @param The vector to subtract */
+  /**@brief Sutfract a vector from this one
+   * @param The vector to sutfract */
 	SIMD_FORCE_INLINE Vector3& operator-=(const Vector3& v) 
 	{
 		m_floats[0] -= v.m_floats[0]; m_floats[1] -= v.m_floats[1];m_floats[2] -= v.m_floats[2];
@@ -114,7 +114,7 @@ public:
    * @param s Scale factor to divide by */
 	SIMD_FORCE_INLINE Vector3& operator/=(const tfScalar& s) 
 	{
-		btFullAssert(s != tfScalar(0.0));
+		tfFullAssert(s != tfScalar(0.0));
 		return *this *= tfScalar(1.0) / s;
 	}
 
@@ -134,7 +134,7 @@ public:
   /**@brief Return the length of the vector */
 	SIMD_FORCE_INLINE tfScalar length() const
 	{
-		return btSqrt(length2());
+		return tfSqrt(length2());
 	}
 
   /**@brief Return the distance squared between the ends of this and another vector
@@ -164,17 +164,17 @@ public:
    * @param v The other vector */
 	SIMD_FORCE_INLINE tfScalar angle(const Vector3& v) const 
 	{
-		tfScalar s = btSqrt(length2() * v.length2());
-		btFullAssert(s != tfScalar(0.0));
-		return btAcos(dot(v) / s);
+		tfScalar s = tfSqrt(length2() * v.length2());
+		tfFullAssert(s != tfScalar(0.0));
+		return tfAcos(dot(v) / s);
 	}
   /**@brief Return a vector will the absolute values of each element */
 	SIMD_FORCE_INLINE Vector3 absolute() const 
 	{
 		return Vector3(
-			btFabs(m_floats[0]), 
-			btFabs(m_floats[1]), 
-			btFabs(m_floats[2]));
+			tfFabs(m_floats[0]), 
+			tfFabs(m_floats[1]), 
+			tfFabs(m_floats[2]));
 	}
   /**@brief Return the cross product between this and another vector 
    * @param v The other vector */
@@ -394,7 +394,7 @@ operator*(const tfScalar& s, const Vector3& v)
 SIMD_FORCE_INLINE Vector3
 operator/(const Vector3& v, const tfScalar& s)
 {
-	btFullAssert(s != tfScalar(0.0));
+	tfFullAssert(s != tfScalar(0.0));
 	return v * (tfScalar(1.0) / s);
 }
 
@@ -407,7 +407,7 @@ operator/(const Vector3& v1, const Vector3& v2)
 
 /**@brief Return the dot product between two vectors */
 SIMD_FORCE_INLINE tfScalar 
-btDot(const Vector3& v1, const Vector3& v2) 
+tfDot(const Vector3& v1, const Vector3& v2) 
 { 
 	return v1.dot(v2); 
 }
@@ -415,7 +415,7 @@ btDot(const Vector3& v1, const Vector3& v2)
 
 /**@brief Return the distance squared between two vectors */
 SIMD_FORCE_INLINE tfScalar
-btDistance2(const Vector3& v1, const Vector3& v2) 
+tfDistance2(const Vector3& v1, const Vector3& v2) 
 { 
 	return v1.distance2(v2); 
 }
@@ -423,27 +423,27 @@ btDistance2(const Vector3& v1, const Vector3& v2)
 
 /**@brief Return the distance between two vectors */
 SIMD_FORCE_INLINE tfScalar
-btDistance(const Vector3& v1, const Vector3& v2) 
+tfDistance(const Vector3& v1, const Vector3& v2) 
 { 
 	return v1.distance(v2); 
 }
 
 /**@brief Return the angle between two vectors */
 SIMD_FORCE_INLINE tfScalar
-btAngle(const Vector3& v1, const Vector3& v2) 
+tfAngle(const Vector3& v1, const Vector3& v2) 
 { 
 	return v1.angle(v2); 
 }
 
 /**@brief Return the cross product of two vectors */
 SIMD_FORCE_INLINE Vector3 
-btCross(const Vector3& v1, const Vector3& v2) 
+tfCross(const Vector3& v1, const Vector3& v2) 
 { 
 	return v1.cross(v2); 
 }
 
 SIMD_FORCE_INLINE tfScalar
-btTriple(const Vector3& v1, const Vector3& v2, const Vector3& v3)
+tfTriple(const Vector3& v1, const Vector3& v2, const Vector3& v3)
 {
 	return v1.triple(v2, v3);
 }
@@ -485,30 +485,30 @@ SIMD_FORCE_INLINE Vector3 Vector3::rotate( const Vector3& wAxis, const tfScalar 
 
 	y = wAxis.cross( *this );
 
-	return ( o + x * btCos( angle ) + y * btSin( angle ) );
+	return ( o + x * tfCos( angle ) + y * tfSin( angle ) );
 }
 
-class btVector4 : public Vector3
+class tfVector4 : public Vector3
 {
 public:
 
-	SIMD_FORCE_INLINE btVector4() {}
+	SIMD_FORCE_INLINE tfVector4() {}
 
 
-	SIMD_FORCE_INLINE btVector4(const tfScalar& x, const tfScalar& y, const tfScalar& z,const tfScalar& w) 
+	SIMD_FORCE_INLINE tfVector4(const tfScalar& x, const tfScalar& y, const tfScalar& z,const tfScalar& w) 
 		: Vector3(x,y,z)
 	{
 		m_floats[3] = w;
 	}
 
 
-	SIMD_FORCE_INLINE btVector4 absolute4() const 
+	SIMD_FORCE_INLINE tfVector4 absolute4() const 
 	{
-		return btVector4(
-			btFabs(m_floats[0]), 
-			btFabs(m_floats[1]), 
-			btFabs(m_floats[2]),
-			btFabs(m_floats[3]));
+		return tfVector4(
+			tfFabs(m_floats[0]), 
+			tfFabs(m_floats[1]), 
+			tfFabs(m_floats[2]),
+			tfFabs(m_floats[3]));
 	}
 
 
@@ -619,8 +619,8 @@ public:
 };
 
 
-///btSwapVector3Endian swaps vector endianness, useful for network and cross-platform serialization
-SIMD_FORCE_INLINE void	btSwapScalarEndian(const tfScalar& sourceVal, tfScalar& destVal)
+///tfSwapVector3Endian swaps vector endianness, useful for network and cross-platform serialization
+SIMD_FORCE_INLINE void	tfSwapScalarEndian(const tfScalar& sourceVal, tfScalar& destVal)
 {
 	unsigned char* dest = (unsigned char*) &destVal;
 	unsigned char* src  = (unsigned char*) &sourceVal;
@@ -633,34 +633,34 @@ SIMD_FORCE_INLINE void	btSwapScalarEndian(const tfScalar& sourceVal, tfScalar& d
     dest[6] = src[1];
     dest[7] = src[0];
 }
-///btSwapVector3Endian swaps vector endianness, useful for network and cross-platform serialization
-SIMD_FORCE_INLINE void	btSwapVector3Endian(const Vector3& sourceVec, Vector3& destVec)
+///tfSwapVector3Endian swaps vector endianness, useful for network and cross-platform serialization
+SIMD_FORCE_INLINE void	tfSwapVector3Endian(const Vector3& sourceVec, Vector3& destVec)
 {
 	for (int i=0;i<4;i++)
 	{
-		btSwapScalarEndian(sourceVec[i],destVec[i]);
+		tfSwapScalarEndian(sourceVec[i],destVec[i]);
 	}
 
 }
 
-///btUnSwapVector3Endian swaps vector endianness, useful for network and cross-platform serialization
-SIMD_FORCE_INLINE void	btUnSwapVector3Endian(Vector3& vector)
+///tfUnSwapVector3Endian swaps vector endianness, useful for network and cross-platform serialization
+SIMD_FORCE_INLINE void	tfUnSwapVector3Endian(Vector3& vector)
 {
 
 	Vector3	swappedVec;
 	for (int i=0;i<4;i++)
 	{
-		btSwapScalarEndian(vector[i],swappedVec[i]);
+		tfSwapScalarEndian(vector[i],swappedVec[i]);
 	}
 	vector = swappedVec;
 }
 
-SIMD_FORCE_INLINE void btPlaneSpace1 (const Vector3& n, Vector3& p, Vector3& q)
+SIMD_FORCE_INLINE void tfPlaneSpace1 (const Vector3& n, Vector3& p, Vector3& q)
 {
-  if (btFabs(n.z()) > SIMDSQRT12) {
+  if (tfFabs(n.z()) > SIMDSQRT12) {
     // choose p in y-z plane
     tfScalar a = n[1]*n[1] + n[2]*n[2];
-    tfScalar k = btRecipSqrt (a);
+    tfScalar k = tfRecipSqrt (a);
     p.setValue(0,-n[2]*k,n[1]*k);
     // set q = n x p
     q.setValue(a*k,-n[0]*p[2],n[0]*p[1]);
@@ -668,7 +668,7 @@ SIMD_FORCE_INLINE void btPlaneSpace1 (const Vector3& n, Vector3& p, Vector3& q)
   else {
     // choose p in x-y plane
     tfScalar a = n.x()*n.x() + n.y()*n.y();
-    tfScalar k = btRecipSqrt (a);
+    tfScalar k = tfRecipSqrt (a);
     p.setValue(-n.y()*k,n.x()*k,0);
     // set q = n x p
     q.setValue(-n.z()*p.y(),n.z()*p.x(),a*k);

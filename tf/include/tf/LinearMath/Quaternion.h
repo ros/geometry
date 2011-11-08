@@ -61,10 +61,10 @@ public:
 	void setRotation(const Vector3& axis, const tfScalar& angle)
 	{
 		tfScalar d = axis.length();
-		btAssert(d != tfScalar(0.0));
-		tfScalar s = btSin(angle * tfScalar(0.5)) / d;
+		tfAssert(d != tfScalar(0.0));
+		tfScalar s = tfSin(angle * tfScalar(0.5)) / d;
 		setValue(axis.x() * s, axis.y() * s, axis.z() * s, 
-			btCos(angle * tfScalar(0.5)));
+			tfCos(angle * tfScalar(0.5)));
 	}
   /**@brief Set the quaternion using Euler angles
    * @param yaw Angle around Y
@@ -75,12 +75,12 @@ public:
 		tfScalar halfYaw = tfScalar(yaw) * tfScalar(0.5);  
 		tfScalar halfPitch = tfScalar(pitch) * tfScalar(0.5);  
 		tfScalar halfRoll = tfScalar(roll) * tfScalar(0.5);  
-		tfScalar cosYaw = btCos(halfYaw);
-		tfScalar sinYaw = btSin(halfYaw);
-		tfScalar cosPitch = btCos(halfPitch);
-		tfScalar sinPitch = btSin(halfPitch);
-		tfScalar cosRoll = btCos(halfRoll);
-		tfScalar sinRoll = btSin(halfRoll);
+		tfScalar cosYaw = tfCos(halfYaw);
+		tfScalar sinYaw = tfSin(halfYaw);
+		tfScalar cosPitch = tfCos(halfPitch);
+		tfScalar sinPitch = tfSin(halfPitch);
+		tfScalar cosRoll = tfCos(halfRoll);
+		tfScalar sinRoll = tfSin(halfRoll);
 		setValue(cosRoll * sinPitch * cosYaw + sinRoll * cosPitch * sinYaw,
 			cosRoll * cosPitch * sinYaw - sinRoll * sinPitch * cosYaw,
 			sinRoll * cosPitch * cosYaw - cosRoll * sinPitch * sinYaw,
@@ -95,12 +95,12 @@ public:
 		tfScalar halfYaw = tfScalar(yaw) * tfScalar(0.5);  
 		tfScalar halfPitch = tfScalar(pitch) * tfScalar(0.5);  
 		tfScalar halfRoll = tfScalar(roll) * tfScalar(0.5);  
-		tfScalar cosYaw = btCos(halfYaw);
-		tfScalar sinYaw = btSin(halfYaw);
-		tfScalar cosPitch = btCos(halfPitch);
-		tfScalar sinPitch = btSin(halfPitch);
-		tfScalar cosRoll = btCos(halfRoll);
-		tfScalar sinRoll = btSin(halfRoll);
+		tfScalar cosYaw = tfCos(halfYaw);
+		tfScalar sinYaw = tfSin(halfYaw);
+		tfScalar cosPitch = tfCos(halfPitch);
+		tfScalar sinPitch = tfSin(halfPitch);
+		tfScalar cosRoll = tfCos(halfRoll);
+		tfScalar sinRoll = tfSin(halfRoll);
 		setValue(sinRoll * cosPitch * cosYaw - cosRoll * sinPitch * sinYaw, //x
                          cosRoll * sinPitch * cosYaw + sinRoll * cosPitch * sinYaw, //y
                          cosRoll * cosPitch * sinYaw - sinRoll * sinPitch * cosYaw, //z
@@ -122,8 +122,8 @@ public:
 		return *this;
 	}
 
-  /**@brief Subtract out a quaternion
-   * @param q The quaternion to subtract from this one */
+  /**@brief Sutfract out a quaternion
+   * @param q The quaternion to sutfract from this one */
 	Quaternion& operator-=(const Quaternion& q) 
 	{
 		m_floats[0] -= q.x(); m_floats[1] -= q.y(); m_floats[2] -= q.z(); m_floats[3] -= q.m_floats[3];
@@ -165,7 +165,7 @@ public:
   /**@brief Return the length of the quaternion */
 	tfScalar length() const
 	{
-		return btSqrt(length2());
+		return tfSqrt(length2());
 	}
 
   /**@brief Normalize the quaternion 
@@ -188,7 +188,7 @@ public:
    * @param s The inverse scale factor */
 	Quaternion operator/(const tfScalar& s) const
 	{
-		btAssert(s != tfScalar(0.0));
+		tfAssert(s != tfScalar(0.0));
 		return *this * (tfScalar(1.0) / s);
 	}
 
@@ -196,7 +196,7 @@ public:
    * @param s The scale factor */
 	Quaternion& operator/=(const tfScalar& s) 
 	{
-		btAssert(s != tfScalar(0.0));
+		tfAssert(s != tfScalar(0.0));
 		return *this *= tfScalar(1.0) / s;
 	}
 
@@ -209,25 +209,25 @@ public:
    * @param q The other quaternion */
 	tfScalar angle(const Quaternion& q) const 
 	{
-		tfScalar s = btSqrt(length2() * q.length2());
-		btAssert(s != tfScalar(0.0));
-		return btAcos(dot(q) / s);
+		tfScalar s = tfSqrt(length2() * q.length2());
+		tfAssert(s != tfScalar(0.0));
+		return tfAcos(dot(q) / s);
 	}
 	/**@brief Return the angle between this quaternion and the other along the shortest path
 	* @param q The other quaternion */
 	tfScalar angleShortestPath(const Quaternion& q) const 
 	{
-		tfScalar s = btSqrt(length2() * q.length2());
-		btAssert(s != tfScalar(0.0));
+		tfScalar s = tfSqrt(length2() * q.length2());
+		tfAssert(s != tfScalar(0.0));
 		if (dot(q) < 0) // Take care of long angle case see http://en.wikipedia.org/wiki/Slerp
-			return btAcos(dot(-q) / s) * tfScalar(2.0);
+			return tfAcos(dot(-q) / s) * tfScalar(2.0);
 		else 
-			return btAcos(dot(q) / s) * tfScalar(2.0);
+			return tfAcos(dot(q) / s) * tfScalar(2.0);
 	}
   /**@brief Return the angle of rotation represented by this quaternion */
 	tfScalar getAngle() const 
 	{
-		tfScalar s = tfScalar(2.) * btAcos(m_floats[3]);
+		tfScalar s = tfScalar(2.) * tfAcos(m_floats[3]);
 		return s;
 	}
 
@@ -236,9 +236,9 @@ public:
 	{
 	tfScalar s;
 		if (dot(*this) < 0)
-			s = tfScalar(2.) * btAcos(m_floats[3]);
+			s = tfScalar(2.) * tfAcos(m_floats[3]);
 		else
-			s = tfScalar(2.) * btAcos(-m_floats[3]);
+			s = tfScalar(2.) * tfAcos(-m_floats[3]);
 
 		return s;
 	}
@@ -246,10 +246,10 @@ public:
 	/**@brief Return the axis of the rotation represented by this quaternion */
 	Vector3 getAxis() const
 	{
-		tfScalar s_squared = tfScalar(1.) - btPow(m_floats[3], tfScalar(2.));
+		tfScalar s_squared = tfScalar(1.) - tfPow(m_floats[3], tfScalar(2.));
 		if (s_squared < tfScalar(10.) * SIMD_EPSILON) //Check for divide by zero
 			return Vector3(1.0, 0.0, 0.0);  // Arbitrary
-		tfScalar s = btSqrt(s_squared);
+		tfScalar s = tfSqrt(s_squared);
 		return Vector3(m_floats[0] / s, m_floats[1] / s, m_floats[2] / s);
 	}
 
@@ -316,9 +316,9 @@ public:
           tfScalar theta = angleShortestPath(q) / tfScalar(2.0);
 		if (theta != tfScalar(0.0))
 		{
-			tfScalar d = tfScalar(1.0) / btSin(theta);
-			tfScalar s0 = btSin((tfScalar(1.0) - t) * theta);
-			tfScalar s1 = btSin(t * theta);   
+			tfScalar d = tfScalar(1.0) / tfSin(theta);
+			tfScalar s0 = tfSin((tfScalar(1.0) - t) * theta);
+			tfScalar s1 = tfSin(t * theta);   
                         if (dot(q) < 0) // Take care of long angle case see http://en.wikipedia.org/wiki/Slerp
                           return Quaternion((m_floats[0] * s0 + -q.x() * s1) * d,
                                               (m_floats[1] * s0 + -q.y() * s1) * d,
@@ -449,11 +449,11 @@ shortestArcQuat(const Vector3& v0, const Vector3& v1) // Game Programming Gems 2
 	if (d < -1.0 + SIMD_EPSILON)
 	{
 		Vector3 n,unused;
-		btPlaneSpace1(v0,n,unused);
+		tfPlaneSpace1(v0,n,unused);
 		return Quaternion(n.x(),n.y(),n.z(),0.0f); // just pick any vector that is orthogonal to v0
 	}
 
-	tfScalar  s = btSqrt((1.0f + d) * 2.0f);
+	tfScalar  s = tfSqrt((1.0f + d) * 2.0f);
 	tfScalar rs = 1.0f / s;
 
 	return Quaternion(c.getX()*rs,c.getY()*rs,c.getZ()*rs,s * 0.5f);

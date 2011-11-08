@@ -32,7 +32,7 @@ subject to the following restrictions:
 /* SVN $Revision$ on $Date$ from http://bullet.googlecode.com*/
 #define BT_BULLET_VERSION 276
 
-inline int	btGetVersion()
+inline int	tfGetVersion()
 {
 	return BT_BULLET_VERSION;
 }
@@ -66,7 +66,7 @@ inline int	btGetVersion()
 
 			#include <ppcintrinsics.h>
  			#define BT_HAVE_NATIVE_FSEL
- 			#define btFsel(a,b,c) __fsel((a),(b),(c))
+ 			#define tfFsel(a,b,c) __fsel((a),(b),(c))
 		#else
 
 
@@ -76,15 +76,15 @@ inline int	btGetVersion()
 
 		#include <assert.h>
 #ifdef BT_DEBUG
-		#define btAssert assert
+		#define tfAssert assert
 #else
-		#define btAssert(x)
+		#define tfAssert(x)
 #endif
-		//btFullAssert is optional, slows down a lot
-		#define btFullAssert(x)
+		//tfFullAssert is optional, slows down a lot
+		#define tfFullAssert(x)
 
-		#define btLikely(_c)  _c
-		#define btUnlikely(_c) _c
+		#define tfLikely(_c)  _c
+		#define tfUnlikely(_c) _c
 
 #else
 	
@@ -97,15 +97,15 @@ inline int	btGetVersion()
 		#include <assert.h>
 		#endif
 #ifdef BT_DEBUG
-		#define btAssert assert
+		#define tfAssert assert
 #else
-		#define btAssert(x)
+		#define tfAssert(x)
 #endif
-		//btFullAssert is optional, slows down a lot
-		#define btFullAssert(x)
+		//tfFullAssert is optional, slows down a lot
+		#define tfFullAssert(x)
 
-		#define btLikely(_c)  _c
-		#define btUnlikely(_c) _c
+		#define tfLikely(_c)  _c
+		#define tfUnlikely(_c) _c
 
 #else
 
@@ -119,16 +119,16 @@ inline int	btGetVersion()
 		#include <assert.h>
 		#endif
 #ifdef BT_DEBUG
-		#define btAssert assert
+		#define tfAssert assert
 #else
-		#define btAssert(x)
+		#define tfAssert(x)
 #endif
-		//btFullAssert is optional, slows down a lot
-		#define btFullAssert(x)
+		//tfFullAssert is optional, slows down a lot
+		#define tfFullAssert(x)
 
 
-		#define btLikely(_c)   __builtin_expect((_c), 1)
-		#define btUnlikely(_c) __builtin_expect((_c), 0)
+		#define tfLikely(_c)   __builtin_expect((_c), 1)
+		#define tfUnlikely(_c) __builtin_expect((_c), 0)
 		
 
 #else
@@ -148,15 +148,15 @@ inline int	btGetVersion()
 		#endif
 
 #if defined(DEBUG) || defined (_DEBUG)
-		#define btAssert assert
+		#define tfAssert assert
 #else
-		#define btAssert(x)
+		#define tfAssert(x)
 #endif
 
-		//btFullAssert is optional, slows down a lot
-		#define btFullAssert(x)
-		#define btLikely(_c)  _c
-		#define btUnlikely(_c) _c
+		//tfFullAssert is optional, slows down a lot
+		#define tfFullAssert(x)
+		#define tfLikely(_c)  _c
+		#define tfUnlikely(_c) _c
 
 #endif // LIBSPE2
 
@@ -172,31 +172,31 @@ typedef double tfScalar;
 
 
 #define BT_DECLARE_ALIGNED_ALLOCATOR() \
-   SIMD_FORCE_INLINE void* operator new(size_t sizeInBytes)   { return btAlignedAlloc(sizeInBytes,16); }   \
-   SIMD_FORCE_INLINE void  operator delete(void* ptr)         { btAlignedFree(ptr); }   \
+   SIMD_FORCE_INLINE void* operator new(size_t sizeInBytes)   { return tfAlignedAlloc(sizeInBytes,16); }   \
+   SIMD_FORCE_INLINE void  operator delete(void* ptr)         { tfAlignedFree(ptr); }   \
    SIMD_FORCE_INLINE void* operator new(size_t, void* ptr)   { return ptr; }   \
    SIMD_FORCE_INLINE void  operator delete(void*, void*)      { }   \
-   SIMD_FORCE_INLINE void* operator new[](size_t sizeInBytes)   { return btAlignedAlloc(sizeInBytes,16); }   \
-   SIMD_FORCE_INLINE void  operator delete[](void* ptr)         { btAlignedFree(ptr); }   \
+   SIMD_FORCE_INLINE void* operator new[](size_t sizeInBytes)   { return tfAlignedAlloc(sizeInBytes,16); }   \
+   SIMD_FORCE_INLINE void  operator delete[](void* ptr)         { tfAlignedFree(ptr); }   \
    SIMD_FORCE_INLINE void* operator new[](size_t, void* ptr)   { return ptr; }   \
    SIMD_FORCE_INLINE void  operator delete[](void*, void*)      { }   \
 
 
 
 		
-SIMD_FORCE_INLINE tfScalar btSqrt(tfScalar x) { return sqrt(x); }
-SIMD_FORCE_INLINE tfScalar btFabs(tfScalar x) { return fabs(x); }
-SIMD_FORCE_INLINE tfScalar btCos(tfScalar x) { return cos(x); }
-SIMD_FORCE_INLINE tfScalar btSin(tfScalar x) { return sin(x); }
-SIMD_FORCE_INLINE tfScalar btTan(tfScalar x) { return tan(x); }
-SIMD_FORCE_INLINE tfScalar btAcos(tfScalar x) { if (x<tfScalar(-1))	x=tfScalar(-1); if (x>tfScalar(1))	x=tfScalar(1); return acos(x); }
-SIMD_FORCE_INLINE tfScalar btAsin(tfScalar x) { if (x<tfScalar(-1))	x=tfScalar(-1); if (x>tfScalar(1))	x=tfScalar(1); return asin(x); }
-SIMD_FORCE_INLINE tfScalar btAtan(tfScalar x) { return atan(x); }
-SIMD_FORCE_INLINE tfScalar btAtan2(tfScalar x, tfScalar y) { return atan2(x, y); }
-SIMD_FORCE_INLINE tfScalar btExp(tfScalar x) { return exp(x); }
-SIMD_FORCE_INLINE tfScalar btLog(tfScalar x) { return log(x); }
-SIMD_FORCE_INLINE tfScalar btPow(tfScalar x,tfScalar y) { return pow(x,y); }
-SIMD_FORCE_INLINE tfScalar btFmod(tfScalar x,tfScalar y) { return fmod(x,y); }
+SIMD_FORCE_INLINE tfScalar tfSqrt(tfScalar x) { return sqrt(x); }
+SIMD_FORCE_INLINE tfScalar tfFabs(tfScalar x) { return fabs(x); }
+SIMD_FORCE_INLINE tfScalar tfCos(tfScalar x) { return cos(x); }
+SIMD_FORCE_INLINE tfScalar tfSin(tfScalar x) { return sin(x); }
+SIMD_FORCE_INLINE tfScalar tfTan(tfScalar x) { return tan(x); }
+SIMD_FORCE_INLINE tfScalar tfAcos(tfScalar x) { if (x<tfScalar(-1))	x=tfScalar(-1); if (x>tfScalar(1))	x=tfScalar(1); return acos(x); }
+SIMD_FORCE_INLINE tfScalar tfAsin(tfScalar x) { if (x<tfScalar(-1))	x=tfScalar(-1); if (x>tfScalar(1))	x=tfScalar(1); return asin(x); }
+SIMD_FORCE_INLINE tfScalar tfAtan(tfScalar x) { return atan(x); }
+SIMD_FORCE_INLINE tfScalar tfAtan2(tfScalar x, tfScalar y) { return atan2(x, y); }
+SIMD_FORCE_INLINE tfScalar tfExp(tfScalar x) { return exp(x); }
+SIMD_FORCE_INLINE tfScalar tfLog(tfScalar x) { return log(x); }
+SIMD_FORCE_INLINE tfScalar tfPow(tfScalar x,tfScalar y) { return pow(x,y); }
+SIMD_FORCE_INLINE tfScalar tfFmod(tfScalar x,tfScalar y) { return fmod(x,y); }
 
 
 #define SIMD_2_PI         tfScalar(6.283185307179586232)
@@ -206,17 +206,17 @@ SIMD_FORCE_INLINE tfScalar btFmod(tfScalar x,tfScalar y) { return fmod(x,y); }
 #define SIMD_DEGS_PER_RAD  (tfScalar(360.0) / SIMD_2_PI)
 #define SIMDSQRT12 tfScalar(0.7071067811865475244008443621048490)
 
-#define btRecipSqrt(x) ((tfScalar)(tfScalar(1.0)/btSqrt(tfScalar(x))))		/* reciprocal square root */
+#define tfRecipSqrt(x) ((tfScalar)(tfScalar(1.0)/tfSqrt(tfScalar(x))))		/* reciprocal square root */
 
 
 #define SIMD_EPSILON      DBL_EPSILON
 #define SIMD_INFINITY     DBL_MAX
 
-SIMD_FORCE_INLINE tfScalar btAtan2Fast(tfScalar y, tfScalar x) 
+SIMD_FORCE_INLINE tfScalar tfAtan2Fast(tfScalar y, tfScalar x) 
 {
 	tfScalar coeff_1 = SIMD_PI / 4.0f;
 	tfScalar coeff_2 = 3.0f * coeff_1;
-	tfScalar abs_y = btFabs(y);
+	tfScalar abs_y = tfFabs(y);
 	tfScalar angle;
 	if (x >= 0.0f) {
 		tfScalar r = (x - abs_y) / (x + abs_y);
@@ -228,35 +228,35 @@ SIMD_FORCE_INLINE tfScalar btAtan2Fast(tfScalar y, tfScalar x)
 	return (y < 0.0f) ? -angle : angle;
 }
 
-SIMD_FORCE_INLINE bool      btFuzzyZero(tfScalar x) { return btFabs(x) < SIMD_EPSILON; }
+SIMD_FORCE_INLINE bool      tfFuzzyZero(tfScalar x) { return tfFabs(x) < SIMD_EPSILON; }
 
-SIMD_FORCE_INLINE bool	btEqual(tfScalar a, tfScalar eps) {
+SIMD_FORCE_INLINE bool	tfEqual(tfScalar a, tfScalar eps) {
 	return (((a) <= eps) && !((a) < -eps));
 }
-SIMD_FORCE_INLINE bool	btGreaterEqual (tfScalar a, tfScalar eps) {
+SIMD_FORCE_INLINE bool	tfGreaterEqual (tfScalar a, tfScalar eps) {
 	return (!((a) <= eps));
 }
 
 
-SIMD_FORCE_INLINE int       btIsNegative(tfScalar x) {
+SIMD_FORCE_INLINE int       tfIsNegative(tfScalar x) {
     return x < tfScalar(0.0) ? 1 : 0;
 }
 
-SIMD_FORCE_INLINE tfScalar btRadians(tfScalar x) { return x * SIMD_RADS_PER_DEG; }
-SIMD_FORCE_INLINE tfScalar btDegrees(tfScalar x) { return x * SIMD_DEGS_PER_RAD; }
+SIMD_FORCE_INLINE tfScalar tfRadians(tfScalar x) { return x * SIMD_RADS_PER_DEG; }
+SIMD_FORCE_INLINE tfScalar tfDegrees(tfScalar x) { return x * SIMD_DEGS_PER_RAD; }
 
 #define BT_DECLARE_HANDLE(name) typedef struct name##__ { int unused; } *name
 
-#ifndef btFsel
-SIMD_FORCE_INLINE tfScalar btFsel(tfScalar a, tfScalar b, tfScalar c)
+#ifndef tfFsel
+SIMD_FORCE_INLINE tfScalar tfFsel(tfScalar a, tfScalar b, tfScalar c)
 {
 	return a >= 0 ? b : c;
 }
 #endif
-#define btFsels(a,b,c) (tfScalar)btFsel(a,b,c)
+#define tfFsels(a,b,c) (tfScalar)tfFsel(a,b,c)
 
 
-SIMD_FORCE_INLINE bool btMachineIsLittleEndian()
+SIMD_FORCE_INLINE bool tfMachineIsLittleEndian()
 {
    long int i = 1;
    const char *p = (const char *) &i;
@@ -268,9 +268,9 @@ SIMD_FORCE_INLINE bool btMachineIsLittleEndian()
 
 
 
-///btSelect avoids branches, which makes performance much better for consoles like Playstation 3 and XBox 360
+///tfSelect avoids branches, which makes performance much better for consoles like Playstation 3 and XBox 360
 ///Thanks Phil Knight. See also http://www.cellperformance.com/articles/2006/04/more_techniques_for_eliminatin_1.html
-SIMD_FORCE_INLINE unsigned btSelect(unsigned condition, unsigned valueIfConditionNonZero, unsigned valueIfConditionZero) 
+SIMD_FORCE_INLINE unsigned tfSelect(unsigned condition, unsigned valueIfConditionNonZero, unsigned valueIfConditionZero) 
 {
     // Set testNz to 0xFFFFFFFF if condition is nonzero, 0x00000000 if condition is zero
     // Rely on positive value or'ed with its negative having sign bit on
@@ -280,22 +280,22 @@ SIMD_FORCE_INLINE unsigned btSelect(unsigned condition, unsigned valueIfConditio
     unsigned testEqz = ~testNz;
     return ((valueIfConditionNonZero & testNz) | (valueIfConditionZero & testEqz)); 
 }
-SIMD_FORCE_INLINE int btSelect(unsigned condition, int valueIfConditionNonZero, int valueIfConditionZero)
+SIMD_FORCE_INLINE int tfSelect(unsigned condition, int valueIfConditionNonZero, int valueIfConditionZero)
 {
     unsigned testNz = (unsigned)(((int)condition | -(int)condition) >> 31);
     unsigned testEqz = ~testNz; 
     return static_cast<int>((valueIfConditionNonZero & testNz) | (valueIfConditionZero & testEqz));
 }
-SIMD_FORCE_INLINE float btSelect(unsigned condition, float valueIfConditionNonZero, float valueIfConditionZero)
+SIMD_FORCE_INLINE float tfSelect(unsigned condition, float valueIfConditionNonZero, float valueIfConditionZero)
 {
 #ifdef BT_HAVE_NATIVE_FSEL
-    return (float)btFsel((tfScalar)condition - tfScalar(1.0f), valueIfConditionNonZero, valueIfConditionZero);
+    return (float)tfFsel((tfScalar)condition - tfScalar(1.0f), valueIfConditionNonZero, valueIfConditionZero);
 #else
     return (condition != 0) ? valueIfConditionNonZero : valueIfConditionZero; 
 #endif
 }
 
-template<typename T> SIMD_FORCE_INLINE void btSwap(T& a, T& b)
+template<typename T> SIMD_FORCE_INLINE void tfSwap(T& a, T& b)
 {
 	T tmp = a;
 	a = b;
@@ -304,33 +304,33 @@ template<typename T> SIMD_FORCE_INLINE void btSwap(T& a, T& b)
 
 
 //PCK: endian swapping functions
-SIMD_FORCE_INLINE unsigned btSwapEndian(unsigned val)
+SIMD_FORCE_INLINE unsigned tfSwapEndian(unsigned val)
 {
 	return (((val & 0xff000000) >> 24) | ((val & 0x00ff0000) >> 8) | ((val & 0x0000ff00) << 8)  | ((val & 0x000000ff) << 24));
 }
 
-SIMD_FORCE_INLINE unsigned short btSwapEndian(unsigned short val)
+SIMD_FORCE_INLINE unsigned short tfSwapEndian(unsigned short val)
 {
 	return static_cast<unsigned short>(((val & 0xff00) >> 8) | ((val & 0x00ff) << 8));
 }
 
-SIMD_FORCE_INLINE unsigned btSwapEndian(int val)
+SIMD_FORCE_INLINE unsigned tfSwapEndian(int val)
 {
-	return btSwapEndian((unsigned)val);
+	return tfSwapEndian((unsigned)val);
 }
 
-SIMD_FORCE_INLINE unsigned short btSwapEndian(short val)
+SIMD_FORCE_INLINE unsigned short tfSwapEndian(short val)
 {
-	return btSwapEndian((unsigned short) val);
+	return tfSwapEndian((unsigned short) val);
 }
 
-///btSwapFloat uses using char pointers to swap the endianness
-////btSwapFloat/btSwapDouble will NOT return a float, because the machine might 'correct' invalid floating point values
+///tfSwapFloat uses using char pointers to swap the endianness
+////tfSwapFloat/tfSwapDouble will NOT return a float, because the machine might 'correct' invalid floating point values
 ///Not all values of sign/exponent/mantissa are valid floating point numbers according to IEEE 754. 
 ///When a floating point unit is faced with an invalid value, it may actually change the value, or worse, throw an exception. 
 ///In most systems, running user mode code, you wouldn't get an exception, but instead the hardware/os/runtime will 'fix' the number for you. 
 ///so instead of returning a float/double, we return integer/long long integer
-SIMD_FORCE_INLINE unsigned int  btSwapEndianFloat(float d)
+SIMD_FORCE_INLINE unsigned int  tfSwapEndianFloat(float d)
 {
     unsigned int a = 0;
     unsigned char *dst = (unsigned char *)&a;
@@ -344,7 +344,7 @@ SIMD_FORCE_INLINE unsigned int  btSwapEndianFloat(float d)
 }
 
 // unswap using char pointers
-SIMD_FORCE_INLINE float btUnswapEndianFloat(unsigned int a) 
+SIMD_FORCE_INLINE float tfUnswapEndianFloat(unsigned int a) 
 {
     float d = 0.0f;
     unsigned char *src = (unsigned char *)&a;
@@ -360,7 +360,7 @@ SIMD_FORCE_INLINE float btUnswapEndianFloat(unsigned int a)
 
 
 // swap using char pointers
-SIMD_FORCE_INLINE void  btSwapEndianDouble(double d, unsigned char* dst)
+SIMD_FORCE_INLINE void  tfSwapEndianDouble(double d, unsigned char* dst)
 {
     unsigned char *src = (unsigned char *)&d;
 
@@ -376,7 +376,7 @@ SIMD_FORCE_INLINE void  btSwapEndianDouble(double d, unsigned char* dst)
 }
 
 // unswap using char pointers
-SIMD_FORCE_INLINE double btUnswapEndianDouble(const unsigned char *src) 
+SIMD_FORCE_INLINE double tfUnswapEndianDouble(const unsigned char *src) 
 {
     double d = 0.0;
     unsigned char *dst = (unsigned char *)&d;
@@ -394,9 +394,9 @@ SIMD_FORCE_INLINE double btUnswapEndianDouble(const unsigned char *src)
 }
 
 // returns normalized value in range [-SIMD_PI, SIMD_PI]
-SIMD_FORCE_INLINE tfScalar btNormalizeAngle(tfScalar angleInRadians) 
+SIMD_FORCE_INLINE tfScalar tfNormalizeAngle(tfScalar angleInRadians) 
 {
-	angleInRadians = btFmod(angleInRadians, SIMD_2_PI);
+	angleInRadians = tfFmod(angleInRadians, SIMD_2_PI);
 	if(angleInRadians < -SIMD_PI)
 	{
 		return angleInRadians + SIMD_2_PI;
@@ -412,9 +412,9 @@ SIMD_FORCE_INLINE tfScalar btNormalizeAngle(tfScalar angleInRadians)
 }
 
 ///rudimentary class to provide type info
-struct btTypedObject
+struct tfTypedObject
 {
-	btTypedObject(int objectType)
+	tfTypedObject(int objectType)
 		:m_objectType(objectType)
 	{
 	}

@@ -83,7 +83,7 @@ public:
 
 /*		void multInverseLeft(const Transform& t1, const Transform& t2) {
 			Vector3 v = t2.m_origin - t1.m_origin;
-			m_basis = btMultTransposeLeft(t1.m_basis, t2.m_basis);
+			m_basis = tfMultTransposeLeft(t1.m_basis, t2.m_basis);
 			m_origin = v * t1.m_basis;
 		}
 		*/

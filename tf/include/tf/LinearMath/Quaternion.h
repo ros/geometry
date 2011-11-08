@@ -30,16 +30,16 @@ public:
   /**@brief No initialization constructor */
 	Quaternion() {}
 
-	//		template <typename btScalar>
-	//		explicit Quaternion(const btScalar *v) : Tuple4<btScalar>(v) {}
+	//		template <typename tfScalar>
+	//		explicit Quaternion(const tfScalar *v) : Tuple4<tfScalar>(v) {}
   /**@brief Constructor from scalars */
-	Quaternion(const btScalar& x, const btScalar& y, const btScalar& z, const btScalar& w) 
+	Quaternion(const tfScalar& x, const tfScalar& y, const tfScalar& z, const tfScalar& w) 
 		: QuadWord(x, y, z, w) 
 	{}
   /**@brief Axis angle Constructor
    * @param axis The axis which the rotation is around
    * @param angle The magnitude of the rotation around the angle (Radians) */
-	Quaternion(const Vector3& axis, const btScalar& angle) 
+	Quaternion(const Vector3& axis, const tfScalar& angle) 
 	{ 
 		setRotation(axis, angle); 
 	}
@@ -47,7 +47,7 @@ public:
    * @param yaw Angle around Y unless BT_EULER_DEFAULT_ZYX defined then Z
    * @param pitch Angle around X unless BT_EULER_DEFAULT_ZYX defined then Y
    * @param roll Angle around Z unless BT_EULER_DEFAULT_ZYX defined then X */
-  Quaternion(const btScalar& yaw, const btScalar& pitch, const btScalar& roll) __attribute__((deprecated))
+  Quaternion(const tfScalar& yaw, const tfScalar& pitch, const tfScalar& roll) __attribute__((deprecated))
 	{ 
 #ifndef BT_EULER_DEFAULT_ZYX
 		setEuler(yaw, pitch, roll); 
@@ -58,29 +58,29 @@ public:
   /**@brief Set the rotation using axis angle notation 
    * @param axis The axis around which to rotate
    * @param angle The magnitude of the rotation in Radians */
-	void setRotation(const Vector3& axis, const btScalar& angle)
+	void setRotation(const Vector3& axis, const tfScalar& angle)
 	{
-		btScalar d = axis.length();
-		btAssert(d != btScalar(0.0));
-		btScalar s = btSin(angle * btScalar(0.5)) / d;
+		tfScalar d = axis.length();
+		btAssert(d != tfScalar(0.0));
+		tfScalar s = btSin(angle * tfScalar(0.5)) / d;
 		setValue(axis.x() * s, axis.y() * s, axis.z() * s, 
-			btCos(angle * btScalar(0.5)));
+			btCos(angle * tfScalar(0.5)));
 	}
   /**@brief Set the quaternion using Euler angles
    * @param yaw Angle around Y
    * @param pitch Angle around X
    * @param roll Angle around Z */
-	void setEuler(const btScalar& yaw, const btScalar& pitch, const btScalar& roll)
+	void setEuler(const tfScalar& yaw, const tfScalar& pitch, const tfScalar& roll)
 	{
-		btScalar halfYaw = btScalar(yaw) * btScalar(0.5);  
-		btScalar halfPitch = btScalar(pitch) * btScalar(0.5);  
-		btScalar halfRoll = btScalar(roll) * btScalar(0.5);  
-		btScalar cosYaw = btCos(halfYaw);
-		btScalar sinYaw = btSin(halfYaw);
-		btScalar cosPitch = btCos(halfPitch);
-		btScalar sinPitch = btSin(halfPitch);
-		btScalar cosRoll = btCos(halfRoll);
-		btScalar sinRoll = btSin(halfRoll);
+		tfScalar halfYaw = tfScalar(yaw) * tfScalar(0.5);  
+		tfScalar halfPitch = tfScalar(pitch) * tfScalar(0.5);  
+		tfScalar halfRoll = tfScalar(roll) * tfScalar(0.5);  
+		tfScalar cosYaw = btCos(halfYaw);
+		tfScalar sinYaw = btSin(halfYaw);
+		tfScalar cosPitch = btCos(halfPitch);
+		tfScalar sinPitch = btSin(halfPitch);
+		tfScalar cosRoll = btCos(halfRoll);
+		tfScalar sinRoll = btSin(halfRoll);
 		setValue(cosRoll * sinPitch * cosYaw + sinRoll * cosPitch * sinYaw,
 			cosRoll * cosPitch * sinYaw - sinRoll * sinPitch * cosYaw,
 			sinRoll * cosPitch * cosYaw - cosRoll * sinPitch * sinYaw,
@@ -90,17 +90,17 @@ public:
    * @param roll Angle around X 
    * @param pitch Angle around Y
    * @param yaw Angle around Z*/
-  void setRPY(const btScalar& roll, const btScalar& pitch, const btScalar& yaw)
+  void setRPY(const tfScalar& roll, const tfScalar& pitch, const tfScalar& yaw)
 	{
-		btScalar halfYaw = btScalar(yaw) * btScalar(0.5);  
-		btScalar halfPitch = btScalar(pitch) * btScalar(0.5);  
-		btScalar halfRoll = btScalar(roll) * btScalar(0.5);  
-		btScalar cosYaw = btCos(halfYaw);
-		btScalar sinYaw = btSin(halfYaw);
-		btScalar cosPitch = btCos(halfPitch);
-		btScalar sinPitch = btSin(halfPitch);
-		btScalar cosRoll = btCos(halfRoll);
-		btScalar sinRoll = btSin(halfRoll);
+		tfScalar halfYaw = tfScalar(yaw) * tfScalar(0.5);  
+		tfScalar halfPitch = tfScalar(pitch) * tfScalar(0.5);  
+		tfScalar halfRoll = tfScalar(roll) * tfScalar(0.5);  
+		tfScalar cosYaw = btCos(halfYaw);
+		tfScalar sinYaw = btSin(halfYaw);
+		tfScalar cosPitch = btCos(halfPitch);
+		tfScalar sinPitch = btSin(halfPitch);
+		tfScalar cosRoll = btCos(halfRoll);
+		tfScalar sinRoll = btSin(halfRoll);
 		setValue(sinRoll * cosPitch * cosYaw - cosRoll * sinPitch * sinYaw, //x
                          cosRoll * sinPitch * cosYaw + sinRoll * cosPitch * sinYaw, //y
                          cosRoll * cosPitch * sinYaw - sinRoll * sinPitch * cosYaw, //z
@@ -110,7 +110,7 @@ public:
    * @param yaw Angle around Z
    * @param pitch Angle around Y
    * @param roll Angle around X */
-  void setEulerZYX(const btScalar& yaw, const btScalar& pitch, const btScalar& roll) __attribute__((deprecated))
+  void setEulerZYX(const tfScalar& yaw, const tfScalar& pitch, const tfScalar& roll) __attribute__((deprecated))
 	{
           setRPY(roll, pitch, yaw);
 	}
@@ -132,7 +132,7 @@ public:
 
   /**@brief Scale this quaternion
    * @param s The scalar to scale by */
-	Quaternion& operator*=(const btScalar& s)
+	Quaternion& operator*=(const tfScalar& s)
 	{
 		m_floats[0] *= s; m_floats[1] *= s; m_floats[2] *= s; m_floats[3] *= s;
 		return *this;
@@ -151,19 +151,19 @@ public:
 	}
   /**@brief Return the dot product between this quaternion and another
    * @param q The other quaternion */
-	btScalar dot(const Quaternion& q) const
+	tfScalar dot(const Quaternion& q) const
 	{
 		return m_floats[0] * q.x() + m_floats[1] * q.y() + m_floats[2] * q.z() + m_floats[3] * q.m_floats[3];
 	}
 
   /**@brief Return the length squared of the quaternion */
-	btScalar length2() const
+	tfScalar length2() const
 	{
 		return dot(*this);
 	}
 
   /**@brief Return the length of the quaternion */
-	btScalar length() const
+	tfScalar length() const
 	{
 		return btSqrt(length2());
 	}
@@ -178,7 +178,7 @@ public:
   /**@brief Return a scaled version of this quaternion
    * @param s The scale factor */
 	SIMD_FORCE_INLINE Quaternion
-	operator*(const btScalar& s) const
+	operator*(const tfScalar& s) const
 	{
 		return Quaternion(x() * s, y() * s, z() * s, m_floats[3] * s);
 	}
@@ -186,18 +186,18 @@ public:
 
   /**@brief Return an inversely scaled versionof this quaternion
    * @param s The inverse scale factor */
-	Quaternion operator/(const btScalar& s) const
+	Quaternion operator/(const tfScalar& s) const
 	{
-		btAssert(s != btScalar(0.0));
-		return *this * (btScalar(1.0) / s);
+		btAssert(s != tfScalar(0.0));
+		return *this * (tfScalar(1.0) / s);
 	}
 
   /**@brief Inversely scale this quaternion
    * @param s The scale factor */
-	Quaternion& operator/=(const btScalar& s) 
+	Quaternion& operator/=(const tfScalar& s) 
 	{
-		btAssert(s != btScalar(0.0));
-		return *this *= btScalar(1.0) / s;
+		btAssert(s != tfScalar(0.0));
+		return *this *= tfScalar(1.0) / s;
 	}
 
   /**@brief Return a normalized version of this quaternion */
@@ -207,38 +207,38 @@ public:
 	} 
   /**@brief Return the ***half*** angle between this quaternion and the other 
    * @param q The other quaternion */
-	btScalar angle(const Quaternion& q) const 
+	tfScalar angle(const Quaternion& q) const 
 	{
-		btScalar s = btSqrt(length2() * q.length2());
-		btAssert(s != btScalar(0.0));
+		tfScalar s = btSqrt(length2() * q.length2());
+		btAssert(s != tfScalar(0.0));
 		return btAcos(dot(q) / s);
 	}
 	/**@brief Return the angle between this quaternion and the other along the shortest path
 	* @param q The other quaternion */
-	btScalar angleShortestPath(const Quaternion& q) const 
+	tfScalar angleShortestPath(const Quaternion& q) const 
 	{
-		btScalar s = btSqrt(length2() * q.length2());
-		btAssert(s != btScalar(0.0));
+		tfScalar s = btSqrt(length2() * q.length2());
+		btAssert(s != tfScalar(0.0));
 		if (dot(q) < 0) // Take care of long angle case see http://en.wikipedia.org/wiki/Slerp
-			return btAcos(dot(-q) / s) * btScalar(2.0);
+			return btAcos(dot(-q) / s) * tfScalar(2.0);
 		else 
-			return btAcos(dot(q) / s) * btScalar(2.0);
+			return btAcos(dot(q) / s) * tfScalar(2.0);
 	}
   /**@brief Return the angle of rotation represented by this quaternion */
-	btScalar getAngle() const 
+	tfScalar getAngle() const 
 	{
-		btScalar s = btScalar(2.) * btAcos(m_floats[3]);
+		tfScalar s = tfScalar(2.) * btAcos(m_floats[3]);
 		return s;
 	}
 
 	/**@brief Return the angle of rotation represented by this quaternion along the shortest path*/
-	btScalar getAngleShortestPath() const 
+	tfScalar getAngleShortestPath() const 
 	{
-	btScalar s;
+	tfScalar s;
 		if (dot(*this) < 0)
-			s = btScalar(2.) * btAcos(m_floats[3]);
+			s = tfScalar(2.) * btAcos(m_floats[3]);
 		else
-			s = btScalar(2.) * btAcos(-m_floats[3]);
+			s = tfScalar(2.) * btAcos(-m_floats[3]);
 
 		return s;
 	}
@@ -246,10 +246,10 @@ public:
 	/**@brief Return the axis of the rotation represented by this quaternion */
 	Vector3 getAxis() const
 	{
-		btScalar s_squared = btScalar(1.) - btPow(m_floats[3], btScalar(2.));
-		if (s_squared < btScalar(10.) * SIMD_EPSILON) //Check for divide by zero
+		tfScalar s_squared = tfScalar(1.) - btPow(m_floats[3], tfScalar(2.));
+		if (s_squared < tfScalar(10.) * SIMD_EPSILON) //Check for divide by zero
 			return Vector3(1.0, 0.0, 0.0);  // Arbitrary
-		btScalar s = btSqrt(s_squared);
+		tfScalar s = btSqrt(s_squared);
 		return Vector3(m_floats[0] / s, m_floats[1] / s, m_floats[2] / s);
 	}
 
@@ -311,14 +311,14 @@ public:
    * @param q The other quaternion to interpolate with 
    * @param t The ratio between this and q to interpolate.  If t = 0 the result is this, if t=1 the result is q.
    * Slerp interpolates assuming constant velocity.  */
-	Quaternion slerp(const Quaternion& q, const btScalar& t) const
+	Quaternion slerp(const Quaternion& q, const tfScalar& t) const
 	{
-          btScalar theta = angleShortestPath(q) / btScalar(2.0);
-		if (theta != btScalar(0.0))
+          tfScalar theta = angleShortestPath(q) / tfScalar(2.0);
+		if (theta != tfScalar(0.0))
 		{
-			btScalar d = btScalar(1.0) / btSin(theta);
-			btScalar s0 = btSin((btScalar(1.0) - t) * theta);
-			btScalar s1 = btSin(t * theta);   
+			tfScalar d = tfScalar(1.0) / btSin(theta);
+			tfScalar s0 = btSin((tfScalar(1.0) - t) * theta);
+			tfScalar s1 = btSin(t * theta);   
                         if (dot(q) < 0) // Take care of long angle case see http://en.wikipedia.org/wiki/Slerp
                           return Quaternion((m_floats[0] * s0 + -q.x() * s1) * d,
                                               (m_floats[1] * s0 + -q.y() * s1) * d,
@@ -339,11 +339,11 @@ public:
 
 	static const Quaternion&	getIdentity()
 	{
-		static const Quaternion identityQuat(btScalar(0.),btScalar(0.),btScalar(0.),btScalar(1.));
+		static const Quaternion identityQuat(tfScalar(0.),tfScalar(0.),tfScalar(0.),tfScalar(1.));
 		return identityQuat;
 	}
 
-	SIMD_FORCE_INLINE const btScalar& getW() const { return m_floats[3]; }
+	SIMD_FORCE_INLINE const tfScalar& getW() const { return m_floats[3]; }
 
 	
 };
@@ -386,7 +386,7 @@ operator*(const Vector3& w, const Quaternion& q)
 }
 
 /**@brief Calculate the dot product between two quaternions */
-SIMD_FORCE_INLINE btScalar 
+SIMD_FORCE_INLINE tfScalar 
 dot(const Quaternion& q1, const Quaternion& q2) 
 { 
 	return q1.dot(q2); 
@@ -394,21 +394,21 @@ dot(const Quaternion& q1, const Quaternion& q2)
 
 
 /**@brief Return the length of a quaternion */
-SIMD_FORCE_INLINE btScalar
+SIMD_FORCE_INLINE tfScalar
 length(const Quaternion& q) 
 { 
 	return q.length(); 
 }
 
 /**@brief Return the ***half*** angle between two quaternions*/
-SIMD_FORCE_INLINE btScalar
+SIMD_FORCE_INLINE tfScalar
 angle(const Quaternion& q1, const Quaternion& q2) 
 { 
 	return q1.angle(q2); 
 }
 
 /**@brief Return the shortest angle between two quaternions*/
-SIMD_FORCE_INLINE btScalar
+SIMD_FORCE_INLINE tfScalar
 angleShortestPath(const Quaternion& q1, const Quaternion& q2) 
 { 
 	return q1.angleShortestPath(q2); 
@@ -427,7 +427,7 @@ inverse(const Quaternion& q)
  * @param t The ration between q1 and q2.  t = 0 return q1, t=1 returns q2 
  * Slerp assumes constant velocity between positions. */
 SIMD_FORCE_INLINE Quaternion
-slerp(const Quaternion& q1, const Quaternion& q2, const btScalar& t) 
+slerp(const Quaternion& q1, const Quaternion& q2, const tfScalar& t) 
 {
 	return q1.slerp(q2, t);
 }
@@ -444,7 +444,7 @@ SIMD_FORCE_INLINE Quaternion
 shortestArcQuat(const Vector3& v0, const Vector3& v1) // Game Programming Gems 2.10. make sure v0,v1 are normalized
 {
 	Vector3 c = v0.cross(v1);
-	btScalar  d = v0.dot(v1);
+	tfScalar  d = v0.dot(v1);
 
 	if (d < -1.0 + SIMD_EPSILON)
 	{
@@ -453,8 +453,8 @@ shortestArcQuat(const Vector3& v0, const Vector3& v1) // Game Programming Gems 2
 		return Quaternion(n.x(),n.y(),n.z(),0.0f); // just pick any vector that is orthogonal to v0
 	}
 
-	btScalar  s = btSqrt((1.0f + d) * 2.0f);
-	btScalar rs = 1.0f / s;
+	tfScalar  s = btSqrt((1.0f + d) * 2.0f);
+	tfScalar rs = 1.0f / s;
 
 	return Quaternion(c.getX()*rs,c.getY()*rs,c.getZ()*rs,s * 0.5f);
 }

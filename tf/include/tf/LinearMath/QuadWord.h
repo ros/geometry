@@ -41,7 +41,7 @@ protected:
 #if defined (__SPU__) && defined (__CELLOS_LV2__)
 	union {
 		vec_float4 mVec128;
-		btScalar	m_floats[4];
+		tfScalar	m_floats[4];
 	};
 public:
 	vec_float4	get128() const
@@ -50,40 +50,40 @@ public:
 	}
 protected:
 #else //__CELLOS_LV2__ __SPU__
-	btScalar	m_floats[4];
+	tfScalar	m_floats[4];
 #endif //__CELLOS_LV2__ __SPU__
 
 	public:
   
 
   /**@brief Return the x value */
-		SIMD_FORCE_INLINE const btScalar& getX() const { return m_floats[0]; }
+		SIMD_FORCE_INLINE const tfScalar& getX() const { return m_floats[0]; }
   /**@brief Return the y value */
-		SIMD_FORCE_INLINE const btScalar& getY() const { return m_floats[1]; }
+		SIMD_FORCE_INLINE const tfScalar& getY() const { return m_floats[1]; }
   /**@brief Return the z value */
-		SIMD_FORCE_INLINE const btScalar& getZ() const { return m_floats[2]; }
+		SIMD_FORCE_INLINE const tfScalar& getZ() const { return m_floats[2]; }
   /**@brief Set the x value */
-		SIMD_FORCE_INLINE void	setX(btScalar x) { m_floats[0] = x;};
+		SIMD_FORCE_INLINE void	setX(tfScalar x) { m_floats[0] = x;};
   /**@brief Set the y value */
-		SIMD_FORCE_INLINE void	setY(btScalar y) { m_floats[1] = y;};
+		SIMD_FORCE_INLINE void	setY(tfScalar y) { m_floats[1] = y;};
   /**@brief Set the z value */
-		SIMD_FORCE_INLINE void	setZ(btScalar z) { m_floats[2] = z;};
+		SIMD_FORCE_INLINE void	setZ(tfScalar z) { m_floats[2] = z;};
   /**@brief Set the w value */
-		SIMD_FORCE_INLINE void	setW(btScalar w) { m_floats[3] = w;};
+		SIMD_FORCE_INLINE void	setW(tfScalar w) { m_floats[3] = w;};
   /**@brief Return the x value */
-		SIMD_FORCE_INLINE const btScalar& x() const { return m_floats[0]; }
+		SIMD_FORCE_INLINE const tfScalar& x() const { return m_floats[0]; }
   /**@brief Return the y value */
-		SIMD_FORCE_INLINE const btScalar& y() const { return m_floats[1]; }
+		SIMD_FORCE_INLINE const tfScalar& y() const { return m_floats[1]; }
   /**@brief Return the z value */
-		SIMD_FORCE_INLINE const btScalar& z() const { return m_floats[2]; }
+		SIMD_FORCE_INLINE const tfScalar& z() const { return m_floats[2]; }
   /**@brief Return the w value */
-		SIMD_FORCE_INLINE const btScalar& w() const { return m_floats[3]; }
+		SIMD_FORCE_INLINE const tfScalar& w() const { return m_floats[3]; }
 
-	//SIMD_FORCE_INLINE btScalar&       operator[](int i)       { return (&m_floats[0])[i];	}      
-	//SIMD_FORCE_INLINE const btScalar& operator[](int i) const { return (&m_floats[0])[i]; }
-	///operator btScalar*() replaces operator[], using implicit conversion. We added operator != and operator == to avoid pointer comparisons.
-	SIMD_FORCE_INLINE	operator       btScalar *()       { return &m_floats[0]; }
-	SIMD_FORCE_INLINE	operator const btScalar *() const { return &m_floats[0]; }
+	//SIMD_FORCE_INLINE tfScalar&       operator[](int i)       { return (&m_floats[0])[i];	}      
+	//SIMD_FORCE_INLINE const tfScalar& operator[](int i) const { return (&m_floats[0])[i]; }
+	///operator tfScalar*() replaces operator[], using implicit conversion. We added operator != and operator == to avoid pointer comparisons.
+	SIMD_FORCE_INLINE	operator       tfScalar *()       { return &m_floats[0]; }
+	SIMD_FORCE_INLINE	operator const tfScalar *() const { return &m_floats[0]; }
 
 	SIMD_FORCE_INLINE	bool	operator==(const QuadWord& other) const
 	{
@@ -100,7 +100,7 @@ protected:
    * @param y Value of y
    * @param z Value of z
    */
-		SIMD_FORCE_INLINE void 	setValue(const btScalar& x, const btScalar& y, const btScalar& z)
+		SIMD_FORCE_INLINE void 	setValue(const tfScalar& x, const tfScalar& y, const tfScalar& z)
 		{
 			m_floats[0]=x;
 			m_floats[1]=y;
@@ -108,7 +108,7 @@ protected:
 			m_floats[3] = 0.f;
 		}
 
-/*		void getValue(btScalar *m) const 
+/*		void getValue(tfScalar *m) const 
 		{
 			m[0] = m_floats[0];
 			m[1] = m_floats[1];
@@ -121,7 +121,7 @@ protected:
    * @param z Value of z
    * @param w Value of w
    */
-		SIMD_FORCE_INLINE void	setValue(const btScalar& x, const btScalar& y, const btScalar& z,const btScalar& w)
+		SIMD_FORCE_INLINE void	setValue(const tfScalar& x, const tfScalar& y, const tfScalar& z,const tfScalar& w)
 		{
 			m_floats[0]=x;
 			m_floats[1]=y;
@@ -130,7 +130,7 @@ protected:
 		}
   /**@brief No initialization constructor */
 		SIMD_FORCE_INLINE QuadWord()
-		//	:m_floats[0](btScalar(0.)),m_floats[1](btScalar(0.)),m_floats[2](btScalar(0.)),m_floats[3](btScalar(0.))
+		//	:m_floats[0](tfScalar(0.)),m_floats[1](tfScalar(0.)),m_floats[2](tfScalar(0.)),m_floats[3](tfScalar(0.))
 		{
 		}
  
@@ -139,7 +139,7 @@ protected:
    * @param y Value of y
    * @param z Value of z
    */
-		SIMD_FORCE_INLINE QuadWord(const btScalar& x, const btScalar& y, const btScalar& z)		
+		SIMD_FORCE_INLINE QuadWord(const tfScalar& x, const tfScalar& y, const tfScalar& z)		
 		{
 			m_floats[0] = x, m_floats[1] = y, m_floats[2] = z, m_floats[3] = 0.0f;
 		}
@@ -150,7 +150,7 @@ protected:
    * @param z Value of z
    * @param w Value of w
    */
-		SIMD_FORCE_INLINE QuadWord(const btScalar& x, const btScalar& y, const btScalar& z,const btScalar& w) 
+		SIMD_FORCE_INLINE QuadWord(const tfScalar& x, const tfScalar& y, const tfScalar& z,const tfScalar& w) 
 		{
 			m_floats[0] = x, m_floats[1] = y, m_floats[2] = z, m_floats[3] = w;
 		}

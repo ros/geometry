@@ -44,7 +44,7 @@ public:
    * @param q Rotation from quaternion 
    * @param c Translation from Vector (default 0,0,0) */
 	explicit SIMD_FORCE_INLINE Transform(const Quaternion& q, 
-		const Vector3& c = Vector3(btScalar(0), btScalar(0), btScalar(0))) 
+		const Vector3& c = Vector3(tfScalar(0), tfScalar(0), tfScalar(0))) 
 		: m_basis(q),
 		m_origin(c)
 	{}
@@ -53,7 +53,7 @@ public:
    * @param b Rotation from Matrix 
    * @param c Translation from Vector default (0,0,0)*/
 	explicit SIMD_FORCE_INLINE Transform(const Matrix3x3& b, 
-		const Vector3& c = Vector3(btScalar(0), btScalar(0), btScalar(0)))
+		const Vector3& c = Vector3(tfScalar(0), tfScalar(0), tfScalar(0)))
 		: m_basis(b),
 		m_origin(c)
 	{}
@@ -128,7 +128,7 @@ public:
 	
   /**@brief Set from an array 
    * @param m A pointer to a 15 element array (12 rotation(row major padded on the right by 1), and 3 translation */
-	void setFromOpenGLMatrix(const btScalar *m)
+	void setFromOpenGLMatrix(const tfScalar *m)
 	{
 		m_basis.setFromOpenGLSubMatrix(m);
 		m_origin.setValue(m[12],m[13],m[14]);
@@ -136,13 +136,13 @@ public:
 
   /**@brief Fill an array representation
    * @param m A pointer to a 15 element array (12 rotation(row major padded on the right by 1), and 3 translation */
-	void getOpenGLMatrix(btScalar *m) const 
+	void getOpenGLMatrix(tfScalar *m) const 
 	{
 		m_basis.getOpenGLSubMatrix(m);
 		m[12] = m_origin.x();
 		m[13] = m_origin.y();
 		m[14] = m_origin.z();
-		m[15] = btScalar(1.0);
+		m[15] = tfScalar(1.0);
 	}
 
   /**@brief Set the translational element
@@ -172,7 +172,7 @@ public:
 	void setIdentity()
 	{
 		m_basis.setIdentity();
-		m_origin.setValue(btScalar(0.0), btScalar(0.0), btScalar(0.0));
+		m_origin.setValue(tfScalar(0.0), tfScalar(0.0), tfScalar(0.0));
 	}
 
   /**@brief Multiply this Transform by another(this = this * another) 

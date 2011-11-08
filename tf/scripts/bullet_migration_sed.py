@@ -55,6 +55,7 @@ rules = ['s|LinearMath/bt|tf/LinearMath/|g',  # include path
          's/btQuadWord\.h/QuadWord\.h/g',
          's/btMinMax\.h/MinMax\.h/g',
          's/btVector3\.h/Vector3\.h/g',
+         's/btScalar/tfScalar/g',
          ]
 
 unnamespaced_rules = [
@@ -63,7 +64,7 @@ unnamespaced_rules = [
          's/btVector3/tf::Vector3/g',
          's/btMatrix3x3/tf::Matrix3x3/g',
          's/btQuadWord/tf::QuadWord/g',
-         #'s/btScalar/tf::Scalar/g',
+
          ]
 
 namespaced_rules = [ 

@@ -129,7 +129,7 @@ static inline void quaternionTFToMsg(const Quaternion& bt, geometry_msgs::Quater
 
 /** \brief Helper function for getting yaw from a Quaternion */
 static inline double getYaw(const Quaternion& bt_q){
-  btScalar useless_pitch, useless_roll, yaw;
+  tfScalar useless_pitch, useless_roll, yaw;
   tf::Matrix3x3(bt_q).getRPY( useless_roll, useless_pitch,yaw);
   return yaw;
 }

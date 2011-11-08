@@ -37,21 +37,21 @@ public:
 	/** @brief No initializaion constructor */
 	Matrix3x3 () {}
 
-	//		explicit Matrix3x3(const btScalar *m) { setFromOpenGLSubMatrix(m); }
+	//		explicit Matrix3x3(const tfScalar *m) { setFromOpenGLSubMatrix(m); }
 
 	/**@brief Constructor from Quaternion */
 	explicit Matrix3x3(const Quaternion& q) { setRotation(q); }
 	/*
-	template <typename btScalar>
-	Matrix3x3(const btScalar& yaw, const btScalar& pitch, const btScalar& roll)
+	template <typename tfScalar>
+	Matrix3x3(const tfScalar& yaw, const tfScalar& pitch, const tfScalar& roll)
 	{ 
 	setEulerYPR(yaw, pitch, roll);
 	}
 	*/
 	/** @brief Constructor with row major formatting */
-	Matrix3x3(const btScalar& xx, const btScalar& xy, const btScalar& xz,
-		const btScalar& yx, const btScalar& yy, const btScalar& yz,
-		const btScalar& zx, const btScalar& zy, const btScalar& zz)
+	Matrix3x3(const tfScalar& xx, const tfScalar& xy, const tfScalar& xz,
+		const tfScalar& yx, const tfScalar& yy, const tfScalar& yz,
+		const tfScalar& zx, const tfScalar& zy, const tfScalar& zz)
 	{ 
 		setValue(xx, xy, xz, 
 			yx, yy, yz, 
@@ -110,9 +110,9 @@ public:
 	* Equivilant to this = this * m */
 	Matrix3x3& operator*=(const Matrix3x3& m); 
 
-	/** @brief Set from a carray of btScalars 
-	*  @param m A pointer to the beginning of an array of 9 btScalars */
-	void setFromOpenGLSubMatrix(const btScalar *m)
+	/** @brief Set from a carray of tfScalars 
+	*  @param m A pointer to the beginning of an array of 9 tfScalars */
+	void setFromOpenGLSubMatrix(const tfScalar *m)
 	{
 		m_el[0].setValue(m[0],m[4],m[8]);
 		m_el[1].setValue(m[1],m[5],m[9]);
@@ -129,9 +129,9 @@ public:
 	*  @param zx Bottom Left
 	*  @param zy Bottom Middle
 	*  @param zz Bottom Right*/
-	void setValue(const btScalar& xx, const btScalar& xy, const btScalar& xz, 
-		const btScalar& yx, const btScalar& yy, const btScalar& yz, 
-		const btScalar& zx, const btScalar& zy, const btScalar& zz)
+	void setValue(const tfScalar& xx, const tfScalar& xy, const tfScalar& xz, 
+		const tfScalar& yx, const tfScalar& yy, const tfScalar& yz, 
+		const tfScalar& zx, const tfScalar& zy, const tfScalar& zz)
 	{
 		m_el[0].setValue(xx,xy,xz);
 		m_el[1].setValue(yx,yy,yz);
@@ -142,16 +142,16 @@ public:
 	*  @param q The Quaternion to match */  
 	void setRotation(const Quaternion& q) 
 	{
-		btScalar d = q.length2();
-		btFullAssert(d != btScalar(0.0));
-		btScalar s = btScalar(2.0) / d;
-		btScalar xs = q.x() * s,   ys = q.y() * s,   zs = q.z() * s;
-		btScalar wx = q.w() * xs,  wy = q.w() * ys,  wz = q.w() * zs;
-		btScalar xx = q.x() * xs,  xy = q.x() * ys,  xz = q.x() * zs;
-		btScalar yy = q.y() * ys,  yz = q.y() * zs,  zz = q.z() * zs;
-		setValue(btScalar(1.0) - (yy + zz), xy - wz, xz + wy,
-			xy + wz, btScalar(1.0) - (xx + zz), yz - wx,
-			xz - wy, yz + wx, btScalar(1.0) - (xx + yy));
+		tfScalar d = q.length2();
+		btFullAssert(d != tfScalar(0.0));
+		tfScalar s = tfScalar(2.0) / d;
+		tfScalar xs = q.x() * s,   ys = q.y() * s,   zs = q.z() * s;
+		tfScalar wx = q.w() * xs,  wy = q.w() * ys,  wz = q.w() * zs;
+		tfScalar xx = q.x() * xs,  xy = q.x() * ys,  xz = q.x() * zs;
+		tfScalar yy = q.y() * ys,  yz = q.y() * zs,  zz = q.z() * zs;
+		setValue(tfScalar(1.0) - (yy + zz), xy - wz, xz + wy,
+			xy + wz, tfScalar(1.0) - (xx + zz), yz - wx,
+			xz - wy, yz + wx, tfScalar(1.0) - (xx + yy));
 	}
 
 
@@ -160,7 +160,7 @@ public:
 	*  @param pitch Pitch about Y axis
 	*  @param roll Roll about X axis 
 	*/
-	void setEulerZYX(const btScalar& yaw, const btScalar& pitch, const btScalar& roll) __attribute__((deprecated))
+	void setEulerZYX(const tfScalar& yaw, const tfScalar& pitch, const tfScalar& roll) __attribute__((deprecated))
 	{
 		setEulerYPR(yaw, pitch, roll);
 	}
@@ -174,17 +174,17 @@ public:
 	* angles are applied in ZYX order. I.e a vector is first rotated 
 	* about X then Y and then Z
 	**/
-	void setEulerYPR(btScalar eulerZ, btScalar eulerY,btScalar eulerX)  { 
-		btScalar ci ( btCos(eulerX)); 
-		btScalar cj ( btCos(eulerY)); 
-		btScalar ch ( btCos(eulerZ)); 
-		btScalar si ( btSin(eulerX)); 
-		btScalar sj ( btSin(eulerY)); 
-		btScalar sh ( btSin(eulerZ)); 
-		btScalar cc = ci * ch; 
-		btScalar cs = ci * sh; 
-		btScalar sc = si * ch; 
-		btScalar ss = si * sh;
+	void setEulerYPR(tfScalar eulerZ, tfScalar eulerY,tfScalar eulerX)  { 
+		tfScalar ci ( btCos(eulerX)); 
+		tfScalar cj ( btCos(eulerY)); 
+		tfScalar ch ( btCos(eulerZ)); 
+		tfScalar si ( btSin(eulerX)); 
+		tfScalar sj ( btSin(eulerY)); 
+		tfScalar sh ( btSin(eulerZ)); 
+		tfScalar cc = ci * ch; 
+		tfScalar cs = ci * sh; 
+		tfScalar sc = si * ch; 
+		tfScalar ss = si * sh;
 
 		setValue(cj * ch, sj * sc - cs, sj * cc + ss,
 			cj * sh, sj * ss + cc, sj * cs - sc, 
@@ -197,56 +197,56 @@ public:
          * @param yaw Yaw aboud Z axis
          * 
 	 **/
-	void setRPY(btScalar roll, btScalar pitch,btScalar yaw) { 
+	void setRPY(tfScalar roll, tfScalar pitch,tfScalar yaw) { 
                setEulerYPR(yaw, pitch, roll);
 	}
 
 	/**@brief Set the matrix to the identity */
 	void setIdentity()
 	{ 
-		setValue(btScalar(1.0), btScalar(0.0), btScalar(0.0), 
-			btScalar(0.0), btScalar(1.0), btScalar(0.0), 
-			btScalar(0.0), btScalar(0.0), btScalar(1.0)); 
+		setValue(tfScalar(1.0), tfScalar(0.0), tfScalar(0.0), 
+			tfScalar(0.0), tfScalar(1.0), tfScalar(0.0), 
+			tfScalar(0.0), tfScalar(0.0), tfScalar(1.0)); 
 	}
 
 	static const Matrix3x3&	getIdentity()
 	{
-		static const Matrix3x3 identityMatrix(btScalar(1.0), btScalar(0.0), btScalar(0.0), 
-			btScalar(0.0), btScalar(1.0), btScalar(0.0), 
-			btScalar(0.0), btScalar(0.0), btScalar(1.0));
+		static const Matrix3x3 identityMatrix(tfScalar(1.0), tfScalar(0.0), tfScalar(0.0), 
+			tfScalar(0.0), tfScalar(1.0), tfScalar(0.0), 
+			tfScalar(0.0), tfScalar(0.0), tfScalar(1.0));
 		return identityMatrix;
 	}
 
 	/**@brief Fill the values of the matrix into a 9 element array 
 	* @param m The array to be filled */
-	void getOpenGLSubMatrix(btScalar *m) const 
+	void getOpenGLSubMatrix(tfScalar *m) const 
 	{
-		m[0]  = btScalar(m_el[0].x()); 
-		m[1]  = btScalar(m_el[1].x());
-		m[2]  = btScalar(m_el[2].x());
-		m[3]  = btScalar(0.0); 
-		m[4]  = btScalar(m_el[0].y());
-		m[5]  = btScalar(m_el[1].y());
-		m[6]  = btScalar(m_el[2].y());
-		m[7]  = btScalar(0.0); 
-		m[8]  = btScalar(m_el[0].z()); 
-		m[9]  = btScalar(m_el[1].z());
-		m[10] = btScalar(m_el[2].z());
-		m[11] = btScalar(0.0); 
+		m[0]  = tfScalar(m_el[0].x()); 
+		m[1]  = tfScalar(m_el[1].x());
+		m[2]  = tfScalar(m_el[2].x());
+		m[3]  = tfScalar(0.0); 
+		m[4]  = tfScalar(m_el[0].y());
+		m[5]  = tfScalar(m_el[1].y());
+		m[6]  = tfScalar(m_el[2].y());
+		m[7]  = tfScalar(0.0); 
+		m[8]  = tfScalar(m_el[0].z()); 
+		m[9]  = tfScalar(m_el[1].z());
+		m[10] = tfScalar(m_el[2].z());
+		m[11] = tfScalar(0.0); 
 	}
 
 	/**@brief Get the matrix represented as a quaternion 
 	* @param q The quaternion which will be set */
 	void getRotation(Quaternion& q) const
 	{
-		btScalar trace = m_el[0].x() + m_el[1].y() + m_el[2].z();
-		btScalar temp[4];
+		tfScalar trace = m_el[0].x() + m_el[1].y() + m_el[2].z();
+		tfScalar temp[4];
 
-		if (trace > btScalar(0.0)) 
+		if (trace > tfScalar(0.0)) 
 		{
-			btScalar s = btSqrt(trace + btScalar(1.0));
-			temp[3]=(s * btScalar(0.5));
-			s = btScalar(0.5) / s;
+			tfScalar s = btSqrt(trace + tfScalar(1.0));
+			temp[3]=(s * tfScalar(0.5));
+			s = tfScalar(0.5) / s;
 
 			temp[0]=((m_el[2].y() - m_el[1].z()) * s);
 			temp[1]=((m_el[0].z() - m_el[2].x()) * s);
@@ -260,9 +260,9 @@ public:
 			int j = (i + 1) % 3;  
 			int k = (i + 2) % 3;
 
-			btScalar s = btSqrt(m_el[i][i] - m_el[j][j] - m_el[k][k] + btScalar(1.0));
-			temp[i] = s * btScalar(0.5);
-			s = btScalar(0.5) / s;
+			tfScalar s = btSqrt(m_el[i][i] - m_el[j][j] - m_el[k][k] + tfScalar(1.0));
+			temp[i] = s * tfScalar(0.5);
+			s = tfScalar(0.5) / s;
 
 			temp[3] = (m_el[k][j] - m_el[j][k]) * s;
 			temp[j] = (m_el[j][i] + m_el[i][j]) * s;
@@ -276,7 +276,7 @@ public:
 	* @param pitch Pitch around Y axis
 	* @param roll around X axis 
  	* @param solution_number Which solution of two possible solutions ( 1 or 2) are possible values*/	
-	__attribute__((deprecated)) void getEulerZYX(btScalar& yaw, btScalar& pitch, btScalar& roll, unsigned int solution_number = 1) const
+	__attribute__((deprecated)) void getEulerZYX(tfScalar& yaw, tfScalar& pitch, tfScalar& roll, unsigned int solution_number = 1) const
 	{
 		getEulerYPR(yaw, pitch, roll, solution_number);
 	};
@@ -286,13 +286,13 @@ public:
 	* @param yaw Yaw around Z axis
 	* @param pitch Pitch around Y axis
 	* @param roll around X axis */	
-	void getEulerYPR(btScalar& yaw, btScalar& pitch, btScalar& roll, unsigned int solution_number = 1) const
+	void getEulerYPR(tfScalar& yaw, tfScalar& pitch, tfScalar& roll, unsigned int solution_number = 1) const
 	{
 		struct Euler
 		{
-			btScalar yaw;
-			btScalar pitch;
-			btScalar roll;
+			tfScalar yaw;
+			tfScalar pitch;
+			tfScalar roll;
 		};
 
 		Euler euler_out;
@@ -307,18 +307,18 @@ public:
 			euler_out2.yaw = 0;
 	
 			// From difference of angles formula
-			btScalar delta = btAtan2(m_el[2].y(),m_el[2].z());
+			tfScalar delta = btAtan2(m_el[2].y(),m_el[2].z());
 			if (m_el[2].x() < 0)  //gimbal locked down
 			{
-				euler_out.pitch = SIMD_PI / btScalar(2.0);
-				euler_out2.pitch = SIMD_PI / btScalar(2.0);
+				euler_out.pitch = SIMD_PI / tfScalar(2.0);
+				euler_out2.pitch = SIMD_PI / tfScalar(2.0);
 				euler_out.roll = delta;
 				euler_out2.roll = delta;
 			}
 			else // gimbal locked up
 			{
-				euler_out.pitch = -SIMD_PI / btScalar(2.0);
-				euler_out2.pitch = -SIMD_PI / btScalar(2.0);
+				euler_out.pitch = -SIMD_PI / tfScalar(2.0);
+				euler_out2.pitch = -SIMD_PI / tfScalar(2.0);
 				euler_out.roll = delta;
 				euler_out2.roll = delta;
 			}
@@ -358,7 +358,7 @@ public:
 	* @param pitch Pitch around Y axis
 	* @param yaw Yaw around Z axis
 	* @param solution_number Which solution of two possible solutions ( 1 or 2) are possible values*/	
-	void getRPY(btScalar& roll, btScalar& pitch, btScalar& yaw, unsigned int solution_number = 1) const
+	void getRPY(tfScalar& roll, tfScalar& pitch, tfScalar& yaw, unsigned int solution_number = 1) const
 	{
 	getEulerYPR(yaw, pitch, roll, solution_number);
 	}
@@ -374,7 +374,7 @@ public:
 	}
 
 	/**@brief Return the determinant of the matrix */
-	btScalar            determinant() const;
+	tfScalar            determinant() const;
 	/**@brief Return the adjoint of the matrix */
 	Matrix3x3 adjoint() const;
 	/**@brief Return the matrix with all values non negative */
@@ -387,15 +387,15 @@ public:
 	Matrix3x3 transposeTimes(const Matrix3x3& m) const;
 	Matrix3x3 timesTranspose(const Matrix3x3& m) const;
 
-	SIMD_FORCE_INLINE btScalar tdotx(const Vector3& v) const 
+	SIMD_FORCE_INLINE tfScalar tdotx(const Vector3& v) const 
 	{
 		return m_el[0].x() * v.x() + m_el[1].x() * v.y() + m_el[2].x() * v.z();
 	}
-	SIMD_FORCE_INLINE btScalar tdoty(const Vector3& v) const 
+	SIMD_FORCE_INLINE tfScalar tdoty(const Vector3& v) const 
 	{
 		return m_el[0].y() * v.x() + m_el[1].y() * v.y() + m_el[2].y() * v.z();
 	}
-	SIMD_FORCE_INLINE btScalar tdotz(const Vector3& v) const 
+	SIMD_FORCE_INLINE tfScalar tdotz(const Vector3& v) const 
 	{
 		return m_el[0].z() * v.x() + m_el[1].z() * v.y() + m_el[2].z() * v.z();
 	}
@@ -410,7 +410,7 @@ public:
 	* 
 	* Note that this matrix is assumed to be symmetric. 
 	*/
-	void diagonalize(Matrix3x3& rot, btScalar threshold, int maxSteps)
+	void diagonalize(Matrix3x3& rot, tfScalar threshold, int maxSteps)
 	{
 		rot.setIdentity();
 		for (int step = maxSteps; step > 0; step--)
@@ -419,8 +419,8 @@ public:
 			int p = 0;
 			int q = 1;
 			int r = 2;
-			btScalar max = btFabs(m_el[0][1]);
-			btScalar v = btFabs(m_el[0][2]);
+			tfScalar max = btFabs(m_el[0][1]);
+			tfScalar v = btFabs(m_el[0][2]);
 			if (v > max)
 			{
 				q = 2;
@@ -436,7 +436,7 @@ public:
 				max = v;
 			}
 
-			btScalar t = threshold * (btFabs(m_el[0][0]) + btFabs(m_el[1][1]) + btFabs(m_el[2][2]));
+			tfScalar t = threshold * (btFabs(m_el[0][0]) + btFabs(m_el[1][1]) + btFabs(m_el[2][2]));
 			if (max <= t)
 			{
 				if (max <= SIMD_EPSILON * t)
@@ -447,12 +447,12 @@ public:
 			}
 
 			// compute Jacobi rotation J which leads to a zero for element [p][q] 
-			btScalar mpq = m_el[p][q];
-			btScalar theta = (m_el[q][q] - m_el[p][p]) / (2 * mpq);
-			btScalar theta2 = theta * theta;
-			btScalar cos;
-			btScalar sin;
-			if (theta2 * theta2 < btScalar(10 / SIMD_EPSILON))
+			tfScalar mpq = m_el[p][q];
+			tfScalar theta = (m_el[q][q] - m_el[p][p]) / (2 * mpq);
+			tfScalar theta2 = theta * theta;
+			tfScalar cos;
+			tfScalar sin;
+			if (theta2 * theta2 < tfScalar(10 / SIMD_EPSILON))
 			{
 				t = (theta >= 0) ? 1 / (theta + btSqrt(1 + theta2))
 					: 1 / (theta - btSqrt(1 + theta2));
@@ -462,8 +462,8 @@ public:
 			else
 			{
 				// approximation for large theta-value, i.e., a nearly diagonal matrix
-				t = 1 / (theta * (2 + btScalar(0.5) / theta2));
-				cos = 1 - btScalar(0.5) * t * t;
+				t = 1 / (theta * (2 + tfScalar(0.5) / theta2));
+				cos = 1 - tfScalar(0.5) * t * t;
 				sin = cos * t;
 			}
 
@@ -471,8 +471,8 @@ public:
 			m_el[p][q] = m_el[q][p] = 0;
 			m_el[p][p] -= t * mpq;
 			m_el[q][q] += t * mpq;
-			btScalar mrp = m_el[r][p];
-			btScalar mrq = m_el[r][q];
+			tfScalar mrp = m_el[r][p];
+			tfScalar mrq = m_el[r][q];
 			m_el[r][p] = m_el[p][r] = cos * mrp - sin * mrq;
 			m_el[r][q] = m_el[q][r] = cos * mrq + sin * mrp;
 
@@ -498,7 +498,7 @@ public:
 	* @param c1 The second column to use for calculating the cofactor
 	* See http://en.wikipedia.org/wiki/Cofactor_(linear_algebra) for more details
 	*/
-	btScalar cofac(int r1, int c1, int r2, int c2) const 
+	tfScalar cofac(int r1, int c1, int r2, int c2) const 
 	{
 		return m_el[r1][c1] * m_el[r2][c2] - m_el[r1][c2] * m_el[r2][c1];
 	}
@@ -525,7 +525,7 @@ Matrix3x3::operator*=(const Matrix3x3& m)
 	return *this;
 }
 
-SIMD_FORCE_INLINE btScalar 
+SIMD_FORCE_INLINE tfScalar 
 Matrix3x3::determinant() const
 { 
 	return btTriple((*this)[0], (*this)[1], (*this)[2]);
@@ -561,9 +561,9 @@ SIMD_FORCE_INLINE Matrix3x3
 Matrix3x3::inverse() const
 {
 	Vector3 co(cofac(1, 1, 2, 2), cofac(1, 2, 2, 0), cofac(1, 0, 2, 1));
-	btScalar det = (*this)[0].dot(co);
-	btFullAssert(det != btScalar(0.0));
-	btScalar s = btScalar(1.0) / det;
+	tfScalar det = (*this)[0].dot(co);
+	btFullAssert(det != tfScalar(0.0));
+	tfScalar s = tfScalar(1.0) / det;
 	return Matrix3x3(co.x() * s, cofac(0, 2, 2, 1) * s, cofac(0, 1, 1, 2) * s,
 		co.y() * s, cofac(0, 0, 2, 2) * s, cofac(0, 2, 1, 0) * s,
 		co.z() * s, cofac(0, 1, 2, 0) * s, cofac(0, 0, 1, 1) * s);

@@ -385,8 +385,8 @@ static PyObject *setTransform(PyObject *self, PyObject *args)
   double qw = PyFloat_AsDouble(PyObject_BorrowAttrString(rotation, "w"));
 
   transform.setData(tf::Transform(
-    tf::Quaternion(btScalar(qx), btScalar(qy), btScalar(qz), btScalar(qw)),
-    tf::Vector3(btScalar(tx), btScalar(ty), btScalar(tz))));
+    tf::Quaternion(tfScalar(qx), tfScalar(qy), tfScalar(qz), tfScalar(qw)),
+    tf::Vector3(tfScalar(tx), tfScalar(ty), tfScalar(tz))));
   t->setTransform(transform, authority);
   Py_RETURN_NONE;
 }

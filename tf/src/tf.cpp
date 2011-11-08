@@ -534,7 +534,7 @@ void Transformer::lookupTwist(const std::string& tracking_frame, const std::stri
   tf::Quaternion quat_temp;
   temp.getRotation(quat_temp);
   tf::Vector3 o = start.getBasis() * quat_temp.getAxis();
-  btScalar ang = quat_temp.getAngle();
+  tfScalar ang = quat_temp.getAngle();
   
   double delta_x = end.getOrigin().getX() - start.getOrigin().getX();
   double delta_y = end.getOrigin().getY() - start.getOrigin().getY();

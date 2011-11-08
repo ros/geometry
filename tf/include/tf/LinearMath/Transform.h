@@ -43,7 +43,7 @@ public:
   /**@brief Constructor from Quaternion (optional Vector3 )
    * @param q Rotation from quaternion 
    * @param c Translation from Vector (default 0,0,0) */
-	explicit SIMD_FORCE_INLINE Transform(const Quaternion& q, 
+	explicit TFSIMD_FORCE_INLINE Transform(const Quaternion& q, 
 		const Vector3& c = Vector3(tfScalar(0), tfScalar(0), tfScalar(0))) 
 		: m_basis(q),
 		m_origin(c)
@@ -52,19 +52,19 @@ public:
   /**@brief Constructor from Matrix3x3 (optional Vector3)
    * @param b Rotation from Matrix 
    * @param c Translation from Vector default (0,0,0)*/
-	explicit SIMD_FORCE_INLINE Transform(const Matrix3x3& b, 
+	explicit TFSIMD_FORCE_INLINE Transform(const Matrix3x3& b, 
 		const Vector3& c = Vector3(tfScalar(0), tfScalar(0), tfScalar(0)))
 		: m_basis(b),
 		m_origin(c)
 	{}
   /**@brief Copy constructor */
-	SIMD_FORCE_INLINE Transform (const Transform& other)
+	TFSIMD_FORCE_INLINE Transform (const Transform& other)
 		: m_basis(other.m_basis),
 		m_origin(other.m_origin)
 	{
 	}
   /**@brief Assignment Operator */
-	SIMD_FORCE_INLINE Transform& operator=(const Transform& other)
+	TFSIMD_FORCE_INLINE Transform& operator=(const Transform& other)
 	{
 		m_basis = other.m_basis;
 		m_origin = other.m_origin;
@@ -72,7 +72,7 @@ public:
 	}
 
   /**@brief Assignment Operator  from btTransform*/
-	SIMD_FORCE_INLINE Transform& operator=(const btTransform& other)
+	TFSIMD_FORCE_INLINE Transform& operator=(const btTransform& other)
 	{
           m_basis = other.getBasis();
           m_origin = other.getOrigin();
@@ -80,7 +80,7 @@ public:
 	}
 
   /** @brief Return a btTransform */
-  SIMD_FORCE_INLINE btTransform as_bt(void) const
+  TFSIMD_FORCE_INLINE btTransform as_bt(void) const
   {
     return btTransform(m_basis.as_bt(), m_origin.as_bt());
   }
@@ -90,7 +90,7 @@ public:
    * @param t1 Transform 1
    * @param t2 Transform 2
    * This = Transform1 * Transform2 */
-		SIMD_FORCE_INLINE void mult(const Transform& t1, const Transform& t2) {
+		TFSIMD_FORCE_INLINE void mult(const Transform& t1, const Transform& t2) {
 			m_basis = t1.m_basis * t2.m_basis;
 			m_origin = t1(t2.m_origin);
 		}
@@ -103,7 +103,7 @@ public:
 		*/
 
 /**@brief Return the transform of the vector */
-	SIMD_FORCE_INLINE Vector3 operator()(const Vector3& x) const
+	TFSIMD_FORCE_INLINE Vector3 operator()(const Vector3& x) const
 	{
 		return Vector3(m_basis[0].dot(x) + m_origin.x(), 
 			m_basis[1].dot(x) + m_origin.y(), 
@@ -111,26 +111,26 @@ public:
 	}
 
   /**@brief Return the transform of the vector */
-	SIMD_FORCE_INLINE Vector3 operator*(const Vector3& x) const
+	TFSIMD_FORCE_INLINE Vector3 operator*(const Vector3& x) const
 	{
 		return (*this)(x);
 	}
 
   /**@brief Return the transform of the Quaternion */
-	SIMD_FORCE_INLINE Quaternion operator*(const Quaternion& q) const
+	TFSIMD_FORCE_INLINE Quaternion operator*(const Quaternion& q) const
 	{
 		return getRotation() * q;
 	}
 
   /**@brief Return the basis matrix for the rotation */
-	SIMD_FORCE_INLINE Matrix3x3&       getBasis()          { return m_basis; }
+	TFSIMD_FORCE_INLINE Matrix3x3&       getBasis()          { return m_basis; }
   /**@brief Return the basis matrix for the rotation */
-	SIMD_FORCE_INLINE const Matrix3x3& getBasis()    const { return m_basis; }
+	TFSIMD_FORCE_INLINE const Matrix3x3& getBasis()    const { return m_basis; }
 
   /**@brief Return the origin vector translation */
-	SIMD_FORCE_INLINE Vector3&         getOrigin()         { return m_origin; }
+	TFSIMD_FORCE_INLINE Vector3&         getOrigin()         { return m_origin; }
   /**@brief Return the origin vector translation */
-	SIMD_FORCE_INLINE const Vector3&   getOrigin()   const { return m_origin; }
+	TFSIMD_FORCE_INLINE const Vector3&   getOrigin()   const { return m_origin; }
 
   /**@brief Return a quaternion representing the rotation */
 	Quaternion getRotation() const { 
@@ -161,22 +161,22 @@ public:
 
   /**@brief Set the translational element
    * @param origin The vector to set the translation to */
-	SIMD_FORCE_INLINE void setOrigin(const Vector3& origin) 
+	TFSIMD_FORCE_INLINE void setOrigin(const Vector3& origin) 
 	{ 
 		m_origin = origin;
 	}
 
-	SIMD_FORCE_INLINE Vector3 invXform(const Vector3& inVec) const;
+	TFSIMD_FORCE_INLINE Vector3 invXform(const Vector3& inVec) const;
 
 
   /**@brief Set the rotational element by Matrix3x3 */
-	SIMD_FORCE_INLINE void setBasis(const Matrix3x3& basis)
+	TFSIMD_FORCE_INLINE void setBasis(const Matrix3x3& basis)
 	{ 
 		m_basis = basis;
 	}
 
   /**@brief Set the rotational element by Quaternion */
-	SIMD_FORCE_INLINE void setRotation(const Quaternion& q)
+	TFSIMD_FORCE_INLINE void setRotation(const Quaternion& q)
 	{
 		m_basis.setRotation(q);
 	}
@@ -233,14 +233,14 @@ public:
 };
 
 
-SIMD_FORCE_INLINE Vector3
+TFSIMD_FORCE_INLINE Vector3
 Transform::invXform(const Vector3& inVec) const
 {
 	Vector3 v = inVec - m_origin;
 	return (m_basis.transpose() * v);
 }
 
-SIMD_FORCE_INLINE Transform 
+TFSIMD_FORCE_INLINE Transform 
 Transform::inverseTimes(const Transform& t) const  
 {
 	Vector3 v = t.getOrigin() - m_origin;
@@ -248,7 +248,7 @@ Transform::inverseTimes(const Transform& t) const
 			v * m_basis);
 }
 
-SIMD_FORCE_INLINE Transform 
+TFSIMD_FORCE_INLINE Transform 
 Transform::operator*(const Transform& t) const
 {
 	return Transform(m_basis * t.m_basis, 
@@ -256,7 +256,7 @@ Transform::operator*(const Transform& t) const
 }
 
 /**@brief Test if two transforms have all elements equal */
-SIMD_FORCE_INLINE bool operator==(const Transform& t1, const Transform& t2)
+TFSIMD_FORCE_INLINE bool operator==(const Transform& t1, const Transform& t2)
 {
    return ( t1.getBasis()  == t2.getBasis() &&
             t1.getOrigin() == t2.getOrigin() );
@@ -278,32 +278,32 @@ struct	TransformDoubleData
 
 
 
-SIMD_FORCE_INLINE	void	Transform::serialize(TransformData& dataOut) const
+TFSIMD_FORCE_INLINE	void	Transform::serialize(TransformData& dataOut) const
 {
 	m_basis.serialize(dataOut.m_basis);
 	m_origin.serialize(dataOut.m_origin);
 }
 
-SIMD_FORCE_INLINE	void	Transform::serializeFloat(TransformFloatData& dataOut) const
+TFSIMD_FORCE_INLINE	void	Transform::serializeFloat(TransformFloatData& dataOut) const
 {
 	m_basis.serializeFloat(dataOut.m_basis);
 	m_origin.serializeFloat(dataOut.m_origin);
 }
 
 
-SIMD_FORCE_INLINE	void	Transform::deSerialize(const TransformData& dataIn)
+TFSIMD_FORCE_INLINE	void	Transform::deSerialize(const TransformData& dataIn)
 {
 	m_basis.deSerialize(dataIn.m_basis);
 	m_origin.deSerialize(dataIn.m_origin);
 }
 
-SIMD_FORCE_INLINE	void	Transform::deSerializeFloat(const TransformFloatData& dataIn)
+TFSIMD_FORCE_INLINE	void	Transform::deSerializeFloat(const TransformFloatData& dataIn)
 {
 	m_basis.deSerializeFloat(dataIn.m_basis);
 	m_origin.deSerializeFloat(dataIn.m_origin);
 }
 
-SIMD_FORCE_INLINE	void	Transform::deSerializeDouble(const TransformDoubleData& dataIn)
+TFSIMD_FORCE_INLINE	void	Transform::deSerializeDouble(const TransformDoubleData& dataIn)
 {
 	m_basis.deSerializeDouble(dataIn.m_basis);
 	m_origin.deSerializeDouble(dataIn.m_origin);

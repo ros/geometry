@@ -118,7 +118,7 @@ public:
 	}
   /**@brief Add two quaternions
    * @param q The quaternion to add to this one */
-	SIMD_FORCE_INLINE	Quaternion& operator+=(const Quaternion& q)
+	TFSIMD_FORCE_INLINE	Quaternion& operator+=(const Quaternion& q)
 	{
 		m_floats[0] += q.x(); m_floats[1] += q.y(); m_floats[2] += q.z(); m_floats[3] += q.m_floats[3];
 		return *this;
@@ -128,7 +128,7 @@ public:
   /** @brief Assignment from btQuaternion
    * @param the btQuaternion to copy
    */
-	SIMD_FORCE_INLINE	Quaternion& operator=(const btQuaternion& q)
+	TFSIMD_FORCE_INLINE	Quaternion& operator=(const btQuaternion& q)
 	{
           m_floats[0] = q.x(); m_floats[1] = q.y(); m_floats[2] = q.z(); m_floats[3] = q.w();
 		return *this;
@@ -136,7 +136,7 @@ public:
 
   /** @brief return a btQuaternion
    */
-	SIMD_FORCE_INLINE	btQuaternion as_bt() const
+	TFSIMD_FORCE_INLINE	btQuaternion as_bt() const
 	{
           return btQuaternion(m_floats[0], m_floats[1], m_floats[2], m_floats[3]);
 	}
@@ -198,7 +198,7 @@ public:
 
   /**@brief Return a scaled version of this quaternion
    * @param s The scale factor */
-	SIMD_FORCE_INLINE Quaternion
+	TFSIMD_FORCE_INLINE Quaternion
 	operator*(const tfScalar& s) const
 	{
 		return Quaternion(x() * s, y() * s, z() * s, m_floats[3] * s);
@@ -268,7 +268,7 @@ public:
 	Vector3 getAxis() const
 	{
 		tfScalar s_squared = tfScalar(1.) - tfPow(m_floats[3], tfScalar(2.));
-		if (s_squared < tfScalar(10.) * SIMD_EPSILON) //Check for divide by zero
+		if (s_squared < tfScalar(10.) * TFSIMD_EPSILON) //Check for divide by zero
 			return Vector3(1.0, 0.0, 0.0);  // Arbitrary
 		tfScalar s = tfSqrt(s_squared);
 		return Vector3(m_floats[0] / s, m_floats[1] / s, m_floats[2] / s);
@@ -282,7 +282,7 @@ public:
 
   /**@brief Return the sum of this quaternion and the other 
    * @param q2 The other quaternion */
-	SIMD_FORCE_INLINE Quaternion
+	TFSIMD_FORCE_INLINE Quaternion
 	operator+(const Quaternion& q2) const
 	{
 		const Quaternion& q1 = *this;
@@ -291,7 +291,7 @@ public:
 
   /**@brief Return the difference between this quaternion and the other 
    * @param q2 The other quaternion */
-	SIMD_FORCE_INLINE Quaternion
+	TFSIMD_FORCE_INLINE Quaternion
 	operator-(const Quaternion& q2) const
 	{
 		const Quaternion& q1 = *this;
@@ -300,13 +300,13 @@ public:
 
   /**@brief Return the negative of this quaternion 
    * This simply negates each element */
-	SIMD_FORCE_INLINE Quaternion operator-() const
+	TFSIMD_FORCE_INLINE Quaternion operator-() const
 	{
 		const Quaternion& q2 = *this;
 		return Quaternion( - q2.x(), - q2.y(),  - q2.z(),  - q2.m_floats[3]);
 	}
   /**@todo document this and it's use */
-	SIMD_FORCE_INLINE Quaternion farthest( const Quaternion& qd) const 
+	TFSIMD_FORCE_INLINE Quaternion farthest( const Quaternion& qd) const 
 	{
 		Quaternion diff,sum;
 		diff = *this - qd;
@@ -317,7 +317,7 @@ public:
 	}
 
 	/**@todo document this and it's use */
-	SIMD_FORCE_INLINE Quaternion nearest( const Quaternion& qd) const 
+	TFSIMD_FORCE_INLINE Quaternion nearest( const Quaternion& qd) const 
 	{
 		Quaternion diff,sum;
 		diff = *this - qd;
@@ -364,14 +364,14 @@ public:
 		return identityQuat;
 	}
 
-	SIMD_FORCE_INLINE const tfScalar& getW() const { return m_floats[3]; }
+	TFSIMD_FORCE_INLINE const tfScalar& getW() const { return m_floats[3]; }
 
 	
 };
 
 
 /**@brief Return the negative of a quaternion */
-SIMD_FORCE_INLINE Quaternion
+TFSIMD_FORCE_INLINE Quaternion
 operator-(const Quaternion& q)
 {
 	return Quaternion(-q.x(), -q.y(), -q.z(), -q.w());
@@ -380,7 +380,7 @@ operator-(const Quaternion& q)
 
 
 /**@brief Return the product of two quaternions */
-SIMD_FORCE_INLINE Quaternion
+TFSIMD_FORCE_INLINE Quaternion
 operator*(const Quaternion& q1, const Quaternion& q2) {
 	return Quaternion(q1.w() * q2.x() + q1.x() * q2.w() + q1.y() * q2.z() - q1.z() * q2.y(),
 		q1.w() * q2.y() + q1.y() * q2.w() + q1.z() * q2.x() - q1.x() * q2.z(),
@@ -388,7 +388,7 @@ operator*(const Quaternion& q1, const Quaternion& q2) {
 		q1.w() * q2.w() - q1.x() * q2.x() - q1.y() * q2.y() - q1.z() * q2.z()); 
 }
 
-SIMD_FORCE_INLINE Quaternion
+TFSIMD_FORCE_INLINE Quaternion
 operator*(const Quaternion& q, const Vector3& w)
 {
 	return Quaternion( q.w() * w.x() + q.y() * w.z() - q.z() * w.y(),
@@ -397,7 +397,7 @@ operator*(const Quaternion& q, const Vector3& w)
 		-q.x() * w.x() - q.y() * w.y() - q.z() * w.z()); 
 }
 
-SIMD_FORCE_INLINE Quaternion
+TFSIMD_FORCE_INLINE Quaternion
 operator*(const Vector3& w, const Quaternion& q)
 {
 	return Quaternion( w.x() * q.w() + w.y() * q.z() - w.z() * q.y(),
@@ -407,7 +407,7 @@ operator*(const Vector3& w, const Quaternion& q)
 }
 
 /**@brief Calculate the dot product between two quaternions */
-SIMD_FORCE_INLINE tfScalar 
+TFSIMD_FORCE_INLINE tfScalar 
 dot(const Quaternion& q1, const Quaternion& q2) 
 { 
 	return q1.dot(q2); 
@@ -415,28 +415,28 @@ dot(const Quaternion& q1, const Quaternion& q2)
 
 
 /**@brief Return the length of a quaternion */
-SIMD_FORCE_INLINE tfScalar
+TFSIMD_FORCE_INLINE tfScalar
 length(const Quaternion& q) 
 { 
 	return q.length(); 
 }
 
 /**@brief Return the ***half*** angle between two quaternions*/
-SIMD_FORCE_INLINE tfScalar
+TFSIMD_FORCE_INLINE tfScalar
 angle(const Quaternion& q1, const Quaternion& q2) 
 { 
 	return q1.angle(q2); 
 }
 
 /**@brief Return the shortest angle between two quaternions*/
-SIMD_FORCE_INLINE tfScalar
+TFSIMD_FORCE_INLINE tfScalar
 angleShortestPath(const Quaternion& q1, const Quaternion& q2) 
 { 
 	return q1.angleShortestPath(q2); 
 }
 
 /**@brief Return the inverse of a quaternion*/
-SIMD_FORCE_INLINE Quaternion
+TFSIMD_FORCE_INLINE Quaternion
 inverse(const Quaternion& q) 
 {
 	return q.inverse();
@@ -447,13 +447,13 @@ inverse(const Quaternion& q)
  * @param q2 The second quaternion 
  * @param t The ration between q1 and q2.  t = 0 return q1, t=1 returns q2 
  * Slerp assumes constant velocity between positions. */
-SIMD_FORCE_INLINE Quaternion
+TFSIMD_FORCE_INLINE Quaternion
 slerp(const Quaternion& q1, const Quaternion& q2, const tfScalar& t) 
 {
 	return q1.slerp(q2, t);
 }
 
-SIMD_FORCE_INLINE Vector3 
+TFSIMD_FORCE_INLINE Vector3 
 quatRotate(const Quaternion& rotation, const Vector3& v) 
 {
 	Quaternion q = rotation * v;
@@ -461,13 +461,13 @@ quatRotate(const Quaternion& rotation, const Vector3& v)
 	return Vector3(q.getX(),q.getY(),q.getZ());
 }
 
-SIMD_FORCE_INLINE Quaternion 
+TFSIMD_FORCE_INLINE Quaternion 
 shortestArcQuat(const Vector3& v0, const Vector3& v1) // Game Programming Gems 2.10. make sure v0,v1 are normalized
 {
 	Vector3 c = v0.cross(v1);
 	tfScalar  d = v0.dot(v1);
 
-	if (d < -1.0 + SIMD_EPSILON)
+	if (d < -1.0 + TFSIMD_EPSILON)
 	{
 		Vector3 n,unused;
 		tfPlaneSpace1(v0,n,unused);
@@ -480,7 +480,7 @@ shortestArcQuat(const Vector3& v0, const Vector3& v1) // Game Programming Gems 2
 	return Quaternion(c.getX()*rs,c.getY()*rs,c.getZ()*rs,s * 0.5f);
 }
 
-SIMD_FORCE_INLINE Quaternion 
+TFSIMD_FORCE_INLINE Quaternion 
 shortestArcQuatNormalize2(Vector3& v0,Vector3& v1)
 {
 	v0.normalize();

@@ -38,7 +38,7 @@ subject to the following restrictions:
 
 		#if defined(__MINGW32__) || defined(__CYGWIN__) || (defined (_MSC_VER) && _MSC_VER < 1300)
 
-			#define SIMD_FORCE_INLINE inline
+			#define TFSIMD_FORCE_INLINE inline
 			#define ATTRIBUTE_ALIGNED16(a) a
 			#define ATTRIBUTE_ALIGNED64(a) a
 			#define ATTRIBUTE_ALIGNED128(a) a
@@ -49,7 +49,7 @@ subject to the following restrictions:
 //			#pragma warning(disable:4996) //Turn off warnings about deprecated C routines
 //			#pragma warning(disable:4786) // Disable the "debug name too long" warning
 
-			#define SIMD_FORCE_INLINE __forceinline
+			#define TFSIMD_FORCE_INLINE __forceinline
 			#define ATTRIBUTE_ALIGNED16(a) __declspec(align(16)) a
 			#define ATTRIBUTE_ALIGNED64(a) __declspec(align(64)) a
 			#define ATTRIBUTE_ALIGNED128(a) __declspec (align(128)) a
@@ -81,7 +81,7 @@ subject to the following restrictions:
 #else
 	
 #if defined	(__CELLOS_LV2__)
-		#define SIMD_FORCE_INLINE inline
+		#define TFSIMD_FORCE_INLINE inline
 		#define ATTRIBUTE_ALIGNED16(a) a __attribute__ ((aligned (16)))
 		#define ATTRIBUTE_ALIGNED64(a) a __attribute__ ((aligned (64)))
 		#define ATTRIBUTE_ALIGNED128(a) a __attribute__ ((aligned (128)))
@@ -103,7 +103,7 @@ subject to the following restrictions:
 
 #ifdef USE_LIBSPE2
 
-		#define SIMD_FORCE_INLINE __inline
+		#define TFSIMD_FORCE_INLINE __inline
 		#define ATTRIBUTE_ALIGNED16(a) a __attribute__ ((aligned (16)))
 		#define ATTRIBUTE_ALIGNED64(a) a __attribute__ ((aligned (64)))
 		#define ATTRIBUTE_ALIGNED128(a) a __attribute__ ((aligned (128)))
@@ -127,7 +127,7 @@ subject to the following restrictions:
 	//non-windows systems
 
 
-		#define SIMD_FORCE_INLINE inline
+		#define TFSIMD_FORCE_INLINE inline
 		///@todo: check out alignment methods for other platforms/compilers
 		///#define ATTRIBUTE_ALIGNED16(a) a __attribute__ ((aligned (16)))
 		///#define ATTRIBUTE_ALIGNED64(a) a __attribute__ ((aligned (64)))
@@ -164,49 +164,49 @@ typedef double tfScalar;
 
 
 #define TF_DECLARE_ALIGNED_ALLOCATOR() \
-   SIMD_FORCE_INLINE void* operator new(size_t sizeInBytes)   { return tfAlignedAlloc(sizeInBytes,16); }   \
-   SIMD_FORCE_INLINE void  operator delete(void* ptr)         { tfAlignedFree(ptr); }   \
-   SIMD_FORCE_INLINE void* operator new(size_t, void* ptr)   { return ptr; }   \
-   SIMD_FORCE_INLINE void  operator delete(void*, void*)      { }   \
-   SIMD_FORCE_INLINE void* operator new[](size_t sizeInBytes)   { return tfAlignedAlloc(sizeInBytes,16); }   \
-   SIMD_FORCE_INLINE void  operator delete[](void* ptr)         { tfAlignedFree(ptr); }   \
-   SIMD_FORCE_INLINE void* operator new[](size_t, void* ptr)   { return ptr; }   \
-   SIMD_FORCE_INLINE void  operator delete[](void*, void*)      { }   \
+   TFSIMD_FORCE_INLINE void* operator new(size_t sizeInBytes)   { return tfAlignedAlloc(sizeInBytes,16); }   \
+   TFSIMD_FORCE_INLINE void  operator delete(void* ptr)         { tfAlignedFree(ptr); }   \
+   TFSIMD_FORCE_INLINE void* operator new(size_t, void* ptr)   { return ptr; }   \
+   TFSIMD_FORCE_INLINE void  operator delete(void*, void*)      { }   \
+   TFSIMD_FORCE_INLINE void* operator new[](size_t sizeInBytes)   { return tfAlignedAlloc(sizeInBytes,16); }   \
+   TFSIMD_FORCE_INLINE void  operator delete[](void* ptr)         { tfAlignedFree(ptr); }   \
+   TFSIMD_FORCE_INLINE void* operator new[](size_t, void* ptr)   { return ptr; }   \
+   TFSIMD_FORCE_INLINE void  operator delete[](void*, void*)      { }   \
 
 
 
 		
-SIMD_FORCE_INLINE tfScalar tfSqrt(tfScalar x) { return sqrt(x); }
-SIMD_FORCE_INLINE tfScalar tfFabs(tfScalar x) { return fabs(x); }
-SIMD_FORCE_INLINE tfScalar tfCos(tfScalar x) { return cos(x); }
-SIMD_FORCE_INLINE tfScalar tfSin(tfScalar x) { return sin(x); }
-SIMD_FORCE_INLINE tfScalar tfTan(tfScalar x) { return tan(x); }
-SIMD_FORCE_INLINE tfScalar tfAcos(tfScalar x) { if (x<tfScalar(-1))	x=tfScalar(-1); if (x>tfScalar(1))	x=tfScalar(1); return acos(x); }
-SIMD_FORCE_INLINE tfScalar tfAsin(tfScalar x) { if (x<tfScalar(-1))	x=tfScalar(-1); if (x>tfScalar(1))	x=tfScalar(1); return asin(x); }
-SIMD_FORCE_INLINE tfScalar tfAtan(tfScalar x) { return atan(x); }
-SIMD_FORCE_INLINE tfScalar tfAtan2(tfScalar x, tfScalar y) { return atan2(x, y); }
-SIMD_FORCE_INLINE tfScalar tfExp(tfScalar x) { return exp(x); }
-SIMD_FORCE_INLINE tfScalar tfLog(tfScalar x) { return log(x); }
-SIMD_FORCE_INLINE tfScalar tfPow(tfScalar x,tfScalar y) { return pow(x,y); }
-SIMD_FORCE_INLINE tfScalar tfFmod(tfScalar x,tfScalar y) { return fmod(x,y); }
+TFSIMD_FORCE_INLINE tfScalar tfSqrt(tfScalar x) { return sqrt(x); }
+TFSIMD_FORCE_INLINE tfScalar tfFabs(tfScalar x) { return fabs(x); }
+TFSIMD_FORCE_INLINE tfScalar tfCos(tfScalar x) { return cos(x); }
+TFSIMD_FORCE_INLINE tfScalar tfSin(tfScalar x) { return sin(x); }
+TFSIMD_FORCE_INLINE tfScalar tfTan(tfScalar x) { return tan(x); }
+TFSIMD_FORCE_INLINE tfScalar tfAcos(tfScalar x) { if (x<tfScalar(-1))	x=tfScalar(-1); if (x>tfScalar(1))	x=tfScalar(1); return acos(x); }
+TFSIMD_FORCE_INLINE tfScalar tfAsin(tfScalar x) { if (x<tfScalar(-1))	x=tfScalar(-1); if (x>tfScalar(1))	x=tfScalar(1); return asin(x); }
+TFSIMD_FORCE_INLINE tfScalar tfAtan(tfScalar x) { return atan(x); }
+TFSIMD_FORCE_INLINE tfScalar tfAtan2(tfScalar x, tfScalar y) { return atan2(x, y); }
+TFSIMD_FORCE_INLINE tfScalar tfExp(tfScalar x) { return exp(x); }
+TFSIMD_FORCE_INLINE tfScalar tfLog(tfScalar x) { return log(x); }
+TFSIMD_FORCE_INLINE tfScalar tfPow(tfScalar x,tfScalar y) { return pow(x,y); }
+TFSIMD_FORCE_INLINE tfScalar tfFmod(tfScalar x,tfScalar y) { return fmod(x,y); }
 
 
-#define SIMD_2_PI         tfScalar(6.283185307179586232)
-#define SIMD_PI           (SIMD_2_PI * tfScalar(0.5))
-#define SIMD_HALF_PI      (SIMD_2_PI * tfScalar(0.25))
-#define SIMD_RADS_PER_DEG (SIMD_2_PI / tfScalar(360.0))
-#define SIMD_DEGS_PER_RAD  (tfScalar(360.0) / SIMD_2_PI)
+#define TFSIMD_2_PI         tfScalar(6.283185307179586232)
+#define TFSIMD_PI           (TFSIMD_2_PI * tfScalar(0.5))
+#define TFSIMD_HALF_PI      (TFSIMD_2_PI * tfScalar(0.25))
+#define TFSIMD_RADS_PER_DEG (TFSIMD_2_PI / tfScalar(360.0))
+#define TFSIMD_DEGS_PER_RAD  (tfScalar(360.0) / TFSIMD_2_PI)
 #define SIMDSQRT12 tfScalar(0.7071067811865475244008443621048490)
 
 #define tfRecipSqrt(x) ((tfScalar)(tfScalar(1.0)/tfSqrt(tfScalar(x))))		/* reciprocal square root */
 
 
-#define SIMD_EPSILON      DBL_EPSILON
-#define SIMD_INFINITY     DBL_MAX
+#define TFSIMD_EPSILON      DBL_EPSILON
+#define TFSIMD_INFINITY     DBL_MAX
 
-SIMD_FORCE_INLINE tfScalar tfAtan2Fast(tfScalar y, tfScalar x) 
+TFSIMD_FORCE_INLINE tfScalar tfAtan2Fast(tfScalar y, tfScalar x) 
 {
-	tfScalar coeff_1 = SIMD_PI / 4.0f;
+	tfScalar coeff_1 = TFSIMD_PI / 4.0f;
 	tfScalar coeff_2 = 3.0f * coeff_1;
 	tfScalar abs_y = tfFabs(y);
 	tfScalar angle;
@@ -220,27 +220,27 @@ SIMD_FORCE_INLINE tfScalar tfAtan2Fast(tfScalar y, tfScalar x)
 	return (y < 0.0f) ? -angle : angle;
 }
 
-SIMD_FORCE_INLINE bool      tfFuzzyZero(tfScalar x) { return tfFabs(x) < SIMD_EPSILON; }
+TFSIMD_FORCE_INLINE bool      tfFuzzyZero(tfScalar x) { return tfFabs(x) < TFSIMD_EPSILON; }
 
-SIMD_FORCE_INLINE bool	tfEqual(tfScalar a, tfScalar eps) {
+TFSIMD_FORCE_INLINE bool	tfEqual(tfScalar a, tfScalar eps) {
 	return (((a) <= eps) && !((a) < -eps));
 }
-SIMD_FORCE_INLINE bool	tfGreaterEqual (tfScalar a, tfScalar eps) {
+TFSIMD_FORCE_INLINE bool	tfGreaterEqual (tfScalar a, tfScalar eps) {
 	return (!((a) <= eps));
 }
 
 
-SIMD_FORCE_INLINE int       tfIsNegative(tfScalar x) {
+TFSIMD_FORCE_INLINE int       tfIsNegative(tfScalar x) {
     return x < tfScalar(0.0) ? 1 : 0;
 }
 
-SIMD_FORCE_INLINE tfScalar tfRadians(tfScalar x) { return x * SIMD_RADS_PER_DEG; }
-SIMD_FORCE_INLINE tfScalar tfDegrees(tfScalar x) { return x * SIMD_DEGS_PER_RAD; }
+TFSIMD_FORCE_INLINE tfScalar tfRadians(tfScalar x) { return x * TFSIMD_RADS_PER_DEG; }
+TFSIMD_FORCE_INLINE tfScalar tfDegrees(tfScalar x) { return x * TFSIMD_DEGS_PER_RAD; }
 
 #define TF_DECLARE_HANDLE(name) typedef struct name##__ { int unused; } *name
 
 #ifndef tfFsel
-SIMD_FORCE_INLINE tfScalar tfFsel(tfScalar a, tfScalar b, tfScalar c)
+TFSIMD_FORCE_INLINE tfScalar tfFsel(tfScalar a, tfScalar b, tfScalar c)
 {
 	return a >= 0 ? b : c;
 }
@@ -248,7 +248,7 @@ SIMD_FORCE_INLINE tfScalar tfFsel(tfScalar a, tfScalar b, tfScalar c)
 #define tfFsels(a,b,c) (tfScalar)tfFsel(a,b,c)
 
 
-SIMD_FORCE_INLINE bool tfMachineIsLittleEndian()
+TFSIMD_FORCE_INLINE bool tfMachineIsLittleEndian()
 {
    long int i = 1;
    const char *p = (const char *) &i;
@@ -262,7 +262,7 @@ SIMD_FORCE_INLINE bool tfMachineIsLittleEndian()
 
 ///tfSelect avoids branches, which makes performance much better for consoles like Playstation 3 and XBox 360
 ///Thanks Phil Knight. See also http://www.cellperformance.com/articles/2006/04/more_techniques_for_eliminatin_1.html
-SIMD_FORCE_INLINE unsigned tfSelect(unsigned condition, unsigned valueIfConditionNonZero, unsigned valueIfConditionZero) 
+TFSIMD_FORCE_INLINE unsigned tfSelect(unsigned condition, unsigned valueIfConditionNonZero, unsigned valueIfConditionZero) 
 {
     // Set testNz to 0xFFFFFFFF if condition is nonzero, 0x00000000 if condition is zero
     // Rely on positive value or'ed with its negative having sign bit on
@@ -272,13 +272,13 @@ SIMD_FORCE_INLINE unsigned tfSelect(unsigned condition, unsigned valueIfConditio
     unsigned testEqz = ~testNz;
     return ((valueIfConditionNonZero & testNz) | (valueIfConditionZero & testEqz)); 
 }
-SIMD_FORCE_INLINE int tfSelect(unsigned condition, int valueIfConditionNonZero, int valueIfConditionZero)
+TFSIMD_FORCE_INLINE int tfSelect(unsigned condition, int valueIfConditionNonZero, int valueIfConditionZero)
 {
     unsigned testNz = (unsigned)(((int)condition | -(int)condition) >> 31);
     unsigned testEqz = ~testNz; 
     return static_cast<int>((valueIfConditionNonZero & testNz) | (valueIfConditionZero & testEqz));
 }
-SIMD_FORCE_INLINE float tfSelect(unsigned condition, float valueIfConditionNonZero, float valueIfConditionZero)
+TFSIMD_FORCE_INLINE float tfSelect(unsigned condition, float valueIfConditionNonZero, float valueIfConditionZero)
 {
 #ifdef TF_HAVE_NATIVE_FSEL
     return (float)tfFsel((tfScalar)condition - tfScalar(1.0f), valueIfConditionNonZero, valueIfConditionZero);
@@ -287,7 +287,7 @@ SIMD_FORCE_INLINE float tfSelect(unsigned condition, float valueIfConditionNonZe
 #endif
 }
 
-template<typename T> SIMD_FORCE_INLINE void tfSwap(T& a, T& b)
+template<typename T> TFSIMD_FORCE_INLINE void tfSwap(T& a, T& b)
 {
 	T tmp = a;
 	a = b;
@@ -296,22 +296,22 @@ template<typename T> SIMD_FORCE_INLINE void tfSwap(T& a, T& b)
 
 
 //PCK: endian swapping functions
-SIMD_FORCE_INLINE unsigned tfSwapEndian(unsigned val)
+TFSIMD_FORCE_INLINE unsigned tfSwapEndian(unsigned val)
 {
 	return (((val & 0xff000000) >> 24) | ((val & 0x00ff0000) >> 8) | ((val & 0x0000ff00) << 8)  | ((val & 0x000000ff) << 24));
 }
 
-SIMD_FORCE_INLINE unsigned short tfSwapEndian(unsigned short val)
+TFSIMD_FORCE_INLINE unsigned short tfSwapEndian(unsigned short val)
 {
 	return static_cast<unsigned short>(((val & 0xff00) >> 8) | ((val & 0x00ff) << 8));
 }
 
-SIMD_FORCE_INLINE unsigned tfSwapEndian(int val)
+TFSIMD_FORCE_INLINE unsigned tfSwapEndian(int val)
 {
 	return tfSwapEndian((unsigned)val);
 }
 
-SIMD_FORCE_INLINE unsigned short tfSwapEndian(short val)
+TFSIMD_FORCE_INLINE unsigned short tfSwapEndian(short val)
 {
 	return tfSwapEndian((unsigned short) val);
 }
@@ -322,7 +322,7 @@ SIMD_FORCE_INLINE unsigned short tfSwapEndian(short val)
 ///When a floating point unit is faced with an invalid value, it may actually change the value, or worse, throw an exception. 
 ///In most systems, running user mode code, you wouldn't get an exception, but instead the hardware/os/runtime will 'fix' the number for you. 
 ///so instead of returning a float/double, we return integer/long long integer
-SIMD_FORCE_INLINE unsigned int  tfSwapEndianFloat(float d)
+TFSIMD_FORCE_INLINE unsigned int  tfSwapEndianFloat(float d)
 {
     unsigned int a = 0;
     unsigned char *dst = (unsigned char *)&a;
@@ -336,7 +336,7 @@ SIMD_FORCE_INLINE unsigned int  tfSwapEndianFloat(float d)
 }
 
 // unswap using char pointers
-SIMD_FORCE_INLINE float tfUnswapEndianFloat(unsigned int a) 
+TFSIMD_FORCE_INLINE float tfUnswapEndianFloat(unsigned int a) 
 {
     float d = 0.0f;
     unsigned char *src = (unsigned char *)&a;
@@ -352,7 +352,7 @@ SIMD_FORCE_INLINE float tfUnswapEndianFloat(unsigned int a)
 
 
 // swap using char pointers
-SIMD_FORCE_INLINE void  tfSwapEndianDouble(double d, unsigned char* dst)
+TFSIMD_FORCE_INLINE void  tfSwapEndianDouble(double d, unsigned char* dst)
 {
     unsigned char *src = (unsigned char *)&d;
 
@@ -368,7 +368,7 @@ SIMD_FORCE_INLINE void  tfSwapEndianDouble(double d, unsigned char* dst)
 }
 
 // unswap using char pointers
-SIMD_FORCE_INLINE double tfUnswapEndianDouble(const unsigned char *src) 
+TFSIMD_FORCE_INLINE double tfUnswapEndianDouble(const unsigned char *src) 
 {
     double d = 0.0;
     unsigned char *dst = (unsigned char *)&d;
@@ -385,17 +385,17 @@ SIMD_FORCE_INLINE double tfUnswapEndianDouble(const unsigned char *src)
 	return d;
 }
 
-// returns normalized value in range [-SIMD_PI, SIMD_PI]
-SIMD_FORCE_INLINE tfScalar tfNormalizeAngle(tfScalar angleInRadians) 
+// returns normalized value in range [-TFSIMD_PI, TFSIMD_PI]
+TFSIMD_FORCE_INLINE tfScalar tfNormalizeAngle(tfScalar angleInRadians) 
 {
-	angleInRadians = tfFmod(angleInRadians, SIMD_2_PI);
-	if(angleInRadians < -SIMD_PI)
+	angleInRadians = tfFmod(angleInRadians, TFSIMD_2_PI);
+	if(angleInRadians < -TFSIMD_PI)
 	{
-		return angleInRadians + SIMD_2_PI;
+		return angleInRadians + TFSIMD_2_PI;
 	}
-	else if(angleInRadians > SIMD_PI)
+	else if(angleInRadians > TFSIMD_PI)
 	{
-		return angleInRadians - SIMD_2_PI;
+		return angleInRadians - TFSIMD_2_PI;
 	}
 	else
 	{
@@ -416,4 +416,4 @@ struct tfTypedObject
 		return m_objectType;
 	}
 };
-#endif //SIMD___SCALAR_H
+#endif //TFSIMD___SCALAR_H

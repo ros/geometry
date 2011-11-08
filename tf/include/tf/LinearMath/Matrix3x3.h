@@ -60,14 +60,14 @@ public:
 			zx, zy, zz);
 	}
 	/** @brief Copy constructor */
-	SIMD_FORCE_INLINE Matrix3x3 (const Matrix3x3& other)
+	TFSIMD_FORCE_INLINE Matrix3x3 (const Matrix3x3& other)
 	{
 		m_el[0] = other.m_el[0];
 		m_el[1] = other.m_el[1];
 		m_el[2] = other.m_el[2];
 	}
 	/** @brief Assignment Operator */
-	SIMD_FORCE_INLINE Matrix3x3& operator=(const Matrix3x3& other)
+	TFSIMD_FORCE_INLINE Matrix3x3& operator=(const Matrix3x3& other)
 	{
 		m_el[0] = other.m_el[0];
 		m_el[1] = other.m_el[1];
@@ -76,7 +76,7 @@ public:
 	}
 
   /** @brief Assign from a btMatrix3x3 */
-	SIMD_FORCE_INLINE Matrix3x3& operator=(const btMatrix3x3& other)
+	TFSIMD_FORCE_INLINE Matrix3x3& operator=(const btMatrix3x3& other)
 	{
 		m_el[0] = other.getRow(0);
 		m_el[1] = other.getRow(1);
@@ -86,7 +86,7 @@ public:
 
   /** @brief return a btMatrix3x3
    */
-  SIMD_FORCE_INLINE btMatrix3x3 as_bt(void) const
+  TFSIMD_FORCE_INLINE btMatrix3x3 as_bt(void) const
   {
     return btMatrix3x3(
                     m_el[0][0], m_el[0][1], m_el[0][2],
@@ -96,7 +96,7 @@ public:
 
 	/** @brief Get a column of the matrix as a vector 
 	*  @param i Column number 0 indexed */
-	SIMD_FORCE_INLINE Vector3 getColumn(int i) const
+	TFSIMD_FORCE_INLINE Vector3 getColumn(int i) const
 	{
 		return Vector3(m_el[0][i],m_el[1][i],m_el[2][i]);
 	}
@@ -104,7 +104,7 @@ public:
 
 	/** @brief Get a row of the matrix as a vector 
 	*  @param i Row number 0 indexed */
-	SIMD_FORCE_INLINE const Vector3& getRow(int i) const
+	TFSIMD_FORCE_INLINE const Vector3& getRow(int i) const
 	{
 		tfFullAssert(0 <= i && i < 3);
 		return m_el[i];
@@ -112,7 +112,7 @@ public:
 
 	/** @brief Get a mutable reference to a row of the matrix as a vector 
 	*  @param i Row number 0 indexed */
-	SIMD_FORCE_INLINE Vector3&  operator[](int i)
+	TFSIMD_FORCE_INLINE Vector3&  operator[](int i)
 	{ 
 		tfFullAssert(0 <= i && i < 3);
 		return m_el[i]; 
@@ -120,7 +120,7 @@ public:
 
 	/** @brief Get a const reference to a row of the matrix as a vector 
 	*  @param i Row number 0 indexed */
-	SIMD_FORCE_INLINE const Vector3& operator[](int i) const
+	TFSIMD_FORCE_INLINE const Vector3& operator[](int i) const
 	{
 		tfFullAssert(0 <= i && i < 3);
 		return m_el[i]; 
@@ -331,15 +331,15 @@ public:
 			tfScalar delta = tfAtan2(m_el[2].y(),m_el[2].z());
 			if (m_el[2].x() < 0)  //gimbal locked down
 			{
-				euler_out.pitch = SIMD_PI / tfScalar(2.0);
-				euler_out2.pitch = SIMD_PI / tfScalar(2.0);
+				euler_out.pitch = TFSIMD_PI / tfScalar(2.0);
+				euler_out2.pitch = TFSIMD_PI / tfScalar(2.0);
 				euler_out.roll = delta;
 				euler_out2.roll = delta;
 			}
 			else // gimbal locked up
 			{
-				euler_out.pitch = -SIMD_PI / tfScalar(2.0);
-				euler_out2.pitch = -SIMD_PI / tfScalar(2.0);
+				euler_out.pitch = -TFSIMD_PI / tfScalar(2.0);
+				euler_out2.pitch = -TFSIMD_PI / tfScalar(2.0);
 				euler_out.roll = delta;
 				euler_out2.roll = delta;
 			}
@@ -347,7 +347,7 @@ public:
 		else
 		{
 			euler_out.pitch = - tfAsin(m_el[2].x());
-			euler_out2.pitch = SIMD_PI - euler_out.pitch;
+			euler_out2.pitch = TFSIMD_PI - euler_out.pitch;
 
 			euler_out.roll = tfAtan2(m_el[2].y()/tfCos(euler_out.pitch), 
 				m_el[2].z()/tfCos(euler_out.pitch));
@@ -408,15 +408,15 @@ public:
 	Matrix3x3 transposeTimes(const Matrix3x3& m) const;
 	Matrix3x3 timesTranspose(const Matrix3x3& m) const;
 
-	SIMD_FORCE_INLINE tfScalar tdotx(const Vector3& v) const 
+	TFSIMD_FORCE_INLINE tfScalar tdotx(const Vector3& v) const 
 	{
 		return m_el[0].x() * v.x() + m_el[1].x() * v.y() + m_el[2].x() * v.z();
 	}
-	SIMD_FORCE_INLINE tfScalar tdoty(const Vector3& v) const 
+	TFSIMD_FORCE_INLINE tfScalar tdoty(const Vector3& v) const 
 	{
 		return m_el[0].y() * v.x() + m_el[1].y() * v.y() + m_el[2].y() * v.z();
 	}
-	SIMD_FORCE_INLINE tfScalar tdotz(const Vector3& v) const 
+	TFSIMD_FORCE_INLINE tfScalar tdotz(const Vector3& v) const 
 	{
 		return m_el[0].z() * v.x() + m_el[1].z() * v.y() + m_el[2].z() * v.z();
 	}
@@ -460,7 +460,7 @@ public:
 			tfScalar t = threshold * (tfFabs(m_el[0][0]) + tfFabs(m_el[1][1]) + tfFabs(m_el[2][2]));
 			if (max <= t)
 			{
-				if (max <= SIMD_EPSILON * t)
+				if (max <= TFSIMD_EPSILON * t)
 				{
 					return;
 				}
@@ -473,7 +473,7 @@ public:
 			tfScalar theta2 = theta * theta;
 			tfScalar cos;
 			tfScalar sin;
-			if (theta2 * theta2 < tfScalar(10 / SIMD_EPSILON))
+			if (theta2 * theta2 < tfScalar(10 / TFSIMD_EPSILON))
 			{
 				t = (theta >= 0) ? 1 / (theta + tfSqrt(1 + theta2))
 					: 1 / (theta - tfSqrt(1 + theta2));
@@ -537,7 +537,7 @@ public:
 };
 
 
-SIMD_FORCE_INLINE Matrix3x3& 
+TFSIMD_FORCE_INLINE Matrix3x3& 
 Matrix3x3::operator*=(const Matrix3x3& m)
 {
 	setValue(m.tdotx(m_el[0]), m.tdoty(m_el[0]), m.tdotz(m_el[0]),
@@ -546,14 +546,14 @@ Matrix3x3::operator*=(const Matrix3x3& m)
 	return *this;
 }
 
-SIMD_FORCE_INLINE tfScalar 
+TFSIMD_FORCE_INLINE tfScalar 
 Matrix3x3::determinant() const
 { 
 	return tfTriple((*this)[0], (*this)[1], (*this)[2]);
 }
 
 
-SIMD_FORCE_INLINE Matrix3x3 
+TFSIMD_FORCE_INLINE Matrix3x3 
 Matrix3x3::absolute() const
 {
 	return Matrix3x3(
@@ -562,7 +562,7 @@ Matrix3x3::absolute() const
 		tfFabs(m_el[2].x()), tfFabs(m_el[2].y()), tfFabs(m_el[2].z()));
 }
 
-SIMD_FORCE_INLINE Matrix3x3 
+TFSIMD_FORCE_INLINE Matrix3x3 
 Matrix3x3::transpose() const 
 {
 	return Matrix3x3(m_el[0].x(), m_el[1].x(), m_el[2].x(),
@@ -570,7 +570,7 @@ Matrix3x3::transpose() const
 		m_el[0].z(), m_el[1].z(), m_el[2].z());
 }
 
-SIMD_FORCE_INLINE Matrix3x3 
+TFSIMD_FORCE_INLINE Matrix3x3 
 Matrix3x3::adjoint() const 
 {
 	return Matrix3x3(cofac(1, 1, 2, 2), cofac(0, 2, 2, 1), cofac(0, 1, 1, 2),
@@ -578,7 +578,7 @@ Matrix3x3::adjoint() const
 		cofac(1, 0, 2, 1), cofac(0, 1, 2, 0), cofac(0, 0, 1, 1));
 }
 
-SIMD_FORCE_INLINE Matrix3x3 
+TFSIMD_FORCE_INLINE Matrix3x3 
 Matrix3x3::inverse() const
 {
 	Vector3 co(cofac(1, 1, 2, 2), cofac(1, 2, 2, 0), cofac(1, 0, 2, 1));
@@ -590,7 +590,7 @@ Matrix3x3::inverse() const
 		co.z() * s, cofac(0, 1, 2, 0) * s, cofac(0, 0, 1, 1) * s);
 }
 
-SIMD_FORCE_INLINE Matrix3x3 
+TFSIMD_FORCE_INLINE Matrix3x3 
 Matrix3x3::transposeTimes(const Matrix3x3& m) const
 {
 	return Matrix3x3(
@@ -605,7 +605,7 @@ Matrix3x3::transposeTimes(const Matrix3x3& m) const
 		m_el[0].z() * m[0].z() + m_el[1].z() * m[1].z() + m_el[2].z() * m[2].z());
 }
 
-SIMD_FORCE_INLINE Matrix3x3 
+TFSIMD_FORCE_INLINE Matrix3x3 
 Matrix3x3::timesTranspose(const Matrix3x3& m) const
 {
 	return Matrix3x3(
@@ -615,20 +615,20 @@ Matrix3x3::timesTranspose(const Matrix3x3& m) const
 
 }
 
-SIMD_FORCE_INLINE Vector3 
+TFSIMD_FORCE_INLINE Vector3 
 operator*(const Matrix3x3& m, const Vector3& v) 
 {
 	return Vector3(m[0].dot(v), m[1].dot(v), m[2].dot(v));
 }
 
 
-SIMD_FORCE_INLINE Vector3
+TFSIMD_FORCE_INLINE Vector3
 operator*(const Vector3& v, const Matrix3x3& m)
 {
 	return Vector3(m.tdotx(v), m.tdoty(v), m.tdotz(v));
 }
 
-SIMD_FORCE_INLINE Matrix3x3 
+TFSIMD_FORCE_INLINE Matrix3x3 
 operator*(const Matrix3x3& m1, const Matrix3x3& m2)
 {
 	return Matrix3x3(
@@ -638,7 +638,7 @@ operator*(const Matrix3x3& m1, const Matrix3x3& m2)
 }
 
 /*
-SIMD_FORCE_INLINE Matrix3x3 tfMultTransposeLeft(const Matrix3x3& m1, const Matrix3x3& m2) {
+TFSIMD_FORCE_INLINE Matrix3x3 tfMultTransposeLeft(const Matrix3x3& m1, const Matrix3x3& m2) {
 return Matrix3x3(
 m1[0][0] * m2[0][0] + m1[1][0] * m2[1][0] + m1[2][0] * m2[2][0],
 m1[0][0] * m2[0][1] + m1[1][0] * m2[1][1] + m1[2][0] * m2[2][1],
@@ -654,7 +654,7 @@ m1[0][2] * m2[0][2] + m1[1][2] * m2[1][2] + m1[2][2] * m2[2][2]);
 
 /**@brief Equality operator between two matrices
 * It will test all elements are equal.  */
-SIMD_FORCE_INLINE bool operator==(const Matrix3x3& m1, const Matrix3x3& m2)
+TFSIMD_FORCE_INLINE bool operator==(const Matrix3x3& m1, const Matrix3x3& m2)
 {
 	return ( m1[0][0] == m2[0][0] && m1[1][0] == m2[1][0] && m1[2][0] == m2[2][0] &&
 		m1[0][1] == m2[0][1] && m1[1][1] == m2[1][1] && m1[2][1] == m2[2][1] &&
@@ -676,32 +676,32 @@ struct	Matrix3x3DoubleData
 
 	
 
-SIMD_FORCE_INLINE	void	Matrix3x3::serialize(struct	Matrix3x3Data& dataOut) const
+TFSIMD_FORCE_INLINE	void	Matrix3x3::serialize(struct	Matrix3x3Data& dataOut) const
 {
 	for (int i=0;i<3;i++)
 		m_el[i].serialize(dataOut.m_el[i]);
 }
 
-SIMD_FORCE_INLINE	void	Matrix3x3::serializeFloat(struct	Matrix3x3FloatData& dataOut) const
+TFSIMD_FORCE_INLINE	void	Matrix3x3::serializeFloat(struct	Matrix3x3FloatData& dataOut) const
 {
 	for (int i=0;i<3;i++)
 		m_el[i].serializeFloat(dataOut.m_el[i]);
 }
 
 
-SIMD_FORCE_INLINE	void	Matrix3x3::deSerialize(const struct	Matrix3x3Data& dataIn)
+TFSIMD_FORCE_INLINE	void	Matrix3x3::deSerialize(const struct	Matrix3x3Data& dataIn)
 {
 	for (int i=0;i<3;i++)
 		m_el[i].deSerialize(dataIn.m_el[i]);
 }
 
-SIMD_FORCE_INLINE	void	Matrix3x3::deSerializeFloat(const struct	Matrix3x3FloatData& dataIn)
+TFSIMD_FORCE_INLINE	void	Matrix3x3::deSerializeFloat(const struct	Matrix3x3FloatData& dataIn)
 {
 	for (int i=0;i<3;i++)
 		m_el[i].deSerializeFloat(dataIn.m_el[i]);
 }
 
-SIMD_FORCE_INLINE	void	Matrix3x3::deSerializeDouble(const struct	Matrix3x3DoubleData& dataIn)
+TFSIMD_FORCE_INLINE	void	Matrix3x3::deSerializeDouble(const struct	Matrix3x3DoubleData& dataIn)
 {
 	for (int i=0;i<3;i++)
 		m_el[i].deSerializeDouble(dataIn.m_el[i]);

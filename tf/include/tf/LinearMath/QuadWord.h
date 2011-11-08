@@ -57,40 +57,40 @@ protected:
   
 
   /**@brief Return the x value */
-		SIMD_FORCE_INLINE const tfScalar& getX() const { return m_floats[0]; }
+		TFSIMD_FORCE_INLINE const tfScalar& getX() const { return m_floats[0]; }
   /**@brief Return the y value */
-		SIMD_FORCE_INLINE const tfScalar& getY() const { return m_floats[1]; }
+		TFSIMD_FORCE_INLINE const tfScalar& getY() const { return m_floats[1]; }
   /**@brief Return the z value */
-		SIMD_FORCE_INLINE const tfScalar& getZ() const { return m_floats[2]; }
+		TFSIMD_FORCE_INLINE const tfScalar& getZ() const { return m_floats[2]; }
   /**@brief Set the x value */
-		SIMD_FORCE_INLINE void	setX(tfScalar x) { m_floats[0] = x;};
+		TFSIMD_FORCE_INLINE void	setX(tfScalar x) { m_floats[0] = x;};
   /**@brief Set the y value */
-		SIMD_FORCE_INLINE void	setY(tfScalar y) { m_floats[1] = y;};
+		TFSIMD_FORCE_INLINE void	setY(tfScalar y) { m_floats[1] = y;};
   /**@brief Set the z value */
-		SIMD_FORCE_INLINE void	setZ(tfScalar z) { m_floats[2] = z;};
+		TFSIMD_FORCE_INLINE void	setZ(tfScalar z) { m_floats[2] = z;};
   /**@brief Set the w value */
-		SIMD_FORCE_INLINE void	setW(tfScalar w) { m_floats[3] = w;};
+		TFSIMD_FORCE_INLINE void	setW(tfScalar w) { m_floats[3] = w;};
   /**@brief Return the x value */
-		SIMD_FORCE_INLINE const tfScalar& x() const { return m_floats[0]; }
+		TFSIMD_FORCE_INLINE const tfScalar& x() const { return m_floats[0]; }
   /**@brief Return the y value */
-		SIMD_FORCE_INLINE const tfScalar& y() const { return m_floats[1]; }
+		TFSIMD_FORCE_INLINE const tfScalar& y() const { return m_floats[1]; }
   /**@brief Return the z value */
-		SIMD_FORCE_INLINE const tfScalar& z() const { return m_floats[2]; }
+		TFSIMD_FORCE_INLINE const tfScalar& z() const { return m_floats[2]; }
   /**@brief Return the w value */
-		SIMD_FORCE_INLINE const tfScalar& w() const { return m_floats[3]; }
+		TFSIMD_FORCE_INLINE const tfScalar& w() const { return m_floats[3]; }
 
-	//SIMD_FORCE_INLINE tfScalar&       operator[](int i)       { return (&m_floats[0])[i];	}      
-	//SIMD_FORCE_INLINE const tfScalar& operator[](int i) const { return (&m_floats[0])[i]; }
+	//TFSIMD_FORCE_INLINE tfScalar&       operator[](int i)       { return (&m_floats[0])[i];	}      
+	//TFSIMD_FORCE_INLINE const tfScalar& operator[](int i) const { return (&m_floats[0])[i]; }
 	///operator tfScalar*() replaces operator[], using implicit conversion. We added operator != and operator == to avoid pointer comparisons.
-	SIMD_FORCE_INLINE	operator       tfScalar *()       { return &m_floats[0]; }
-	SIMD_FORCE_INLINE	operator const tfScalar *() const { return &m_floats[0]; }
+	TFSIMD_FORCE_INLINE	operator       tfScalar *()       { return &m_floats[0]; }
+	TFSIMD_FORCE_INLINE	operator const tfScalar *() const { return &m_floats[0]; }
 
-	SIMD_FORCE_INLINE	bool	operator==(const QuadWord& other) const
+	TFSIMD_FORCE_INLINE	bool	operator==(const QuadWord& other) const
 	{
 		return ((m_floats[3]==other.m_floats[3]) && (m_floats[2]==other.m_floats[2]) && (m_floats[1]==other.m_floats[1]) && (m_floats[0]==other.m_floats[0]));
 	}
 
-	SIMD_FORCE_INLINE	bool	operator!=(const QuadWord& other) const
+	TFSIMD_FORCE_INLINE	bool	operator!=(const QuadWord& other) const
 	{
 		return !(*this == other);
 	}
@@ -100,7 +100,7 @@ protected:
    * @param y Value of y
    * @param z Value of z
    */
-		SIMD_FORCE_INLINE void 	setValue(const tfScalar& x, const tfScalar& y, const tfScalar& z)
+		TFSIMD_FORCE_INLINE void 	setValue(const tfScalar& x, const tfScalar& y, const tfScalar& z)
 		{
 			m_floats[0]=x;
 			m_floats[1]=y;
@@ -121,7 +121,7 @@ protected:
    * @param z Value of z
    * @param w Value of w
    */
-		SIMD_FORCE_INLINE void	setValue(const tfScalar& x, const tfScalar& y, const tfScalar& z,const tfScalar& w)
+		TFSIMD_FORCE_INLINE void	setValue(const tfScalar& x, const tfScalar& y, const tfScalar& z,const tfScalar& w)
 		{
 			m_floats[0]=x;
 			m_floats[1]=y;
@@ -129,7 +129,7 @@ protected:
 			m_floats[3]=w;
 		}
   /**@brief No initialization constructor */
-		SIMD_FORCE_INLINE QuadWord()
+		TFSIMD_FORCE_INLINE QuadWord()
 		//	:m_floats[0](tfScalar(0.)),m_floats[1](tfScalar(0.)),m_floats[2](tfScalar(0.)),m_floats[3](tfScalar(0.))
 		{
 		}
@@ -139,7 +139,7 @@ protected:
    * @param y Value of y
    * @param z Value of z
    */
-		SIMD_FORCE_INLINE QuadWord(const tfScalar& x, const tfScalar& y, const tfScalar& z)		
+		TFSIMD_FORCE_INLINE QuadWord(const tfScalar& x, const tfScalar& y, const tfScalar& z)		
 		{
 			m_floats[0] = x, m_floats[1] = y, m_floats[2] = z, m_floats[3] = 0.0f;
 		}
@@ -150,7 +150,7 @@ protected:
    * @param z Value of z
    * @param w Value of w
    */
-		SIMD_FORCE_INLINE QuadWord(const tfScalar& x, const tfScalar& y, const tfScalar& z,const tfScalar& w) 
+		TFSIMD_FORCE_INLINE QuadWord(const tfScalar& x, const tfScalar& y, const tfScalar& z,const tfScalar& w) 
 		{
 			m_floats[0] = x, m_floats[1] = y, m_floats[2] = z, m_floats[3] = w;
 		}
@@ -158,7 +158,7 @@ protected:
   /**@brief Set each element to the max of the current values and the values of another QuadWord
    * @param other The other QuadWord to compare with 
    */
-		SIMD_FORCE_INLINE void	setMax(const QuadWord& other)
+		TFSIMD_FORCE_INLINE void	setMax(const QuadWord& other)
 		{
 			tfSetMax(m_floats[0], other.m_floats[0]);
 			tfSetMax(m_floats[1], other.m_floats[1]);
@@ -168,7 +168,7 @@ protected:
   /**@brief Set each element to the min of the current values and the values of another QuadWord
    * @param other The other QuadWord to compare with 
    */
-		SIMD_FORCE_INLINE void	setMin(const QuadWord& other)
+		TFSIMD_FORCE_INLINE void	setMin(const QuadWord& other)
 		{
 			tfSetMin(m_floats[0], other.m_floats[0]);
 			tfSetMin(m_floats[1], other.m_floats[1]);
@@ -182,4 +182,4 @@ protected:
 
 }
 
-#endif //SIMD_QUADWORD_H
+#endif //TFSIMD_QUADWORD_H

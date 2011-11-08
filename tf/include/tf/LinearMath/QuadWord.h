@@ -160,20 +160,20 @@ protected:
    */
 		SIMD_FORCE_INLINE void	setMax(const QuadWord& other)
 		{
-			btSetMax(m_floats[0], other.m_floats[0]);
-			btSetMax(m_floats[1], other.m_floats[1]);
-			btSetMax(m_floats[2], other.m_floats[2]);
-			btSetMax(m_floats[3], other.m_floats[3]);
+			tfSetMax(m_floats[0], other.m_floats[0]);
+			tfSetMax(m_floats[1], other.m_floats[1]);
+			tfSetMax(m_floats[2], other.m_floats[2]);
+			tfSetMax(m_floats[3], other.m_floats[3]);
 		}
   /**@brief Set each element to the min of the current values and the values of another QuadWord
    * @param other The other QuadWord to compare with 
    */
 		SIMD_FORCE_INLINE void	setMin(const QuadWord& other)
 		{
-			btSetMin(m_floats[0], other.m_floats[0]);
-			btSetMin(m_floats[1], other.m_floats[1]);
-			btSetMin(m_floats[2], other.m_floats[2]);
-			btSetMin(m_floats[3], other.m_floats[3]);
+			tfSetMin(m_floats[0], other.m_floats[0]);
+			tfSetMin(m_floats[1], other.m_floats[1]);
+			tfSetMin(m_floats[2], other.m_floats[2]);
+			tfSetMin(m_floats[3], other.m_floats[3]);
 		}
 
 

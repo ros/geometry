@@ -289,20 +289,20 @@ public:
    */
 		SIMD_FORCE_INLINE void	setMax(const Vector3& other)
 		{
-			btSetMax(m_floats[0], other.m_floats[0]);
-			btSetMax(m_floats[1], other.m_floats[1]);
-			btSetMax(m_floats[2], other.m_floats[2]);
-			btSetMax(m_floats[3], other.w());
+			tfSetMax(m_floats[0], other.m_floats[0]);
+			tfSetMax(m_floats[1], other.m_floats[1]);
+			tfSetMax(m_floats[2], other.m_floats[2]);
+			tfSetMax(m_floats[3], other.w());
 		}
   /**@brief Set each element to the min of the current values and the values of another Vector3
    * @param other The other Vector3 to compare with 
    */
 		SIMD_FORCE_INLINE void	setMin(const Vector3& other)
 		{
-			btSetMin(m_floats[0], other.m_floats[0]);
-			btSetMin(m_floats[1], other.m_floats[1]);
-			btSetMin(m_floats[2], other.m_floats[2]);
-			btSetMin(m_floats[3], other.w());
+			tfSetMin(m_floats[0], other.m_floats[0]);
+			tfSetMin(m_floats[1], other.m_floats[1]);
+			tfSetMin(m_floats[2], other.m_floats[2]);
+			tfSetMin(m_floats[3], other.w());
 		}
 
 		SIMD_FORCE_INLINE void 	setValue(const btScalar& x, const btScalar& y, const btScalar& z)

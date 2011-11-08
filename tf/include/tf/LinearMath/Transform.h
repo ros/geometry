@@ -24,13 +24,7 @@ subject to the following restrictions:
 namespace tf
 {
 
-#ifdef BT_USE_DOUBLE_PRECISION
 #define btTransformData btTransformDoubleData
-#else
-#define btTransformData btTransformFloatData
-#endif
-
-
 
 
 /**@brief The btTransform class supports rigid transforms with only translation and rotation and no scaling/shear.

@@ -31,7 +31,7 @@
 #include <tf/tf.h>
 #include <sys/time.h>
 
-#include "LinearMath/btVector3.h"
+#include "tf/LinearMath/Vector3.h"
 
 using namespace tf;
 

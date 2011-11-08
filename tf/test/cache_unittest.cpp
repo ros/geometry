@@ -30,8 +30,8 @@
 #include <gtest/gtest.h>
 #include <tf/tf.h>
 #include <sys/time.h>
-#include "LinearMath/btVector3.h"
-#include "LinearMath/btMatrix3x3.h"
+#include "tf/LinearMath/Vector3.h"
+#include "tf/LinearMath/Matrix3x3.h"
 
 
 void seed_rand()
@@ -216,7 +216,7 @@ TEST(TimeCache, CartesianInterpolation)
       yvalues[step] = 10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
       zvalues[step] = 10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
     
-      t.setOrigin(btVector3(xvalues[step], yvalues[step], zvalues[step]));
+      t.setOrigin(tf::Vector3(xvalues[step], yvalues[step], zvalues[step]));
       t.stamp_ = ros::Time().fromNSec(step * 100 + offset);
       TransformStorage stor(t, 2, 0);
       cache.insertData(stor);
@@ -261,7 +261,7 @@ TEST(TimeCache, ReparentingInterpolationProtection)
     yvalues[step] = 10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
     zvalues[step] = 10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
     
-    t.setOrigin(btVector3(xvalues[step], yvalues[step], zvalues[step]));
+    t.setOrigin(tf::Vector3(xvalues[step], yvalues[step], zvalues[step]));
     t.stamp_ = ros::Time().fromNSec(step * 100 + offset);
     TransformStorage stor(t, step + 4, 0);
     cache.insertData(stor);
@@ -316,7 +316,7 @@ TEST(TimeCache, CartesianExtrapolation)
       yvalues[step] = 10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
       zvalues[step] = 10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
     
-      t.setOrigin(btVector3(xvalues[step], yvalues[step], zvalues[step]));
+      t.setOrigin(tf::Vector3(xvalues[step], yvalues[step], zvalues[step]));
       t.stamp_ = ros::Time().fromNSec(step * 100 + offset);
       TransformStorage stor(t, 2, 0);
       cache.insertData(stor);
@@ -344,7 +344,7 @@ TEST(Bullet, Slerp)
   uint64_t runs = 100;
   seed_rand();
 
-  btQuaternion q1, q2;
+  tf::Quaternion q1, q2;
   q1.setEuler(0,0,0);
   
   for (uint64_t i = 0 ; i < runs ; i++)
@@ -354,7 +354,7 @@ TEST(Bullet, Slerp)
                 1.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX);
     
     
-    btQuaternion q3 = slerp(q1,q2,0.5);
+    tf::Quaternion q3 = slerp(q1,q2,0.5);
     
     EXPECT_NEAR(q3.angle(q1), q2.angle(q3), 1e-5);
   }
@@ -374,7 +374,7 @@ TEST(TimeCache, AngularInterpolation)
   std::vector<double> rollvalues(2);
   uint64_t offset = 200;
 
-  std::vector<btQuaternion> quats(2);
+  std::vector<tf::Quaternion> quats(2);
 
   StampedTransform t;
   t.setIdentity();
@@ -397,10 +397,10 @@ TEST(TimeCache, AngularInterpolation)
     for (int pos = 0; pos < 100 ; pos ++)
     {
       cache.getData(ros::Time().fromNSec(offset + pos), out); //get the transform for the position
-      btQuaternion quat = out.rotation_; //get the quaternion out of the transform
+      tf::Quaternion quat = out.rotation_; //get the quaternion out of the transform
 
       //Generate a ground truth quaternion directly calling slerp
-      btQuaternion ground_truth = quats[0].slerp(quats[1], pos/100.0);
+      tf::Quaternion ground_truth = quats[0].slerp(quats[1], pos/100.0);
       
       //Make sure the transformed one and the direct call match
       EXPECT_NEAR(0, angle(ground_truth, quat), epsilon);

@@ -170,8 +170,8 @@ void TransformListener::transformTwist(const std::string& target_frame,
   lookupTransform(target_frame,msg_in.header.frame_id,  msg_in.header.stamp, transform);
 
 
-  btVector3 out_rot = transform.getBasis() * twist_rot;
-  btVector3 out_vel = transform.getBasis()* twist_vel + transform.getOrigin().cross(out_rot);
+  tf::Vector3 out_rot = transform.getBasis() * twist_rot;
+  tf::Vector3 out_vel = transform.getBasis()* twist_vel + transform.getOrigin().cross(out_rot);
 
   geometry_msgs::TwistStamped interframe_twist;
   lookupVelocity(target_frame, msg_in.header.frame_id, msg_in.header.stamp, ros::Duration(0.1), interframe_twist); //\todo get rid of hard coded number
@@ -252,7 +252,7 @@ void TransformListener::transformPointCloud(const std::string& target_frame, con
 
 }
 
-inline void transformPointMatVec(const tf::Vector3 &origin, const btMatrix3x3 &basis, const geometry_msgs::Point32 &in, geometry_msgs::Point32 &out)
+inline void transformPointMatVec(const tf::Vector3 &origin, const tf::Matrix3x3 &basis, const geometry_msgs::Point32 &in, geometry_msgs::Point32 &out)
 {
   // Use temporary variables in case &in == &out
   double x = basis[0].x() * in.x + basis[0].y() * in.y + basis[0].z() * in.z + origin.x();
@@ -268,7 +268,7 @@ void TransformListener::transformPointCloud(const std::string & target_frame, co
                                             sensor_msgs::PointCloud & cloudOut) const
 {
   tf::Vector3 origin = net_transform.getOrigin();
-  btMatrix3x3 basis  = net_transform.getBasis();
+  tf::Matrix3x3 basis  = net_transform.getBasis();
 
   unsigned int length = cloudIn.points.size();
 

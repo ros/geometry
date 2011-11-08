@@ -69,10 +69,6 @@ inline int	btGetVersion()
  			#define btFsel(a,b,c) __fsel((a),(b),(c))
 		#else
 
-#if (defined (_WIN32) && (_MSC_VER) && _MSC_VER >= 1400) && (!defined (BT_USE_DOUBLE_PRECISION))
-			#define BT_USE_SSE
-			#include <emmintrin.h>
-#endif
 
 		#endif//_XBOX
 
@@ -138,31 +134,6 @@ inline int	btGetVersion()
 #else
 	//non-windows systems
 
-#if (defined (__APPLE__) && defined (__i386__) && (!defined (BT_USE_DOUBLE_PRECISION)))
-	#define BT_USE_SSE
-	#include <emmintrin.h>
-
-	#define SIMD_FORCE_INLINE inline
-///@todo: check out alignment methods for other platforms/compilers
-	#define ATTRIBUTE_ALIGNED16(a) a __attribute__ ((aligned (16)))
-	#define ATTRIBUTE_ALIGNED64(a) a __attribute__ ((aligned (64)))
-	#define ATTRIBUTE_ALIGNED128(a) a __attribute__ ((aligned (128)))
-	#ifndef assert
-	#include <assert.h>
-	#endif
-
-	#if defined(DEBUG) || defined (_DEBUG)
-		#define btAssert assert
-	#else
-		#define btAssert(x)
-	#endif
-
-	//btFullAssert is optional, slows down a lot
-	#define btFullAssert(x)
-	#define btLikely(_c)  _c
-	#define btUnlikely(_c) _c
-
-#else
 
 		#define SIMD_FORCE_INLINE inline
 		///@todo: check out alignment methods for other platforms/compilers
@@ -186,7 +157,6 @@ inline int	btGetVersion()
 		#define btFullAssert(x)
 		#define btLikely(_c)  _c
 		#define btUnlikely(_c) _c
-#endif //__APPLE__ 
 
 #endif // LIBSPE2
 
@@ -195,15 +165,9 @@ inline int	btGetVersion()
 
 
 ///The btScalar type abstracts floating point numbers, to easily switch between double and single floating point precision.
-#if defined(BT_USE_DOUBLE_PRECISION)
 typedef double btScalar;
 //this number could be bigger in double precision
 #define BT_LARGE_FLOAT 1e30
-#else
-typedef float btScalar;
-//keep BT_LARGE_FLOAT*BT_LARGE_FLOAT < FLT_MAX
-#define BT_LARGE_FLOAT 1e18f
-#endif
 
 
 
@@ -219,7 +183,6 @@ typedef float btScalar;
 
 
 
-#if defined(BT_USE_DOUBLE_PRECISION) || defined(BT_FORCE_DOUBLE_FUNCTIONS)
 		
 SIMD_FORCE_INLINE btScalar btSqrt(btScalar x) { return sqrt(x); }
 SIMD_FORCE_INLINE btScalar btFabs(btScalar x) { return fabs(x); }
@@ -235,54 +198,6 @@ SIMD_FORCE_INLINE btScalar btLog(btScalar x) { return log(x); }
 SIMD_FORCE_INLINE btScalar btPow(btScalar x,btScalar y) { return pow(x,y); }
 SIMD_FORCE_INLINE btScalar btFmod(btScalar x,btScalar y) { return fmod(x,y); }
 
-#else
-		
-SIMD_FORCE_INLINE btScalar btSqrt(btScalar y) 
-{ 
-#ifdef USE_APPROXIMATION
-    double x, z, tempf;
-    unsigned long *tfptr = ((unsigned long *)&tempf) + 1;
-
-	tempf = y;
-	*tfptr = (0xbfcdd90a - *tfptr)>>1; /* estimate of 1/sqrt(y) */
-	x =  tempf;
-	z =  y*btScalar(0.5);                        /* hoist out the “/2”    */
-	x = (btScalar(1.5)*x)-(x*x)*(x*z);         /* iteration formula     */
-	x = (btScalar(1.5)*x)-(x*x)*(x*z);
-	x = (btScalar(1.5)*x)-(x*x)*(x*z);
-	x = (btScalar(1.5)*x)-(x*x)*(x*z);
-	x = (btScalar(1.5)*x)-(x*x)*(x*z);
-	return x*y;
-#else
-	return sqrtf(y); 
-#endif
-}
-SIMD_FORCE_INLINE btScalar btFabs(btScalar x) { return fabsf(x); }
-SIMD_FORCE_INLINE btScalar btCos(btScalar x) { return cosf(x); }
-SIMD_FORCE_INLINE btScalar btSin(btScalar x) { return sinf(x); }
-SIMD_FORCE_INLINE btScalar btTan(btScalar x) { return tanf(x); }
-SIMD_FORCE_INLINE btScalar btAcos(btScalar x) { 
-	if (x<btScalar(-1))	
-		x=btScalar(-1); 
-	if (x>btScalar(1))	
-		x=btScalar(1);
-	return acosf(x); 
-}
-SIMD_FORCE_INLINE btScalar btAsin(btScalar x) { 
-	if (x<btScalar(-1))	
-		x=btScalar(-1); 
-	if (x>btScalar(1))	
-		x=btScalar(1);
-	return asinf(x); 
-}
-SIMD_FORCE_INLINE btScalar btAtan(btScalar x) { return atanf(x); }
-SIMD_FORCE_INLINE btScalar btAtan2(btScalar x, btScalar y) { return atan2f(x, y); }
-SIMD_FORCE_INLINE btScalar btExp(btScalar x) { return expf(x); }
-SIMD_FORCE_INLINE btScalar btLog(btScalar x) { return logf(x); }
-SIMD_FORCE_INLINE btScalar btPow(btScalar x,btScalar y) { return powf(x,y); }
-SIMD_FORCE_INLINE btScalar btFmod(btScalar x,btScalar y) { return fmodf(x,y); }
-	
-#endif
 
 #define SIMD_2_PI         btScalar(6.283185307179586232)
 #define SIMD_PI           (SIMD_2_PI * btScalar(0.5))
@@ -294,13 +209,8 @@ SIMD_FORCE_INLINE btScalar btFmod(btScalar x,btScalar y) { return fmodf(x,y); }
 #define btRecipSqrt(x) ((btScalar)(btScalar(1.0)/btSqrt(btScalar(x))))		/* reciprocal square root */
 
 
-#ifdef BT_USE_DOUBLE_PRECISION
 #define SIMD_EPSILON      DBL_EPSILON
 #define SIMD_INFINITY     DBL_MAX
-#else
-#define SIMD_EPSILON      FLT_EPSILON
-#define SIMD_INFINITY     FLT_MAX
-#endif
 
 SIMD_FORCE_INLINE btScalar btAtan2Fast(btScalar y, btScalar x) 
 {

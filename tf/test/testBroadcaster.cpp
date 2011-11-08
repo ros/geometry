@@ -44,7 +44,7 @@ public:
 
   // A function to call to send data periodically
   void test () {
-    broadcaster.sendTransform(tf::StampedTransform(btTransform(tf::createIdentityQuaternion(), btVector3(1,2,3)), ros::Time().fromSec(1), "frame2", "frame1"));
+    broadcaster.sendTransform(tf::StampedTransform(tf::Transform(tf::createIdentityQuaternion(), tf::Vector3(1,2,3)), ros::Time().fromSec(1), "frame2", "frame1"));
 
     if (count > 9000)
     {
@@ -59,8 +59,8 @@ public:
   // A function to call to send data periodically
   void test_vector () {
     std::vector<tf::StampedTransform> vec;
-    vec.push_back(tf::StampedTransform(btTransform(tf::createIdentityQuaternion(), btVector3(1,2,3)), ros::Time().fromSec(1), "vframe2", "vframe1"));
-    vec.push_back(tf::StampedTransform(btTransform(tf::createIdentityQuaternion(), btVector3(1,2,3)), ros::Time().fromSec(1), "vframe1", "vframe0"));
+    vec.push_back(tf::StampedTransform(tf::Transform(tf::createIdentityQuaternion(), tf::Vector3(1,2,3)), ros::Time().fromSec(1), "vframe2", "vframe1"));
+    vec.push_back(tf::StampedTransform(tf::Transform(tf::createIdentityQuaternion(), tf::Vector3(1,2,3)), ros::Time().fromSec(1), "vframe1", "vframe0"));
     broadcaster.sendTransform(vec);
 
     if (count1 > 9000)

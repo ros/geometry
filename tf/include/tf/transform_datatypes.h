@@ -38,7 +38,7 @@
 #include "geometry_msgs/QuaternionStamped.h"
 #include "geometry_msgs/TransformStamped.h"
 #include "geometry_msgs/PoseStamped.h"
-#include "LinearMath/btTransform.h"
+#include "tf/LinearMath/Transform.h"
 #include "ros/time.h"
 
 #include "ros/console.h"
@@ -46,8 +46,8 @@
 namespace tf
 {
 
-typedef btVector3 Point;
-typedef btTransform Pose;
+typedef tf::Vector3 Point;
+typedef tf::Transform Pose;
 
 static const double QUATERNION_TOLERANCE = 0.1f;
 
@@ -130,7 +130,7 @@ static inline void quaternionTFToMsg(const Quaternion& bt, geometry_msgs::Quater
 /** \brief Helper function for getting yaw from a Quaternion */
 static inline double getYaw(const Quaternion& bt_q){
   btScalar useless_pitch, useless_roll, yaw;
-  btMatrix3x3(bt_q).getRPY( useless_roll, useless_pitch,yaw);
+  tf::Matrix3x3(bt_q).getRPY( useless_roll, useless_pitch,yaw);
   return yaw;
 }
 

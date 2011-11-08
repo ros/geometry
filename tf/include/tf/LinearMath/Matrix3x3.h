@@ -22,11 +22,8 @@ subject to the following restrictions:
 namespace tf
 {
 
-#ifdef BT_USE_DOUBLE_PRECISION
+
 #define btMatrix3x3Data	btMatrix3x3DoubleData 
-#else
-#define btMatrix3x3Data	btMatrix3x3FloatData
-#endif //BT_USE_DOUBLE_PRECISION
 
 
 /**@brief The btMatrix3x3 class implements a 3x3 rotation matrix, to perform linear algebra in combination with btQuaternion, btTransform and btVector3.

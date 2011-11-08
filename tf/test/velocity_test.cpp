@@ -2,7 +2,7 @@
 #include <tf/tf.h>
 #include <sys/time.h>
 
-#include "LinearMath/btVector3.h"
+#include "tf/LinearMath/Vector3.h"
 
 using namespace tf;
 
@@ -25,9 +25,9 @@ protected:
       else if (t < 4) y -= .1;
       else if (t < 5) z += .1;
       else            z -= .1;
-      tf_.setTransform(StampedTransform(btTransform(tf::createIdentityQuaternion(), btVector3(x, y, z)), ros::Time(t), "foo", "bar"));
-      tf_.setTransform(StampedTransform(btTransform(tf::createIdentityQuaternion(), btVector3(1,0,0)), ros::Time(t), "foo", "stationary_offset_child"));
-      tf_.setTransform(StampedTransform(btTransform(tf::createIdentityQuaternion(), btVector3(0,0,1)), ros::Time(t), "stationary_offset_parent", "foo"));
+      tf_.setTransform(StampedTransform(tf::Transform(tf::createIdentityQuaternion(), tf::Vector3(x, y, z)), ros::Time(t), "foo", "bar"));
+      tf_.setTransform(StampedTransform(tf::Transform(tf::createIdentityQuaternion(), tf::Vector3(1,0,0)), ros::Time(t), "foo", "stationary_offset_child"));
+      tf_.setTransform(StampedTransform(tf::Transform(tf::createIdentityQuaternion(), tf::Vector3(0,0,1)), ros::Time(t), "stationary_offset_parent", "foo"));
     }
 
     // You can do set-up work for each test here.
@@ -74,9 +74,9 @@ protected:
       else if (t < 4) y -= .1;
       else if (t < 5) z += .1;
       else            z -= .1;
-      tf_.setTransform(StampedTransform(btTransform(tf::createQuaternionFromRPY(x, y, z), btVector3(0,0,0)), ros::Time(t), "foo", "bar"));
-      tf_.setTransform(StampedTransform(btTransform(tf::createIdentityQuaternion(), btVector3(1,0,0)), ros::Time(t), "foo", "stationary_offset_child"));
-      tf_.setTransform(StampedTransform(btTransform(tf::createIdentityQuaternion(), btVector3(0,0,-1)), ros::Time(t), "stationary_offset_parent", "foo"));
+      tf_.setTransform(StampedTransform(tf::Transform(tf::createQuaternionFromRPY(x, y, z), tf::Vector3(0,0,0)), ros::Time(t), "foo", "bar"));
+      tf_.setTransform(StampedTransform(tf::Transform(tf::createIdentityQuaternion(), tf::Vector3(1,0,0)), ros::Time(t), "foo", "stationary_offset_child"));
+      tf_.setTransform(StampedTransform(tf::Transform(tf::createIdentityQuaternion(), tf::Vector3(0,0,-1)), ros::Time(t), "stationary_offset_parent", "foo"));
     }
 
     // You can do set-up work for each test here.

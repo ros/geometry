@@ -23,13 +23,8 @@ subject to the following restrictions:
 
 namespace tf{
 
-#ifdef BT_USE_DOUBLE_PRECISION
 #define btVector3Data btVector3DoubleData
 #define btVector3DataName "btVector3DoubleData"
-#else
-#define btVector3Data btVector3FloatData
-#define btVector3DataName "btVector3FloatData"
-#endif //BT_USE_DOUBLE_PRECISION
 
 
 
@@ -627,7 +622,6 @@ public:
 ///btSwapVector3Endian swaps vector endianness, useful for network and cross-platform serialization
 SIMD_FORCE_INLINE void	btSwapScalarEndian(const btScalar& sourceVal, btScalar& destVal)
 {
-	#ifdef BT_USE_DOUBLE_PRECISION
 	unsigned char* dest = (unsigned char*) &destVal;
 	unsigned char* src  = (unsigned char*) &sourceVal;
 	dest[0] = src[7];
@@ -638,14 +632,6 @@ SIMD_FORCE_INLINE void	btSwapScalarEndian(const btScalar& sourceVal, btScalar& d
     dest[5] = src[2];
     dest[6] = src[1];
     dest[7] = src[0];
-#else
-	unsigned char* dest = (unsigned char*) &destVal;
-	unsigned char* src  = (unsigned char*) &sourceVal;
-	dest[0] = src[3];
-    dest[1] = src[2];
-    dest[2] = src[1];
-    dest[3] = src[0];
-#endif //BT_USE_DOUBLE_PRECISION
 }
 ///btSwapVector3Endian swaps vector endianness, useful for network and cross-platform serialization
 SIMD_FORCE_INLINE void	btSwapVector3Endian(const btVector3& sourceVec, btVector3& destVec)

@@ -31,7 +31,7 @@
 #include <tf/tf.h>
 #include <sys/time.h>
 
-#include "LinearMath/btVector3.h"
+#include "tf/LinearMath/Vector3.h"
 
 void seed_rand()
 {
@@ -83,7 +83,7 @@ TEST(tf_benchmark, canTransformCacheLength10000)
   unsigned int cache_length = 10000;
   for (unsigned int i = 0; i < cache_length; i++)
   {
-    StampedTransform tranStamped(btTransform(btQuaternion(0,0,0,1), btVector3(0,0,0)), ros::Time().fromNSec(10.0+i), "my_parent", "child");
+    StampedTransform tranStamped(tf::Transform(tf::Quaternion(0,0,0,1), tf::Vector3(0,0,0)), ros::Time().fromNSec(10.0+i), "my_parent", "child");
     mTR.setTransform(tranStamped);
   }
 
@@ -132,7 +132,7 @@ TEST(tf_benchmark, lookupTransformCacheLength10000)
   unsigned int cache_length = 10000;
   for (unsigned int i = 0; i < cache_length; i++)
   {
-    StampedTransform tranStamped(btTransform(btQuaternion(0,0,0,1), btVector3(0,0,0)), ros::Time().fromNSec(10.0+i), "my_parent", "child");
+    StampedTransform tranStamped(tf::Transform(tf::Quaternion(0,0,0,1), tf::Vector3(0,0,0)), ros::Time().fromNSec(10.0+i), "my_parent", "child");
     mTR.setTransform(tranStamped);
   }
 
@@ -188,7 +188,7 @@ TEST(tf_benchmark, benchmarkExhaustiveSearch)
     yvalues[i] = 10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
     zvalues[i] = 10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
 
-    StampedTransform tranStamped(btTransform(btQuaternion(0,0,0,1), btVector3(xvalues[i],yvalues[i],zvalues[i])), ros::Time().fromNSec(10.0 + i), "my_parent", "child");
+    StampedTransform tranStamped(tf::Transform(tf::Quaternion(0,0,0,1), tf::Vector3(xvalues[i],yvalues[i],zvalues[i])), ros::Time().fromNSec(10.0 + i), "my_parent", "child");
     mTR.setTransform(tranStamped);
   }
 
@@ -196,7 +196,7 @@ TEST(tf_benchmark, benchmarkExhaustiveSearch)
   for ( uint64_t i = 0; i < runs ; i++ )
 
   {
-    Stamped<btTransform> inpose (btTransform(btQuaternion(0,0,0,1), btVector3(0,0,0)), ros::Time().fromNSec(10.0 + i), "child");
+    Stamped<tf::Transform> inpose (tf::Transform(tf::Quaternion(0,0,0,1), tf::Vector3(0,0,0)), ros::Time().fromNSec(10.0 + i), "child");
 
     try{
     Stamped<Pose> outpose;
@@ -214,7 +214,7 @@ TEST(tf_benchmark, benchmarkExhaustiveSearch)
     }
   }
   
-  Stamped<Pose> inpose (btTransform(btQuaternion(0,0,0,1), btVector3(0,0,0)), ros::Time().fromNSec(runs), "child");
+  Stamped<Pose> inpose (tf::Transform(tf::Quaternion(0,0,0,1), tf::Vector3(0,0,0)), ros::Time().fromNSec(runs), "child");
   Stamped<Pose> outpose;
   outpose.setIdentity(); //to make sure things are getting mutated
   mTR.transformPose("child",inpose, outpose);

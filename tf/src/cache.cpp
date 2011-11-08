@@ -32,7 +32,7 @@
 #include "tf/time_cache.h"
 #include "tf/exceptions.h"
 
-#include "LinearMath/btTransform.h"
+#include "tf/LinearMath/Transform.h"
 #include <geometry_msgs/TransformStamped.h>
 
 #include "ros/assert.h"

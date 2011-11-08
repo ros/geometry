@@ -20,6 +20,10 @@ subject to the following restrictions:
 
 #include "btMatrix3x3.h"
 
+
+namespace tf
+{
+
 #ifdef BT_USE_DOUBLE_PRECISION
 #define btTransformData btTransformDoubleData
 #else
@@ -297,6 +301,7 @@ SIMD_FORCE_INLINE	void	btTransform::deSerializeDouble(const btTransformDoubleDat
 	m_origin.deSerializeDouble(dataIn.m_origin);
 }
 
+}
 
 #endif
 

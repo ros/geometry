@@ -19,6 +19,9 @@ subject to the following restrictions:
 #include "btVector3.h"
 #include "btQuaternion.h"
 
+namespace tf
+{
+
 #ifdef BT_USE_DOUBLE_PRECISION
 #define btMatrix3x3Data	btMatrix3x3DoubleData 
 #else
@@ -684,6 +687,8 @@ SIMD_FORCE_INLINE	void	btMatrix3x3::deSerializeDouble(const struct	btMatrix3x3Do
 {
 	for (int i=0;i<3;i++)
 		m_el[i].deSerializeDouble(dataIn.m_el[i]);
+}
+
 }
 
 #endif //BT_MATRIX3x3_H

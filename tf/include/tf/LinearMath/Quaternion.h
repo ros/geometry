@@ -21,6 +21,9 @@ subject to the following restrictions:
 #include "btVector3.h"
 #include "btQuadWord.h"
 
+namespace tf
+{
+
 /**@brief The btQuaternion implements quaternion to perform linear algebra rotations in combination with btMatrix3x3, btVector3 and btTransform. */
 class btQuaternion : public btQuadWord {
 public:
@@ -464,6 +467,7 @@ shortestArcQuatNormalize2(btVector3& v0,btVector3& v1)
 	return shortestArcQuat(v0,v1);
 }
 
+}
 #endif
 
 

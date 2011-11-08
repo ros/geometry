@@ -24,6 +24,9 @@ subject to the following restrictions:
 #include <altivec.h>
 #endif
 
+
+namespace tf
+{
 /**@brief The btQuadWord class is base class for btVector3 and btQuaternion. 
  * Some issues under PS3 Linux with IBM 2.1 SDK, gcc compiler prevent from using aligned quadword.
  */
@@ -176,5 +179,7 @@ protected:
 
 
 };
+
+}
 
 #endif //SIMD_QUADWORD_H

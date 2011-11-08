@@ -21,6 +21,8 @@ subject to the following restrictions:
 #include "btScalar.h"
 #include "btMinMax.h"
 
+namespace tf{
+
 #ifdef BT_USE_DOUBLE_PRECISION
 #define btVector3Data btVector3DoubleData
 #define btVector3DataName "btVector3DoubleData"
@@ -740,5 +742,6 @@ SIMD_FORCE_INLINE void	btVector3::deSerialize(const struct	btVector3Data& dataIn
 		m_floats[i] = dataIn.m_floats[i];
 }
 
+}
 
 #endif //SIMD__VECTOR3_H

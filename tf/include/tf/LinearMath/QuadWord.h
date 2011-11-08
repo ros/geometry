@@ -16,8 +16,8 @@ subject to the following restrictions:
 #ifndef TF_QUADWORD_H
 #define TF_QUADWORD_H
 
-#include "btScalar.h"
-#include "btMinMax.h"
+#include "Scalar.h"
+#include "MinMax.h"
 
 
 #if defined (__CELLOS_LV2) && defined (__SPU__)
@@ -27,13 +27,13 @@ subject to the following restrictions:
 
 namespace tf
 {
-/**@brief The btQuadWord class is base class for btVector3 and btQuaternion. 
+/**@brief The QuadWord class is base class for Vector3 and Quaternion. 
  * Some issues under PS3 Linux with IBM 2.1 SDK, gcc compiler prevent from using aligned quadword.
  */
 #ifndef USE_LIBSPE2
-ATTRIBUTE_ALIGNED16(class) btQuadWord
+ATTRIBUTE_ALIGNED16(class) QuadWord
 #else
-class btQuadWord
+class QuadWord
 #endif
 {
 protected:
@@ -85,12 +85,12 @@ protected:
 	SIMD_FORCE_INLINE	operator       btScalar *()       { return &m_floats[0]; }
 	SIMD_FORCE_INLINE	operator const btScalar *() const { return &m_floats[0]; }
 
-	SIMD_FORCE_INLINE	bool	operator==(const btQuadWord& other) const
+	SIMD_FORCE_INLINE	bool	operator==(const QuadWord& other) const
 	{
 		return ((m_floats[3]==other.m_floats[3]) && (m_floats[2]==other.m_floats[2]) && (m_floats[1]==other.m_floats[1]) && (m_floats[0]==other.m_floats[0]));
 	}
 
-	SIMD_FORCE_INLINE	bool	operator!=(const btQuadWord& other) const
+	SIMD_FORCE_INLINE	bool	operator!=(const QuadWord& other) const
 	{
 		return !(*this == other);
 	}
@@ -129,7 +129,7 @@ protected:
 			m_floats[3]=w;
 		}
   /**@brief No initialization constructor */
-		SIMD_FORCE_INLINE btQuadWord()
+		SIMD_FORCE_INLINE QuadWord()
 		//	:m_floats[0](btScalar(0.)),m_floats[1](btScalar(0.)),m_floats[2](btScalar(0.)),m_floats[3](btScalar(0.))
 		{
 		}
@@ -139,7 +139,7 @@ protected:
    * @param y Value of y
    * @param z Value of z
    */
-		SIMD_FORCE_INLINE btQuadWord(const btScalar& x, const btScalar& y, const btScalar& z)		
+		SIMD_FORCE_INLINE QuadWord(const btScalar& x, const btScalar& y, const btScalar& z)		
 		{
 			m_floats[0] = x, m_floats[1] = y, m_floats[2] = z, m_floats[3] = 0.0f;
 		}
@@ -150,25 +150,25 @@ protected:
    * @param z Value of z
    * @param w Value of w
    */
-		SIMD_FORCE_INLINE btQuadWord(const btScalar& x, const btScalar& y, const btScalar& z,const btScalar& w) 
+		SIMD_FORCE_INLINE QuadWord(const btScalar& x, const btScalar& y, const btScalar& z,const btScalar& w) 
 		{
 			m_floats[0] = x, m_floats[1] = y, m_floats[2] = z, m_floats[3] = w;
 		}
 
-  /**@brief Set each element to the max of the current values and the values of another btQuadWord
-   * @param other The other btQuadWord to compare with 
+  /**@brief Set each element to the max of the current values and the values of another QuadWord
+   * @param other The other QuadWord to compare with 
    */
-		SIMD_FORCE_INLINE void	setMax(const btQuadWord& other)
+		SIMD_FORCE_INLINE void	setMax(const QuadWord& other)
 		{
 			btSetMax(m_floats[0], other.m_floats[0]);
 			btSetMax(m_floats[1], other.m_floats[1]);
 			btSetMax(m_floats[2], other.m_floats[2]);
 			btSetMax(m_floats[3], other.m_floats[3]);
 		}
-  /**@brief Set each element to the min of the current values and the values of another btQuadWord
-   * @param other The other btQuadWord to compare with 
+  /**@brief Set each element to the min of the current values and the values of another QuadWord
+   * @param other The other QuadWord to compare with 
    */
-		SIMD_FORCE_INLINE void	setMin(const btQuadWord& other)
+		SIMD_FORCE_INLINE void	setMin(const QuadWord& other)
 		{
 			btSetMin(m_floats[0], other.m_floats[0]);
 			btSetMin(m_floats[1], other.m_floats[1]);

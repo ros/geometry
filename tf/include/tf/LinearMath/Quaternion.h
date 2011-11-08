@@ -21,6 +21,8 @@ subject to the following restrictions:
 #include "Vector3.h"
 #include "QuadWord.h"
 
+#include "LinearMath/btQuaternion.h"
+
 namespace tf
 {
 
@@ -121,6 +123,25 @@ public:
 		m_floats[0] += q.x(); m_floats[1] += q.y(); m_floats[2] += q.z(); m_floats[3] += q.m_floats[3];
 		return *this;
 	}
+
+
+  /** @brief Assignment from btQuaternion
+   * @param the btQuaternion to copy
+   */
+	SIMD_FORCE_INLINE	Quaternion& operator=(const btQuaternion& q)
+	{
+          m_floats[0] = q.x(); m_floats[1] = q.y(); m_floats[2] = q.z(); m_floats[3] = q.w();
+		return *this;
+	}
+
+  /** @brief return a btQuaternion
+   */
+	SIMD_FORCE_INLINE	btQuaternion as_bt() const
+	{
+          return btQuaternion(m_floats[0], m_floats[1], m_floats[2], m_floats[3]);
+	}
+
+  
 
   /**@brief Sutfract out a quaternion
    * @param q The quaternion to sutfract from this one */

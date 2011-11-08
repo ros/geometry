@@ -19,7 +19,7 @@ subject to the following restrictions:
 
 
 #include "Matrix3x3.h"
-
+#include "LinearMath/btTransform.h"
 
 namespace tf
 {
@@ -70,6 +70,20 @@ public:
 		m_origin = other.m_origin;
 		return *this;
 	}
+
+  /**@brief Assignment Operator  from btTransform*/
+	SIMD_FORCE_INLINE Transform& operator=(const btTransform& other)
+	{
+          m_basis = other.getBasis();
+          m_origin = other.getOrigin();
+		return *this;
+	}
+
+  /** @brief Return a btTransform */
+  SIMD_FORCE_INLINE btTransform as_bt(void) const
+  {
+    return btTransform(m_basis.as_bt(), m_origin.as_bt());
+  }
 
 
   /**@brief Set the current transform as the value of the product of two transforms

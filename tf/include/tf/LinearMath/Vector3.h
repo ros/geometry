@@ -46,7 +46,7 @@ public:
 	}
 public:
 #else //__CELLOS_LV2__ __SPU__
-#ifdef BT_USE_SSE // _WIN32
+#ifdef TF_USE_SSE // _WIN32
 	union {
 		__m128 mVec128;
 		tfScalar	m_floats[4];
@@ -519,7 +519,7 @@ public:
 		SIMD_FORCE_INLINE int maxAxis4() const
 	{
 		int maxIndex = -1;
-		tfScalar maxVal = tfScalar(-BT_LARGE_FLOAT);
+		tfScalar maxVal = tfScalar(-TF_LARGE_FLOAT);
 		if (m_floats[0] > maxVal)
 		{
 			maxIndex = 0;
@@ -552,7 +552,7 @@ public:
 	SIMD_FORCE_INLINE int minAxis4() const
 	{
 		int minIndex = -1;
-		tfScalar minVal = tfScalar(BT_LARGE_FLOAT);
+		tfScalar minVal = tfScalar(TF_LARGE_FLOAT);
 		if (m_floats[0] < minVal)
 		{
 			minIndex = 0;

@@ -17,7 +17,7 @@ subject to the following restrictions:
 #ifndef TF_SCALAR_H
 #define TF_SCALAR_H
 
-#ifdef BT_MANAGED_CODE
+#ifdef TF_MANAGED_CODE
 //Aligned data types not supported in managed code
 #pragma unmanaged
 #endif
@@ -30,7 +30,7 @@ subject to the following restrictions:
 #include <float.h>
 
 #if defined(DEBUG) || defined (_DEBUG)
-#define BT_DEBUG
+#define TF_DEBUG
 #endif
 
 
@@ -43,7 +43,7 @@ subject to the following restrictions:
 			#define ATTRIBUTE_ALIGNED64(a) a
 			#define ATTRIBUTE_ALIGNED128(a) a
 		#else
-			//#define BT_HAS_ALIGNED_ALLOCATOR
+			//#define TF_HAS_ALIGNED_ALLOCATOR
 			#pragma warning(disable : 4324) // disable padding warning
 //			#pragma warning(disable:4530) // Disable the exception disable but used in MSCV Stl warning.
 //			#pragma warning(disable:4996) //Turn off warnings about deprecated C routines
@@ -54,10 +54,10 @@ subject to the following restrictions:
 			#define ATTRIBUTE_ALIGNED64(a) __declspec(align(64)) a
 			#define ATTRIBUTE_ALIGNED128(a) __declspec (align(128)) a
 		#ifdef _XBOX
-			#define BT_USE_VMX128
+			#define TF_USE_VMX128
 
 			#include <ppcintrinsics.h>
- 			#define BT_HAVE_NATIVE_FSEL
+ 			#define TF_HAVE_NATIVE_FSEL
  			#define tfFsel(a,b,c) __fsel((a),(b),(c))
 		#else
 
@@ -67,7 +67,7 @@ subject to the following restrictions:
 		#endif //__MINGW32__
 
 		#include <assert.h>
-#ifdef BT_DEBUG
+#ifdef TF_DEBUG
 		#define tfAssert assert
 #else
 		#define tfAssert(x)
@@ -88,7 +88,7 @@ subject to the following restrictions:
 		#ifndef assert
 		#include <assert.h>
 		#endif
-#ifdef BT_DEBUG
+#ifdef TF_DEBUG
 		#define tfAssert assert
 #else
 		#define tfAssert(x)
@@ -110,7 +110,7 @@ subject to the following restrictions:
 		#ifndef assert
 		#include <assert.h>
 		#endif
-#ifdef BT_DEBUG
+#ifdef TF_DEBUG
 		#define tfAssert assert
 #else
 		#define tfAssert(x)
@@ -159,11 +159,11 @@ subject to the following restrictions:
 ///The tfScalar type abstracts floating point numbers, to easily switch between double and single floating point precision.
 typedef double tfScalar;
 //this number could be bigger in double precision
-#define BT_LARGE_FLOAT 1e30
+#define TF_LARGE_FLOAT 1e30
 
 
 
-#define BT_DECLARE_ALIGNED_ALLOCATOR() \
+#define TF_DECLARE_ALIGNED_ALLOCATOR() \
    SIMD_FORCE_INLINE void* operator new(size_t sizeInBytes)   { return tfAlignedAlloc(sizeInBytes,16); }   \
    SIMD_FORCE_INLINE void  operator delete(void* ptr)         { tfAlignedFree(ptr); }   \
    SIMD_FORCE_INLINE void* operator new(size_t, void* ptr)   { return ptr; }   \
@@ -237,7 +237,7 @@ SIMD_FORCE_INLINE int       tfIsNegative(tfScalar x) {
 SIMD_FORCE_INLINE tfScalar tfRadians(tfScalar x) { return x * SIMD_RADS_PER_DEG; }
 SIMD_FORCE_INLINE tfScalar tfDegrees(tfScalar x) { return x * SIMD_DEGS_PER_RAD; }
 
-#define BT_DECLARE_HANDLE(name) typedef struct name##__ { int unused; } *name
+#define TF_DECLARE_HANDLE(name) typedef struct name##__ { int unused; } *name
 
 #ifndef tfFsel
 SIMD_FORCE_INLINE tfScalar tfFsel(tfScalar a, tfScalar b, tfScalar c)
@@ -280,7 +280,7 @@ SIMD_FORCE_INLINE int tfSelect(unsigned condition, int valueIfConditionNonZero, 
 }
 SIMD_FORCE_INLINE float tfSelect(unsigned condition, float valueIfConditionNonZero, float valueIfConditionZero)
 {
-#ifdef BT_HAVE_NATIVE_FSEL
+#ifdef TF_HAVE_NATIVE_FSEL
     return (float)tfFsel((tfScalar)condition - tfScalar(1.0f), valueIfConditionNonZero, valueIfConditionZero);
 #else
     return (condition != 0) ? valueIfConditionNonZero : valueIfConditionZero; 

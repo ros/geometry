@@ -688,5 +688,5 @@ SIMD_FORCE_INLINE	void	Matrix3x3::deSerializeDouble(const struct	Matrix3x3Double
 
 }
 
-#endif //BT_MATRIX3x3_H
+#endif //TF_MATRIX3x3_H
 

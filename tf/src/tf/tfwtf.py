@@ -35,7 +35,7 @@
 import time
 
 from roswtf.rules import warning_rule, error_rule
-import roslib.scriptutil
+import rosgraph
 import rospy
 
 import tf.msg
@@ -149,12 +149,14 @@ def _tf_handle(msg):
 
 # @return bool: True if /tf has a publisher
 def is_tf_active():
-    master = roslib.scriptutil.get_master()
+    master = rosgraph.Master('/tfwtf')
     if master is not None:
-        code, msg, val = master.getPublishedTopics('/roswtf', '/')
-        if code == 1:
+        try:
+            val = master.getPublishedTopics('/')
             if filter(lambda x: x[0] == '/tf', val):
                 return True
+        except:
+            pass
     return False
 
 # roswtf entry point for online checks

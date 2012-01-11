@@ -50,7 +50,7 @@ int main(int argc, char** argv)
   t.frame_id_ = "root";
   t.child_frame_id_ = "0";
   t.setIdentity();
-  t.setOrigin(btVector3(1,0,0));
+  t.setOrigin(tf::Vector3(1,0,0));
   bc.setTransform(t, "me");
   t.stamp_ = ros::Time(2);
   bc.setTransform(t, "me");

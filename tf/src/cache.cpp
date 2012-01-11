@@ -32,7 +32,7 @@
 #include "tf/time_cache.h"
 #include "tf/exceptions.h"
 
-#include "LinearMath/btTransform.h"
+#include "tf/LinearMath/Transform.h"
 #include <geometry_msgs/TransformStamped.h>
 
 #include "ros/assert.h"
@@ -179,7 +179,7 @@ void TimeCache::interpolate(const TransformStorage& one, const TransformStorage&
     return;
   }
   //Calculate the ratio
-  btScalar ratio = (time.toSec() - one.stamp_.toSec()) / (two.stamp_.toSec() - one.stamp_.toSec());
+  tfScalar ratio = (time.toSec() - one.stamp_.toSec()) / (two.stamp_.toSec() - one.stamp_.toSec());
 
   //Interpolate translation
   output.translation_.setInterpolate3(one.translation_, two.translation_, ratio);

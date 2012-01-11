@@ -105,7 +105,7 @@ TEST(MessageFilter, preexistingTransforms)
   filter.registerCallback(boost::bind(&Notification::notify, &n, _1));
 
 	ros::Time stamp = ros::Time::now();
-	tf::StampedTransform transform(btTransform(btQuaternion(0,0,0,1), btVector3(1,2,3)), stamp, "frame1", "frame2");
+	tf::StampedTransform transform(tf::Transform(tf::Quaternion(0,0,0,1), tf::Vector3(1,2,3)), stamp, "frame1", "frame2");
 	tf_client.setTransform(transform);
 
 	geometry_msgs::PointStampedPtr msg(new geometry_msgs::PointStamped);
@@ -134,7 +134,7 @@ TEST(MessageFilter, postTransforms)
 
 	EXPECT_EQ(0, n.count_);
 
-	tf::StampedTransform transform(btTransform(btQuaternion(0,0,0,1), btVector3(1,2,3)), stamp, "frame1", "frame2");
+	tf::StampedTransform transform(tf::Transform(tf::Quaternion(0,0,0,1), tf::Vector3(1,2,3)), stamp, "frame1", "frame2");
 	tf_client.setTransform(transform);
 
 	ros::WallDuration(0.1).sleep();
@@ -165,7 +165,7 @@ TEST(MessageFilter, queueSize)
 	EXPECT_EQ(0, n.count_);
 	EXPECT_EQ(10, n.failure_count_);
 
-	tf::StampedTransform transform(btTransform(btQuaternion(0,0,0,1), btVector3(1,2,3)), stamp, "frame1", "frame2");
+	tf::StampedTransform transform(tf::Transform(tf::Quaternion(0,0,0,1), tf::Vector3(1,2,3)), stamp, "frame1", "frame2");
 	tf_client.setTransform(transform);
 
 	ros::WallDuration(0.1).sleep();
@@ -183,7 +183,7 @@ TEST(MessageFilter, setTargetFrame)
 	filter.setTargetFrame("frame1000");
 
 	ros::Time stamp = ros::Time::now();
-  tf::StampedTransform transform(btTransform(btQuaternion(0,0,0,1), btVector3(1,2,3)), stamp, "frame1000", "frame2");
+  tf::StampedTransform transform(tf::Transform(tf::Quaternion(0,0,0,1), tf::Vector3(1,2,3)), stamp, "frame1000", "frame2");
   tf_client.setTransform(transform);
 
   geometry_msgs::PointStampedPtr msg(new geometry_msgs::PointStamped);
@@ -209,7 +209,7 @@ TEST(MessageFilter, multipleTargetFrames)
 	filter.setTargetFrames(target_frames);
 
 	ros::Time stamp = ros::Time::now();
-  tf::StampedTransform transform(btTransform(btQuaternion(0,0,0,1), btVector3(1,2,3)), stamp, "frame1", "frame3");
+  tf::StampedTransform transform(tf::Transform(tf::Quaternion(0,0,0,1), tf::Vector3(1,2,3)), stamp, "frame1", "frame3");
   tf_client.setTransform(transform);
 
   geometry_msgs::PointStampedPtr msg(new geometry_msgs::PointStamped);
@@ -243,7 +243,7 @@ TEST(MessageFilter, tolerance)
   filter.setTolerance(offset);
 
 	ros::Time stamp = ros::Time::now();
-  tf::StampedTransform transform(btTransform(btQuaternion(0,0,0,1), btVector3(1,2,3)), stamp, "frame1", "frame2");
+  tf::StampedTransform transform(tf::Transform(tf::Quaternion(0,0,0,1), tf::Vector3(1,2,3)), stamp, "frame1", "frame2");
   tf_client.setTransform(transform);
 
   geometry_msgs::PointStampedPtr msg(new geometry_msgs::PointStamped);
@@ -279,7 +279,7 @@ TEST(MessageFilter, maxRate)
   filter.registerCallback(boost::bind(&Notification::notify, &n, _1));
 
   ros::Time stamp = ros::Time::now();
-  tf::StampedTransform transform(btTransform(btQuaternion(0,0,0,1), btVector3(1,2,3)), stamp, "frame1", "frame2");
+  tf::StampedTransform transform(tf::Transform(tf::Quaternion(0,0,0,1), tf::Vector3(1,2,3)), stamp, "frame1", "frame2");
   tf_client.setTransform(transform);
 
   stamp += ros::Duration(0.1);
@@ -316,7 +316,7 @@ TEST(MessageFilter, outTheBackFailure)
   filter.registerFailureCallback(boost::bind(&Notification::failure, &n, _1, _2));
 
   ros::Time stamp = ros::Time::now();
-  tf::StampedTransform transform(btTransform(btQuaternion(0,0,0,1), btVector3(1,2,3)), stamp, "frame1", "frame2");
+  tf::StampedTransform transform(tf::Transform(tf::Quaternion(0,0,0,1), tf::Vector3(1,2,3)), stamp, "frame1", "frame2");
   tf_client.setTransform(transform);
 
   transform.stamp_ = stamp + ros::Duration(10000);

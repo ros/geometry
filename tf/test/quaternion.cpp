@@ -31,7 +31,7 @@
 #include <sys/time.h>
 #include <cstdio>
 
-#include "LinearMath/btTransform.h"
+#include "tf/LinearMath/Transform.h"
 
 
 void seed_rand()
@@ -59,11 +59,11 @@ int main(int argc, char **argv){
   
   for ( unsigned int i = 0; i < runs ; i++ )
   {
-    btMatrix3x3 mat;
-    btQuaternion q_baseline;
+    tf::Matrix3x3 mat;
+    tf::Quaternion q_baseline;
     q_baseline.setRPY(zvalues[i],yvalues[i],xvalues[i]);
     mat.setRotation(q_baseline);
-    btQuaternion q_from_m;
+    tf::Quaternion q_from_m;
     mat.getRotation(q_from_m);
     std::printf("%f, angle between quaternions\n", q_from_m.angle(q_baseline));
   } 

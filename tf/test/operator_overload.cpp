@@ -30,7 +30,7 @@
 #include <vector>
 #include <sys/time.h>
 
-#include "LinearMath/btTransform.h"
+#include "tf/LinearMath/Transform.h"
 
 
 void seed_rand()
@@ -58,9 +58,9 @@ int main(int argc, char **argv){
   //Useful Operator Overload
   for ( unsigned int i = 0; i < runs ; i++ )
   {    
-    btTransform transform(btQuaternion(0,0,0), btVector3(xvalues[i],yvalues[i],zvalues[i]));
-    btQuaternion initial(xvalues[i],yvalues[i],zvalues[i]);
-    btQuaternion final(xvalues[i],yvalues[i],zvalues[i]);
+    tf::Transform transform(tf::Quaternion(0,0,0), tf::Vector3(xvalues[i],yvalues[i],zvalues[i]));
+    tf::Quaternion initial(xvalues[i],yvalues[i],zvalues[i]);
+    tf::Quaternion final(xvalues[i],yvalues[i],zvalues[i]);
     final = transform * initial;
     std::printf("Useful Operator Overload: %f, angle between quaternions\n", initial.angle(final));
   } 

@@ -117,16 +117,16 @@ struct TransformAccum
       break;
     case SourceParentOfTarget:
       {
-        btQuaternion inv_target_quat = target_to_top_quat.inverse();
-        btVector3 inv_target_vec = quatRotate(inv_target_quat, -target_to_top_vec);
+        tf::Quaternion inv_target_quat = target_to_top_quat.inverse();
+        tf::Vector3 inv_target_vec = quatRotate(inv_target_quat, -target_to_top_vec);
         result_vec = inv_target_vec;
         result_quat = inv_target_quat;
         break;
       }
     case FullPath:
       {
-        btQuaternion inv_target_quat = target_to_top_quat.inverse();
-        btVector3 inv_target_vec = quatRotate(inv_target_quat, -target_to_top_vec);
+        tf::Quaternion inv_target_quat = target_to_top_quat.inverse();
+        tf::Vector3 inv_target_vec = quatRotate(inv_target_quat, -target_to_top_vec);
 
      	result_vec = quatRotate(inv_target_quat, source_to_top_vec) + inv_target_vec;
         result_quat = inv_target_quat * source_to_top_quat;
@@ -139,13 +139,13 @@ struct TransformAccum
 
   TransformStorage st;
   ros::Time time;
-  btQuaternion source_to_top_quat;
-  btVector3 source_to_top_vec;
-  btQuaternion target_to_top_quat;
-  btVector3 target_to_top_vec;
+  tf::Quaternion source_to_top_quat;
+  tf::Vector3 source_to_top_vec;
+  tf::Quaternion target_to_top_quat;
+  tf::Vector3 target_to_top_vec;
 
-  btQuaternion result_quat;
-  btVector3 result_vec;
+  tf::Quaternion result_quat;
+  tf::Vector3 result_vec;
 };
 
 
@@ -371,7 +371,7 @@ int Transformer::walkToTopParent(F& f, ros::Time time, CompactFrameID target_id,
 bool Transformer::setTransform(const StampedTransform& transform, const std::string& authority)
 {
 
-  StampedTransform mapped_transform((btTransform)transform, transform.stamp_, transform.frame_id_, transform.child_frame_id_);
+  StampedTransform mapped_transform((tf::Transform)transform, transform.stamp_, transform.frame_id_, transform.child_frame_id_);
   mapped_transform.child_frame_id_ = assert_resolved(tf_prefix_, transform.child_frame_id_);
   mapped_transform.frame_id_ = assert_resolved(tf_prefix_, transform.frame_id_);
 
@@ -530,21 +530,21 @@ void Transformer::lookupTwist(const std::string& tracking_frame, const std::stri
   lookupTransform(observation_frame, tracking_frame, end_time, end);
 
 
-  btMatrix3x3 temp = start.getBasis().inverse() * end.getBasis();
-  btQuaternion quat_temp;
+  tf::Matrix3x3 temp = start.getBasis().inverse() * end.getBasis();
+  tf::Quaternion quat_temp;
   temp.getRotation(quat_temp);
-  btVector3 o = start.getBasis() * quat_temp.getAxis();
-  btScalar ang = quat_temp.getAngle();
+  tf::Vector3 o = start.getBasis() * quat_temp.getAxis();
+  tfScalar ang = quat_temp.getAngle();
   
   double delta_x = end.getOrigin().getX() - start.getOrigin().getX();
   double delta_y = end.getOrigin().getY() - start.getOrigin().getY();
   double delta_z = end.getOrigin().getZ() - start.getOrigin().getZ();
 
 
-  btVector3 twist_vel ((delta_x)/corrected_averaging_interval.toSec(), 
+  tf::Vector3 twist_vel ((delta_x)/corrected_averaging_interval.toSec(), 
                        (delta_y)/corrected_averaging_interval.toSec(),
                        (delta_z)/corrected_averaging_interval.toSec());
-  btVector3 twist_rot = o * (ang / corrected_averaging_interval.toSec());
+  tf::Vector3 twist_rot = o * (ang / corrected_averaging_interval.toSec());
 
 
   // This is a twist w/ reference frame in observation_frame  and reference point is in the tracking_frame at the origin (at start_time)
@@ -553,8 +553,8 @@ void Transformer::lookupTwist(const std::string& tracking_frame, const std::stri
   //correct for the position of the reference frame
   tf::StampedTransform inverse;
   lookupTransform(reference_frame,tracking_frame,  target_time, inverse);
-  btVector3 out_rot = inverse.getBasis() * twist_rot;
-  btVector3 out_vel = inverse.getBasis()* twist_vel + inverse.getOrigin().cross(out_rot);
+  tf::Vector3 out_rot = inverse.getBasis() * twist_rot;
+  tf::Vector3 out_vel = inverse.getBasis()* twist_vel + inverse.getOrigin().cross(out_rot);
 
 
   //Rereference the twist about a new reference point
@@ -1424,9 +1424,9 @@ void Transformer::transformVector(const std::string& target_frame,
   lookupTransform(target_frame, stamped_in.frame_id_, stamped_in.stamp_, transform);
 
   /** \todo may not be most efficient */
-  btVector3 end = stamped_in;
-  btVector3 origin = btVector3(0,0,0);
-  btVector3 output = (transform * end) - (transform * origin);
+  tf::Vector3 end = stamped_in;
+  tf::Vector3 origin = tf::Vector3(0,0,0);
+  tf::Vector3 output = (transform * end) - (transform * origin);
   stamped_out.setData( output);
 
   stamped_out.stamp_ = transform.stamp_;
@@ -1483,9 +1483,9 @@ void Transformer::transformVector(const std::string& target_frame, const ros::Ti
                   fixed_frame, transform);
 
   /** \todo may not be most efficient */
-  btVector3 end = stamped_in;
-  btVector3 origin = btVector3(0,0,0);
-  btVector3 output = (transform * end) - (transform * origin);
+  tf::Vector3 end = stamped_in;
+  tf::Vector3 origin = tf::Vector3(0,0,0);
+  tf::Vector3 output = (transform * end) - (transform * origin);
   stamped_out.setData( output);
 
   stamped_out.stamp_ = transform.stamp_;

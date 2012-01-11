@@ -1,3 +1,8 @@
+if(CATKIN)
+  include(catkin.cmake)
+  return()
+endif()
+
 cmake_minimum_required(VERSION 2.4.6)
 include($ENV{ROS_ROOT}/core/rosbuild/rosbuild.cmake)
 
@@ -16,4 +21,4 @@ set(ROSPACK_MAKEDIST true)
 # variables.
 #list(APPEND CPACK_SOURCE_IGNORE_FILES /core/experimental)
 
-rosbuild_make_distribution(1.7.0)
+rosbuild_make_distribution(1.7.1)

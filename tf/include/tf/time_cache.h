@@ -38,7 +38,7 @@
 #include "tf/transform_datatypes.h"
 #include "tf/exceptions.h"
 
-#include "LinearMath/btTransform.h"
+#include "tf/LinearMath/Transform.h"
 
 #include <sstream>
 
@@ -74,8 +74,8 @@ public:
     return *this;
   }
 
-  btQuaternion rotation_;
-  btVector3 translation_;
+  tf::Quaternion rotation_;
+  tf::Vector3 translation_;
   ros::Time stamp_;
   CompactFrameID frame_id_;
   CompactFrameID child_frame_id_;

@@ -2,7 +2,7 @@
 #include <tf/tf.h>
 #include <sys/time.h>
 
-#include "LinearMath/btVector3.h"
+#include "tf/LinearMath/Vector3.h"
 
 using namespace tf;
 
@@ -37,20 +37,20 @@ TEST(tf, SignFlipExtrapolate)
   double yaw, pitch, roll;
 
   TransformStorage t0(StampedTransform
-                      (btTransform(btQuaternion(0.000, 0.000,  -0.8386707128751809, 0.5446388118427071),
-                                   btVector3(1.0330764266905630, 5.2545257423922198, -0.000)),
+                      (tf::Transform(tf::Quaternion(0.000, 0.000,  -0.8386707128751809, 0.5446388118427071),
+                                   tf::Vector3(1.0330764266905630, 5.2545257423922198, -0.000)),
                        ts0, "odom", "other0"), 3);
   TransformStorage t1(StampedTransform
-                      (btTransform(btQuaternion(0.000, 0.000,  0.8660255375641606, -0.4999997682866531),
-                                   btVector3(1.5766646418987809, 5.1177550046707436, -0.000)),
+                      (tf::Transform(tf::Quaternion(0.000, 0.000,  0.8660255375641606, -0.4999997682866531),
+                                   tf::Vector3(1.5766646418987809, 5.1177550046707436, -0.000)),
                        ts1, "odom", "other1"), 3);
   TransformStorage t2(StampedTransform
-                      (btTransform(btQuaternion(0.000, 0.000, 0.8910066733792211, -0.4539902069358919),
-                                   btVector3(2.1029791754869160, 4.9249128183465967, -0.000)),
+                      (tf::Transform(tf::Quaternion(0.000, 0.000, 0.8910066733792211, -0.4539902069358919),
+                                   tf::Vector3(2.1029791754869160, 4.9249128183465967, -0.000)),
                        ts2, "odom", "other2"), 3);
 
   tf::TimeCache tc;
-  btTransform res;
+  tf::Transform res;
 
   tc.interpolate(t0, t1, ts1, tout);
   res = tout.inverse();

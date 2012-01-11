@@ -282,8 +282,8 @@ static PyObject *lookupTransform(PyObject *self, PyObject *args, PyObject *kw)
     return NULL;
   tf::StampedTransform transform;
   WRAP(t->lookupTransform(target_frame, source_frame, time, transform));
-  btVector3 origin = transform.getOrigin();
-  btQuaternion rotation = transform.getRotation();
+  tf::Vector3 origin = transform.getOrigin();
+  tf::Quaternion rotation = transform.getRotation();
   return Py_BuildValue("(ddd)(dddd)",
       origin.x(), origin.y(), origin.z(),
       rotation.x(), rotation.y(), rotation.z(), rotation.w());
@@ -307,8 +307,8 @@ static PyObject *lookupTransformFull(PyObject *self, PyObject *args, PyObject *k
     return NULL;
   tf::StampedTransform transform;
   WRAP(t->lookupTransform(target_frame, target_time, source_frame, source_time, fixed_frame, transform));
-  btVector3 origin = transform.getOrigin();
-  btQuaternion rotation = transform.getRotation();
+  tf::Vector3 origin = transform.getOrigin();
+  tf::Quaternion rotation = transform.getRotation();
   return Py_BuildValue("(ddd)(dddd)",
       origin.x(), origin.y(), origin.z(),
       rotation.x(), rotation.y(), rotation.z(), rotation.w());
@@ -384,9 +384,9 @@ static PyObject *setTransform(PyObject *self, PyObject *args)
   double qz = PyFloat_AsDouble(PyObject_BorrowAttrString(rotation, "z"));
   double qw = PyFloat_AsDouble(PyObject_BorrowAttrString(rotation, "w"));
 
-  transform.setData(btTransform(
-    btQuaternion(btScalar(qx), btScalar(qy), btScalar(qz), btScalar(qw)),
-    btVector3(btScalar(tx), btScalar(ty), btScalar(tz))));
+  transform.setData(tf::Transform(
+    tf::Quaternion(tfScalar(qx), tfScalar(qy), tfScalar(qz), tfScalar(qw)),
+    tf::Vector3(tfScalar(tx), tfScalar(ty), tfScalar(tz))));
   t->setTransform(transform, authority);
   Py_RETURN_NONE;
 }

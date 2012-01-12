@@ -136,8 +136,9 @@ public:
 
   /** @brief return a btQuaternion
    */
-	TFSIMD_FORCE_INLINE	btQuaternion as_bt() const
-	{
+        TFSIMD_FORCE_INLINE	btQuaternion as_bt() const __attribute__((deprecated)) { return asBt(); } ;
+        TFSIMD_FORCE_INLINE	btQuaternion asBt() const
+        {
           return btQuaternion(m_floats[0], m_floats[1], m_floats[2], m_floats[3]);
 	}
 

@@ -63,6 +63,12 @@ public:
 		m_origin(other.m_origin)
 	{
 	}
+  /**@brief Copy constructor from btTransform*/
+	TFSIMD_FORCE_INLINE Transform (const btTransform& other)
+          : m_basis(other.getBasis()),
+            m_origin(other.getOrigin())
+	{
+	}
   /**@brief Assignment Operator */
 	TFSIMD_FORCE_INLINE Transform& operator=(const Transform& other)
 	{
@@ -79,10 +85,11 @@ public:
 		return *this;
 	}
 
+  TFSIMD_FORCE_INLINE btTransform as_bt(void) const __attribute__((deprecated)) { return asBt(); };
   /** @brief Return a btTransform */
-  TFSIMD_FORCE_INLINE btTransform as_bt(void) const
+  TFSIMD_FORCE_INLINE btTransform asBt(void) const
   {
-    return btTransform(m_basis.as_bt(), m_origin.as_bt());
+    return btTransform(m_basis.asBt(), m_origin.asBt());
   }
 
 

@@ -32,6 +32,14 @@ public:
   /**@brief No initialization constructor */
 	Quaternion() {}
 
+  /** @brief Constructor from btQuaternion
+   * @param the btQuaternion to copy
+   */
+	TFSIMD_FORCE_INLINE	Quaternion (const btQuaternion& q)
+	{
+          m_floats[0] = q.x(); m_floats[1] = q.y(); m_floats[2] = q.z(); m_floats[3] = q.w();
+	}
+
 	//		template <typename tfScalar>
 	//		explicit Quaternion(const tfScalar *v) : Tuple4<tfScalar>(v) {}
   /**@brief Constructor from scalars */

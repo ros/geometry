@@ -82,6 +82,8 @@ public:
   virtual void setTargetFrame(const std::string& target_frame) = 0;
   virtual void setTargetFrames(const std::vector<std::string>& target_frames) = 0;
   virtual void setTolerance(const ros::Duration& tolerance) = 0;
+  virtual void setQueueSize( uint32_t new_queue_size ) = 0;
+  virtual uint32_t getQueueSize() = 0;
 };
 
 /**
@@ -294,6 +296,16 @@ public:
   {
     boost::mutex::scoped_lock lock(failure_signal_mutex_);
     return message_filters::Connection(boost::bind(&MessageFilter::disconnectFailure, this, _1), failure_signal_.connect(callback));
+  }
+
+  virtual void setQueueSize( uint32_t new_queue_size )
+  {
+    queue_size_ = new_queue_size;
+  }
+
+  virtual uint32_t getQueueSize()
+  {
+    return queue_size_;
   }
 
 private:

@@ -106,6 +106,7 @@ set_target_properties(pytf_py PROPERTIES OUTPUT_NAME tf PREFIX "_" SUFFIX ".so")
 rosbuild_add_compile_flags(pytf_py -g -Wno-missing-field-initializers)
 rosbuild_add_compile_flags(pytf_py ${SSE_FLAGS}) #conditionally adds sse flags if available
 rosbuild_add_pyunit(test/testPython.py)
+rosbuild_link_boost(pytf_py thread signals)
 
 rosbuild_add_executable(bin/speed_test EXCLUDE_FROM_ALL test/speed_test.cpp)
 target_link_libraries(bin/speed_test tf)

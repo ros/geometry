@@ -410,7 +410,7 @@ private:
 
       ++successful_transform_count_;
 
-      signalMessage(evt);
+      this->signalMessage(evt);
     }
     else
     {

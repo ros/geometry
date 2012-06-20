@@ -37,6 +37,7 @@
 #include <std_msgs/Float64MultiArray.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <geometry_msgs/Pose.h>
+#include <geometry_msgs/Transform.h>
 #include <geometry_msgs/Twist.h>
 #include <geometry_msgs/Wrench.h>
 
@@ -50,6 +51,30 @@ void poseMsgToEigen(const geometry_msgs::Pose &m, Eigen::Affine3d &e);
 
 /// Converts an Eigen transform into a Pose message
 void poseEigenToMsg(const Eigen::Affine3d &e, geometry_msgs::Pose &m);
+
+/// Converts a Transform message into an Eigen Transform
+void transformMsgToEigen(const geometry_msgs::Transform &m, Eigen::Affine3d &e);
+
+/// Converts an Eigen transform into a Transform message
+void transformEigenToMsg(const Eigen::Affine3d &e, geometry_msgs::Transform &m);
+
+/// Converts a Quaternion message into an Eigen Quaternion
+void quaternionMsgToEigen(const geometry_msgs::Quaternion &m, Eigen::Quaterniond &e);
+
+/// Converts an Eigen Quaternion into a Quaternion message
+void quaternionEigenToMsg(const Eigen::Quaterniond &e, geometry_msgs::Quaternion &m);
+
+/// Converts a Point message into an Eigen Vector
+void pointMsgToEigen(const geometry_msgs::Point &m, Eigen::Vector3d &e);
+
+/// Converts an Eigen Vector into a Point message
+void pointEigenToMsg(const Eigen::Vector3d &e, geometry_msgs::Point &m);
+
+/// Converts a Vector message into an Eigen Vector
+void vectorMsgToEigen(const geometry_msgs::Vector3 &m, Eigen::Vector3d &e);
+
+/// Converts an Eigen Vector into a Vector message
+void vectorEigenToMsg(const Eigen::Vector3d &e, geometry_msgs::Vector3 &m);
 
 /// Converts a Twist message into an Eigen matrix
 void twistMsgToEigen(const geometry_msgs::Twist &m, Eigen::Matrix<double,6,1> &e);

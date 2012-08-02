@@ -13,7 +13,7 @@ find_package(Boost REQUIRED)
 include_directories(${Boost_INCLUDE_DIR})
 
 find_package(Eigen REQUIRED)
-include_directories(${EIGEN_INCLUDE_DIRS})
+include_directories(SYSTEM ${EIGEN_INCLUDE_DIRS})
 
 find_package(Orocos-KDL REQUIRED)
 include_directories(${Orocos-KDL_INCLUDE_DIRS})

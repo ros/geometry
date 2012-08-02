@@ -7,7 +7,7 @@ catkin_project(${PROJECT_NAME}
 include_directories(include)
 
 find_package(Boost REQUIRED thread signals)
-include_directories(${Boost_INCLUDE_DIR})
+include_directories(SYSTEM ${Boost_INCLUDE_DIR})
 
 find_package(genmsg REQUIRED)
 find_package(ROS REQUIRED COMPONENTS roscpp std_msgs geometry_msgs sensor_msgs)
@@ -21,6 +21,7 @@ generate_messages(DEPENDENCIES std_msgs geometry_msgs)
 
 add_library(${PROJECT_NAME} src/tf.cpp src/transform_listener.cpp src/cache.cpp src/transform_broadcaster.cpp)
 target_link_libraries(${PROJECT_NAME} ${ROS_LIBRARIES} ${Boost_LIBRARIES})
+add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_gencpp)
 
 # Debug
 add_executable(empty_listener src/empty_listener.cpp)

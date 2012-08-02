@@ -1,80 +1,89 @@
-if(CATKIN)
-  include(catkin.cmake)
-  return()
-endif()
+project(tf)
 
-cmake_minimum_required(VERSION 2.4.6)
-include($ENV{ROS_ROOT}/core/rosbuild/rosbuild.cmake)
-set(ROS_BUILD_TYPE RelWithDebInfo)
-rosbuild_init()
+catkin_project(${PROJECT_NAME} 
+  LIBRARIES ${PROJECT_NAME}
+  INCLUDE_DIRS include)
 
-rosbuild_add_boost_directories()
+include_directories(include)
 
-rosbuild_genmsg()
-rosbuild_gensrv()
+find_package(Boost REQUIRED thread signals)
+include_directories(${Boost_INCLUDE_DIR})
 
-rosbuild_add_library(tf src/tf.cpp src/transform_listener.cpp src/cache.cpp src/transform_broadcaster.cpp)
-rosbuild_link_boost(tf thread signals)
+find_package(genmsg REQUIRED)
+find_package(ROS REQUIRED COMPONENTS roscpp std_msgs geometry_msgs sensor_msgs)
+include_directories(${ROS_INCLUDE_DIRS})
+
+add_message_files(DIRECTORY msg FILES tfMessage.msg)
+add_service_files(DIRECTORY srv FILES FrameGraph.srv)
+
+generate_messages(DEPENDENCIES std_msgs geometry_msgs)
+
+
+add_library(${PROJECT_NAME} src/tf.cpp src/transform_listener.cpp src/cache.cpp src/transform_broadcaster.cpp)
+target_link_libraries(${PROJECT_NAME} ${ROS_LIBRARIES} ${Boost_LIBRARIES})
 
 # Debug
-rosbuild_add_executable(bin/empty_listener src/empty_listener.cpp)
-target_link_libraries(bin/empty_listener tf)
+add_executable(empty_listener src/empty_listener.cpp)
+target_link_libraries(empty_listener ${PROJECT_NAME})
 
-rosbuild_add_executable(bin/tf_echo src/tf_echo.cpp)
-target_link_libraries(bin/tf_echo tf)
+add_executable(tf_echo src/tf_echo.cpp)
+target_link_libraries(tf_echo ${PROJECT_NAME})
 
-rosbuild_add_executable(bin/change_notifier src/change_notifier.cpp)
-target_link_libraries(bin/change_notifier tf)
+add_executable(change_notifier src/change_notifier.cpp)
+target_link_libraries(change_notifier ${PROJECT_NAME})
 
-rosbuild_add_executable(bin/tf_monitor src/tf_monitor.cpp)
-target_link_libraries(bin/tf_monitor tf)
+add_executable(tf_monitor src/tf_monitor.cpp)
+target_link_libraries(tf_monitor ${PROJECT_NAME})
 
-rosbuild_add_gtest(bin/tf_unittest test/tf_unittest.cpp)
-target_link_libraries(bin/tf_unittest tf)
+catkin_initialize_tests()
 
-rosbuild_add_gtest(bin/test_transform_datatypes test/test_transform_datatypes.cpp)
-target_link_libraries(bin/tf_unittest tf)
+add_gtest(tf_unittest test/tf_unittest.cpp)
+target_link_libraries(tf_unittest ${PROJECT_NAME})
 
-rosbuild_add_executable(bin/transform_listener_unittest test/transform_listener_unittest.cpp)
-target_link_libraries(bin/transform_listener_unittest tf)
-rosbuild_add_gtest_build_flags(bin/transform_listener_unittest)
-rosbuild_add_rostest(test/transform_listener_unittest.launch)
+add_gtest(test_transform_datatypes test/test_transform_datatypes.cpp)
+target_link_libraries(tf_unittest ${PROJECT_NAME})
+
+add_gtest(transform_listener_unittest test/transform_listener_unittest.cpp)
+target_link_libraries(transform_listener_unittest ${PROJECT_NAME})
+#add_rostest(test/transform_listener_unittest.launch) # how does CATKIN do rostests?
 
 # Disabled because of changes in TransformStorage
-#rosbuild_add_gtest_future(bin/tf_unittest_future test/tf_unittest_future.cpp)
-#target_link_libraries(bin/tf_unittest_future tf)
+#add_gtest_future(tf_unittest_future test/tf_unittest_future.cpp)
+#target_link_libraries(tf_unittest_future ${PROJECT_NAME})
 
-rosbuild_add_gtest(bin/test_velocity test/velocity_test.cpp)
-target_link_libraries(bin/test_velocity tf)
+add_gtest(test_velocity test/velocity_test.cpp)
+target_link_libraries(test_velocity ${PROJECT_NAME})
 
-#rosbuild_add_executable(bin/test_transform_twist test/transform_twist_test.cpp)
-#target_link_libraries(bin/test_transform_twist tf)
-#rosbuild_add_gtest_build_flags(bin/test_transform_twist)
-#rosbuild_add_rostest(test/transform_twist_test.launch)
+#add_executable(test_transform_twist test/transform_twist_test.cpp)
+#target_link_libraries(test_transform_twist ${PROJECT_NAME})
+#add_gtest_build_flags(test_transform_twist)
+#add_rostest(test/transform_twist_test.launch)
 
-rosbuild_add_gtest(bin/cache_unittest test/cache_unittest.cpp)
-target_link_libraries(bin/cache_unittest tf)
+add_gtest(cache_unittest test/cache_unittest.cpp)
+target_link_libraries(cache_unittest ${PROJECT_NAME})
 
-rosbuild_add_executable(bin/test_message_filter EXCLUDE_FROM_ALL test/test_message_filter.cpp)
-rosbuild_declare_test(bin/test_message_filter)
-rosbuild_add_gtest_build_flags(bin/test_message_filter)
-target_link_libraries(bin/test_message_filter tf ${Boost_LIBRARIES})
-rosbuild_add_rostest(test/test_message_filter.xml)
+add_gtest(test_message_filter EXCLUDE_FROM_ALL test/test_message_filter.cpp)
+target_link_libraries(test_message_filter tf ${Boost_LIBRARIES})
+
+# HOW DOES CATKIN do ROSTEST?
+# add_rostest(test/test_message_filter.xml)
 
 ### Benchmarking
-rosbuild_add_gtest_future(bin/tf_benchmark test/tf_benchmark.cpp)
-target_link_libraries(bin/tf_benchmark tf)
+#add_gtest_future(tf_benchmark test/tf_benchmark.cpp)
+#target_link_libraries(tf_benchmark ${PROJECT_NAME})
 
-rosbuild_add_executable(bin/btTest test/quaternion.cpp)
-rosbuild_add_executable(bin/testListener test/testListener.cpp)
-rosbuild_add_gtest_build_flags(bin/testListener)
-target_link_libraries(bin/testListener tf)
-rosbuild_add_rostest(test/test_broadcaster.launch)
+add_executable(btTest test/quaternion.cpp)
+
+add_gtest(testListener test/testListener.cpp)
+target_link_libraries(testListener ${PROJECT_NAME})
+
+# HOW DOES CATKIN do ROSTEST?
+# add_rostest(test/test_broadcaster.launch)
                                  
-rosbuild_add_executable(bin/testBroadcaster test/testBroadcaster.cpp)
-target_link_libraries(bin/testBroadcaster tf)
-rosbuild_add_executable(bin/static_transform_publisher src/static_transform_publisher.cpp)
-target_link_libraries(bin/static_transform_publisher tf)
+add_executable(testBroadcaster test/testBroadcaster.cpp)
+target_link_libraries(testBroadcaster ${PROJECT_NAME})
+add_executable(static_transform_publisher src/static_transform_publisher.cpp)
+target_link_libraries(static_transform_publisher ${PROJECT_NAME})
 
 
 find_package(PythonLibs REQUIRED)
@@ -93,21 +102,22 @@ include_directories(${PYTHON_INCLUDE_PATH})
 
 
 # Check for SSE
-rosbuild_check_for_sse()
+#check_for_sse()
 
 # Dynamic linking with tf worked OK, except for exception propagation, which failed in the unit test.
 # so build with the objects directly instead.
 
 link_libraries(${PYTHON_LIBRARIES})
-rosbuild_add_library(pytf_py src/pytf.cpp src/tf.cpp src/transform_listener.cpp src/cache.cpp)
+add_library(pytf_py src/pytf.cpp src/tf.cpp src/transform_listener.cpp src/cache.cpp)
 find_package(PythonLibs REQUIRED)
 set_target_properties(pytf_py PROPERTIES OUTPUT_NAME tf PREFIX "_" SUFFIX ".so")
-# target_link_libraries(pytf_py tf)
-rosbuild_add_compile_flags(pytf_py -g -Wno-missing-field-initializers)
-rosbuild_add_compile_flags(pytf_py ${SSE_FLAGS}) #conditionally adds sse flags if available
-rosbuild_add_pyunit(test/testPython.py)
-rosbuild_link_boost(pytf_py thread signals)
+# target_link_libraries(pytf_py ${PROJECT_NAME})
+# add_compile_flags(pytf_py -g -Wno-missing-field-initializers)
+#add_compile_flags(pytf_py ${SSE_FLAGS}) #conditionally adds sse flags if available
+# add_pyunit(test/testPython.py) 
+# DOES PYUNIT WORK IN CATKIN?
+target_link_libraries(pytf_py ${Boost_LIBRARIES})
 
-rosbuild_add_executable(bin/speed_test EXCLUDE_FROM_ALL test/speed_test.cpp)
-target_link_libraries(bin/speed_test tf)
-rosbuild_declare_test(bin/speed_test)
+add_executable(speed_test EXCLUDE_FROM_ALL test/speed_test.cpp)
+target_link_libraries(speed_test ${PROJECT_NAME})
+

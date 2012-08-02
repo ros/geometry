@@ -1,21 +1,34 @@
-cmake_minimum_required(VERSION 2.4.6)
-include($ENV{ROS_ROOT}/core/rosbuild/rosbuild.cmake)
-set(ROS_BUILD_TYPE Release)
-rosbuild_init()
+project(tf_conversions)
 
-rosbuild_add_boost_directories()
+catkin_project(${PROJECT_NAME} 
+  LIBRARIES ${PROJECT_NAME}
+  INCLUDE_DIRS include)
 
-rosbuild_genmsg()
-rosbuild_gensrv()
+include_directories(include)
 
-rosbuild_add_library(tf_conversions
-    src/tf_kdl.cpp
-    src/tf_eigen.cpp
-    )
+find_package(tf)
+include_directories(${tf_INCLUDE_DIRS})
 
-rosbuild_add_gtest(test_eigen_tf test/test_eigen_tf.cpp)
-rosbuild_add_gtest(test_kdl_tf test/test_kdl_tf.cpp)
-target_link_libraries(test_eigen_tf tf_conversions gtest)
-target_link_libraries(test_kdl_tf tf_conversions gtest)
+find_package(Boost REQUIRED)
+include_directories(${Boost_INCLUDE_DIR})
 
-rosbuild_add_pyunit(test/posemath.py)
+find_package(Eigen REQUIRED)
+include_directories(${EIGEN_INCLUDE_DIRS})
+
+find_package(Orocos-KDL REQUIRED)
+include_directories(${Orocos-KDL_INCLUDE_DIRS})
+link_directories(${Orocos-KDL_LIBRARY_DIRS})
+
+add_library(${PROJECT_NAME}
+  src/tf_kdl.cpp
+  src/tf_eigen.cpp
+  )
+target_link_libraries(${PROJECT_NAME} ${tf_LIBRARIES} ${Orocos-KDL_LIBRARIES})
+
+add_gtest(test_eigen_tf test/test_eigen_tf.cpp)
+add_gtest(test_kdl_tf test/test_kdl_tf.cpp)
+target_link_libraries(test_eigen_tf ${PROJECT_NAME} )
+target_link_libraries(test_kdl_tf ${PROJECT_NAME} )
+
+#add_pyunit(test/posemath.py)
+# does CATKIN suppor pyunit?

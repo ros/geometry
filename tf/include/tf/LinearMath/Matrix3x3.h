@@ -19,8 +19,6 @@ subject to the following restrictions:
 #include "Vector3.h"
 #include "Quaternion.h"
 
-#include "LinearMath/btMatrix3x3.h"
-
 namespace tf
 {
 
@@ -67,12 +65,6 @@ public:
 		m_el[2] = other.m_el[2];
 	}
 
-	TFSIMD_FORCE_INLINE Matrix3x3 (const btMatrix3x3& other)
-	{
-		m_el[0] = other.getRow(0);
-		m_el[1] = other.getRow(1);
-		m_el[2] = other.getRow(2);
-	}
 
 	/** @brief Assignment Operator */
 	TFSIMD_FORCE_INLINE Matrix3x3& operator=(const Matrix3x3& other)
@@ -83,25 +75,6 @@ public:
 		return *this;
 	}
 
-  /** @brief Assign from a btMatrix3x3 */
-	TFSIMD_FORCE_INLINE Matrix3x3& operator=(const btMatrix3x3& other)
-	{
-		m_el[0] = other.getRow(0);
-		m_el[1] = other.getRow(1);
-		m_el[2] = other.getRow(2);
-		return *this;
-	}
-
-  /** @brief return a btMatrix3x3
-   */
-  TFSIMD_FORCE_INLINE btMatrix3x3 as_bt(void) const __attribute__((deprecated)) { return asBt(); };
-  TFSIMD_FORCE_INLINE btMatrix3x3 asBt(void) const
-  {
-    return btMatrix3x3(
-                    m_el[0][0], m_el[0][1], m_el[0][2],
-                    m_el[1][0], m_el[1][1], m_el[1][2],
-                    m_el[2][0], m_el[2][1], m_el[2][2]);
-  }
 
 	/** @brief Get a column of the matrix as a vector 
 	*  @param i Column number 0 indexed */

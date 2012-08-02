@@ -21,8 +21,6 @@ subject to the following restrictions:
 #include "Scalar.h"
 #include "MinMax.h"
 
-#include "LinearMath/btVector3.h"
-
 namespace tf{
 
 #define Vector3Data Vector3DoubleData
@@ -71,25 +69,6 @@ public:
   /**@brief No initialization constructor */
 	TFSIMD_FORCE_INLINE Vector3() {}
 
-        /**@brief Constructor from btVector3 */
-	TFSIMD_FORCE_INLINE Vector3(const btVector3& other) 
-        {
-		m_floats[0] = other.m_floats[0];
-		m_floats[1] = other.m_floats[1];
-		m_floats[2] = other.m_floats[2];
-		m_floats[3] = other.m_floats[3];
-        }
-
- 
-	/** @brief Assign from a btVector3 */
-	TFSIMD_FORCE_INLINE Vector3& operator=(const btVector3& other)
-	{
-		m_floats[0] = other.m_floats[0];
-		m_floats[1] = other.m_floats[1];
-		m_floats[2] = other.m_floats[2];
-		m_floats[3] = other.m_floats[3];
-                return *this;
-	}
 
   /**@brief Constructor from scalars 
    * @param x X value
@@ -104,12 +83,6 @@ public:
 		m_floats[3] = tfScalar(0.);
 	}
 
-        /** @brief Return a btVector3 */
-        TFSIMD_FORCE_INLINE btVector3 as_bt(void) const __attribute__((deprecated)) { return asBt(); } ;
-        TFSIMD_FORCE_INLINE btVector3 asBt(void) const
-        {
-          return btVector3(m_floats[0], m_floats[1], m_floats[2]);
-	}
 /**@brief Add a vector to this one 
  * @param The vector to add to this one */
 	TFSIMD_FORCE_INLINE Vector3& operator+=(const Vector3& v)

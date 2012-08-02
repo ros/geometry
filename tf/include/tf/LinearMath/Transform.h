@@ -19,7 +19,6 @@ subject to the following restrictions:
 
 
 #include "Matrix3x3.h"
-#include "LinearMath/btTransform.h"
 
 namespace tf
 {
@@ -63,12 +62,6 @@ public:
 		m_origin(other.m_origin)
 	{
 	}
-  /**@brief Copy constructor from btTransform*/
-	TFSIMD_FORCE_INLINE Transform (const btTransform& other)
-          : m_basis(other.getBasis()),
-            m_origin(other.getOrigin())
-	{
-	}
   /**@brief Assignment Operator */
 	TFSIMD_FORCE_INLINE Transform& operator=(const Transform& other)
 	{
@@ -76,22 +69,6 @@ public:
 		m_origin = other.m_origin;
 		return *this;
 	}
-
-  /**@brief Assignment Operator  from btTransform*/
-	TFSIMD_FORCE_INLINE Transform& operator=(const btTransform& other)
-	{
-          m_basis = other.getBasis();
-          m_origin = other.getOrigin();
-		return *this;
-	}
-
-  TFSIMD_FORCE_INLINE btTransform as_bt(void) const __attribute__((deprecated)) { return asBt(); };
-  /** @brief Return a btTransform */
-  TFSIMD_FORCE_INLINE btTransform asBt(void) const
-  {
-    return btTransform(m_basis.asBt(), m_origin.asBt());
-  }
-
 
   /**@brief Set the current transform as the value of the product of two transforms
    * @param t1 Transform 1

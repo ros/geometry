@@ -25,3 +25,7 @@ add_library(${PROJECT_NAME}
   )
 
 target_link_libraries(${PROJECT_NAME}  ${tf_LIBRARIES} ${Orocos-KDL_LIBRARIES})
+
+# for compatibility with old build system
+install(FILES manifest.xml
+        DESTINATION share/${PROJECT_NAME})

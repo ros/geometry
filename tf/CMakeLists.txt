@@ -121,3 +121,7 @@ target_link_libraries(pytf_py ${Boost_LIBRARIES})
 add_executable(speed_test EXCLUDE_FROM_ALL test/speed_test.cpp)
 target_link_libraries(speed_test ${PROJECT_NAME})
 
+
+# for compatibility with old build system
+install(FILES manifest.xml
+        DESTINATION share/${PROJECT_NAME})

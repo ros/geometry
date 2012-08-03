@@ -25,14 +25,14 @@ target_link_libraries(${PROJECT_NAME} ${ROS_LIBRARIES} ${Boost_LIBRARIES})
 add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_gencpp)
 
 # Debug
-add_executable(empty_listener src/empty_listener.cpp)
-target_link_libraries(empty_listener ${PROJECT_NAME})
+add_executable(tf_empty_listener src/empty_listener.cpp)
+target_link_libraries(tf_empty_listener ${PROJECT_NAME})
 
 add_executable(tf_echo src/tf_echo.cpp)
 target_link_libraries(tf_echo ${PROJECT_NAME})
 
-add_executable(change_notifier src/change_notifier.cpp)
-target_link_libraries(change_notifier ${PROJECT_NAME})
+add_executable(tf_change_notifier src/change_notifier.cpp)
+target_link_libraries(tf_change_notifier ${PROJECT_NAME})
 
 add_executable(tf_monitor src/tf_monitor.cpp)
 target_link_libraries(tf_monitor ${PROJECT_NAME})
@@ -120,9 +120,18 @@ set_target_properties(pytf_py PROPERTIES OUTPUT_NAME tf PREFIX "_" SUFFIX ".so")
 # DOES PYUNIT WORK IN CATKIN?
 target_link_libraries(pytf_py ${Boost_LIBRARIES})
 
-add_executable(speed_test EXCLUDE_FROM_ALL test/speed_test.cpp)
-target_link_libraries(speed_test ${PROJECT_NAME})
+add_executable(tf_speed_test EXCLUDE_FROM_ALL test/speed_test.cpp)
+target_link_libraries(tf_speed_test ${PROJECT_NAME})
 
+
+install(DIRECTORY include/
+  DESTINATION include)
+
+install(TARGETS ${PROJECT_NAME} pytf_py
+  DESTINATION lib)
+
+install(TARGETS tf_echo tf_empty_listener tf_change_notifier tf_monitor static_transform_publisher
+  DESTINATION bin)
 
 # for compatibility with old build system
 install(FILES manifest.xml

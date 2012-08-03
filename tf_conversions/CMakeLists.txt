@@ -31,6 +31,11 @@ target_link_libraries(test_kdl_tf ${PROJECT_NAME} )
 #add_pyunit(test/posemath.py)
 # does CATKIN suppor pyunit?
 
+install(DIRECTORY include/
+  DESTINATION include)
+
+install(TARGETS ${PROJECT_NAME}
+  DESTINATION lib)
 
 # for compatibility with old build system
 install(FILES manifest.xml

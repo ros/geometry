@@ -2,7 +2,8 @@ project(tf)
 
 catkin_project(${PROJECT_NAME} 
   LIBRARIES ${PROJECT_NAME}
-  INCLUDE_DIRS include)
+  INCLUDE_DIRS include
+  DEPENDS Boost)
 
 include_directories(include)
 

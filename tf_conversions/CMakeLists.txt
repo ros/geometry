@@ -2,15 +2,13 @@ project(tf_conversions)
 
 catkin_project(${PROJECT_NAME} 
   LIBRARIES ${PROJECT_NAME}
-  INCLUDE_DIRS include)
+  INCLUDE_DIRS include
+  DEPENDS tf Orocos-KDL Eigen)
 
 include_directories(include)
 
 find_package(tf)
 include_directories(${tf_INCLUDE_DIRS})
-
-find_package(Boost REQUIRED)
-include_directories(${Boost_INCLUDE_DIR})
 
 find_package(Eigen REQUIRED)
 include_directories(SYSTEM ${EIGEN_INCLUDE_DIRS})

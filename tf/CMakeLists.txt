@@ -129,11 +129,9 @@ target_link_libraries(tf_speed_test ${PROJECT_NAME})
 install(DIRECTORY include/
   DESTINATION include)
 
-install(TARGETS ${PROJECT_NAME} pytf_py
-  DESTINATION lib)
-
-install(PROGRAMS tf_echo tf_empty_listener tf_change_notifier tf_monitor static_transform_publisher
-  DESTINATION bin)
+install(TARGETS ${PROJECT_NAME} pytf_py tf_echo tf_empty_listener tf_change_notifier tf_monitor static_transform_publisher
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin)
 
 # for compatibility with old build system
 install(FILES manifest.xml

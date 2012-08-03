@@ -111,6 +111,8 @@ include_directories(${PYTHON_INCLUDE_PATH})
 
 link_libraries(${PYTHON_LIBRARIES})
 add_library(pytf_py src/pytf.cpp src/tf.cpp src/transform_listener.cpp src/cache.cpp)
+add_dependencies(pytf_py ${PROJECT_NAME}_gencpp)
+
 find_package(PythonLibs REQUIRED)
 set_target_properties(pytf_py PROPERTIES OUTPUT_NAME tf PREFIX "_" SUFFIX ".so")
 # target_link_libraries(pytf_py ${PROJECT_NAME})

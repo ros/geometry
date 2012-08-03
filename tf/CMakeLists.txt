@@ -130,7 +130,7 @@ install(DIRECTORY include/
 install(TARGETS ${PROJECT_NAME} pytf_py
   DESTINATION lib)
 
-install(TARGETS tf_echo tf_empty_listener tf_change_notifier tf_monitor static_transform_publisher
+install(PROGRAMS tf_echo tf_empty_listener tf_change_notifier tf_monitor static_transform_publisher
   DESTINATION bin)
 
 # for compatibility with old build system

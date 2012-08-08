@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009, Willow Garage, Inc.
+ * Copyright (c) 2009-2012, Willow Garage, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,58 +27,85 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+// Author: Adam Leeper, Stuart Glaser
+
 #include "tf_conversions/tf_eigen.h"
 
 namespace tf {
 
-  void VectorTFToEigen(const tf::Vector3& t, Eigen::Vector3d& k)
+  void matrixTFToEigen(const tf::Matrix3x3 &t, Eigen::Matrix3d &e)
   {
-    k(0) = t[0];
-    k(1) = t[1];
-    k(2) = t[2];
-  };
-
-void VectorEigenToTF(const Eigen::Vector3d& k, tf::Vector3& t)
-{
-  t[0] = k(0);
-  t[1] = k(1);
-  t[2] = k(2);
-}
-
-  void RotationTFToEigen(const tf::Quaternion& t, Eigen::Quaterniond& k)
+    for(int i=0; i<3; i++)
+      for(int j=0; j<3; j++)
+        e(i,j) = t[i][j];
+  }
+  
+  void matrixEigenToTF(const Eigen::Matrix3d &e, tf::Matrix3x3 &t)
   {
-    Eigen::Quaterniond m(t[3],t[0],t[1],t[2]);
-    k = m;
-  };
+    for(int i=0; i<3; i++)
+      for(int j=0; j<3; j++)
+        t[i][j] =  e(i,j);
+  }
 
-void RotationEigenToTF(const Eigen::Quaterniond& k, tf::Quaternion& t)
-{
-  t[0] = k.x();
-  t[1] = k.y();
-  t[2] = k.z();
-  t[3] = k.w();
-}
+  void poseTFToEigen(const tf::Pose &t, Eigen::Affine3d &e)
+  {
+    TransformTFToEigen(t, e);
+  }
 
-  void TransformTFToEigen(const tf::Transform &t, Eigen::Affine3d &k)
+  void poseEigenToTF(const Eigen::Affine3d &e, tf::Pose &t)
+  {
+    TransformEigenToTF(e, t);
+  }
+
+  void quaternionTFToEigen(const tf::Quaternion& t, Eigen::Quaterniond& e)
+  {
+    e = Eigen::Quaterniond(t[3],t[0],t[1],t[2]);
+  }
+  
+  void quaternionEigenToTF(const Eigen::Quaterniond& e, tf::Quaternion& t)
+  {
+    t[0] = e.x();
+    t[1] = e.y();
+    t[2] = e.z();
+    t[3] = e.w();
+  }
+
+  void transformTFToEigen(const tf::Transform &t, Eigen::Affine3d &e)
   {
     for(int i=0; i<3; i++)
     {
-      k.matrix()(i,3) = t.getOrigin()[i];
+      e.matrix()(i,3) = t.getOrigin()[i];
       for(int j=0; j<3; j++)
       {
-        k.matrix()(i,j) = t.getBasis()[i][j];
+        e.matrix()(i,j) = t.getBasis()[i][j];
       }
     }
     // Fill in identity in last row
     for (int col = 0 ; col < 3; col ++)
-      k.matrix()(3, col) = 0;
-    k.matrix()(3,3) = 1;
-
+      e.matrix()(3, col) = 0;
+    e.matrix()(3,3) = 1;
   };
 
-  void TransformEigenToTF(const Eigen::Affine3d &k, tf::Transform &t)
+  void transformEigenToTF(const Eigen::Affine3d &k, tf::Transform &t)
   {
-    t.setOrigin(tf::Vector3(k.matrix()(0,3), k.matrix()(1,3), k.matrix()(2,3)));
-    t.setBasis(tf::Matrix3x3(k.matrix()(0,0), k.matrix()(0,1),k.matrix()(0,2),k.matrix()(1,0), k.matrix()(1,1),k.matrix()(1,2),k.matrix()(2,0), k.matrix()(2,1),k.matrix()(2,2)));
-  };
-}
+    t.setOrigin(tf::Vector3( e.matrix()(0,3), e.matrix()(1,3), e.matrix()(2,3)));
+    t.setBasis(tf::Matrix3x3(e.matrix()(0,0), e.matrix()(0,1),e.matrix()(0,2),
+                             e.matrix()(1,0), e.matrix()(1,1),e.matrix()(1,2),
+                             e.matrix()(2,0), e.matrix()(2,1),e.matrix()(2,2)));
+  }
+  
+  void vectorTFToEigen(const tf::Vector3& t, Eigen::Vector3d& e)
+  {
+    e(0) = t[0];
+    e(1) = t[1];
+    e(2) = t[2];
+  }
+
+  void vectorEigenToTF(const Eigen::Vector3d& e, tf::Vector3& t)
+  {
+    t[0] = e(0);
+    t[1] = e(1);
+    t[2] = e(2);
+  }
+
+} // namespace tf

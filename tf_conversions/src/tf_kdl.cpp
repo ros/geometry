@@ -31,17 +31,35 @@
 
 namespace tf {
 
-  void VectorTFToKDL(const tf::Vector3& t, KDL::Vector& k)
+  void poseTFToKDL(const tf::Pose& t, KDL::Frame& k)
   {
-    k = KDL::Vector(t[0], t[1], t[2]);
+    for (unsigned int i = 0; i < 3; ++i)
+      k.p[i] = t.getOrigin()[i];
+    for (unsigned int i = 0; i < 9; ++i)
+      k.M.data[i] = t.getBasis()[i/3][i%3];
   }
 
-  void RotationTFToKDL(const tf::Quaternion& t, KDL::Rotation& k)
+  void poseKDLToTF(const KDL::Frame& k, tf::Pose& t)
+  {
+    t.setOrigin(tf::Vector3(k.p[0], k.p[1], k.p[2]));
+    t.setBasis(tf::Matrix3x3(k.M.data[0], k.M.data[1], k.M.data[2],
+                           k.M.data[3], k.M.data[4], k.M.data[5],
+                           k.M.data[6], k.M.data[7], k.M.data[8]));
+  }
+
+  void quaternionTFToKDL(const tf::Quaternion& t, KDL::Rotation& k)
   {
     k = KDL::Rotation::Quaternion(t[0], t[1], t[2], t[3]);
   }
 
-  void TransformTFToKDL(const tf::Transform &t, KDL::Frame &k)
+  void quaternionKDLToTF(const KDL::Rotation &k, tf::Quaternion &t)
+  {
+    double x, y, z, w;
+    k.GetQuaternion(x, y, z, w);
+    t = tf::Quaternion(x, y, z, w);
+  }
+
+  void transformTFToKDL(const tf::Transform &t, KDL::Frame &k)
   {
     for (unsigned int i = 0; i < 3; ++i)
       k.p[i] = t.getOrigin()[i];
@@ -49,7 +67,7 @@ namespace tf {
       k.M.data[i] = t.getBasis()[i/3][i%3];
   }
 
-  void TransformKDLToTF(const KDL::Frame &k, tf::Transform &t)
+  void transformKDLToTF(const KDL::Frame &k, tf::Transform &t)
   {
     t.setOrigin(tf::Vector3(k.p[0], k.p[1], k.p[2]));
     t.setBasis(tf::Matrix3x3(k.M.data[0], k.M.data[1], k.M.data[2],
@@ -57,56 +75,22 @@ namespace tf {
                            k.M.data[6], k.M.data[7], k.M.data[8]));
   }
 
-  void PoseTFToKDL(const tf::Pose& t, KDL::Frame& k)
+  void vectorTFToKDL(const tf::Vector3& t, KDL::Vector& k)
   {
-    for (unsigned int i = 0; i < 3; ++i)
-      k.p[i] = t.getOrigin()[i];
-    for (unsigned int i = 0; i < 9; ++i)
-      k.M.data[i] = t.getBasis()[i/3][i%3];
+    k[0] = t[0];
+    k[1] = t[1];
+    k[2] = t[2];
   }
 
-  void PoseKDLToTF(const KDL::Frame& k, tf::Pose& t)
+  void vectorKDLToTF(const KDL::Vector& k, tf::Vector3& t)
   {
-    t.setOrigin(tf::Vector3(k.p[0], k.p[1], k.p[2]));
-    t.setBasis(tf::Matrix3x3(k.M.data[0], k.M.data[1], k.M.data[2],
-                           k.M.data[3], k.M.data[4], k.M.data[5],
-                           k.M.data[6], k.M.data[7], k.M.data[8]));
+    t[0] = k[0];
+    t[1] = k[1];
+    t[2] = k[2];
   }
-
-  void TwistKDLToMsg(const KDL::Twist &t, geometry_msgs::Twist &m)
-  {
-    m.linear.x = t.vel[0];
-    m.linear.y = t.vel[1];
-    m.linear.z = t.vel[2];
-    m.angular.x = t.rot[0];
-    m.angular.y = t.rot[1];
-    m.angular.z = t.rot[2];
-  }
-
-  void TwistMsgToKDL(const geometry_msgs::Twist &m, KDL::Twist &t)
-  {
-    t.vel[0] = m.linear.x;
-    t.vel[1] = m.linear.y;
-    t.vel[2] = m.linear.z;
-    t.rot[0] = m.angular.x;
-    t.rot[1] = m.angular.y;
-    t.rot[2] = m.angular.z;
-  }
-
-  void PoseMsgToKDL(const geometry_msgs::Pose &p, KDL::Frame &t)
-  {
-    tf::Pose pose_tf;
-    tf::poseMsgToTF(p,pose_tf);
-    PoseTFToKDL(pose_tf,t);
-  }
-
-  void PoseKDLToMsg(const KDL::Frame &t, geometry_msgs::Pose &p)
-  {
-    tf::Pose pose_tf;
-    PoseKDLToTF(t,pose_tf);
-    tf::poseTFToMsg(pose_tf,p);
-  }
-
+ 
+ 
+  /* DEPRECATED FUNCTIONS */
   geometry_msgs::Pose addDelta(const geometry_msgs::Pose &pose, const geometry_msgs::Twist &twist, const double &t)
   {
     geometry_msgs::Pose result;
@@ -119,4 +103,6 @@ namespace tf {
     PoseKDLToMsg(kdl_pose,result);
     return result;
   }
-}
+
+}  // namespace tf
+

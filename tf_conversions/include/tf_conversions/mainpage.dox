@@ -13,8 +13,8 @@ The supported KDL data types are:
  \li Twist
 
 The supported Eigen data types are:
- \li Transform3d
- \li Vector3D
+ \li Affine3d
+ \li Vector3d
  \li Quaterniond
 
 For a complete list of available conversion methods, follow this link:

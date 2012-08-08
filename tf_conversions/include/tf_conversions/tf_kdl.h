@@ -32,47 +32,38 @@
 
 #include "tf/transform_datatypes.h"
 #include "kdl/frames.hpp"
-#include "geometry_msgs/Twist.h"
-#include "geometry_msgs/Pose.h"
 
 namespace tf
 {
-/// Converts a tf Vector3 into a KDL Vector
-void VectorTFToKDL(const tf::Vector3& t, KDL::Vector& k);
-
-/// Converts a tf Quaternion into a KDL Rotation
-void RotationTFToKDL(const tf::Quaternion& t, KDL::Rotation& k);
-
-/// Converts a tf Transform into a KDL Frame
-void TransformTFToKDL(const tf::Transform &t, KDL::Frame &k);
 
 /// Converts a tf Pose into a KDL Frame
-void PoseTFToKDL(const tf::Pose& pose, KDL::Frame& frame);
-
-/// Converts a KDL Frame into a tf Transform
-void TransformKDLToTF(const KDL::Frame &k, tf::Transform &t);
+void poseTFToKDL(const tf::Pose &t, KDL::Frame &k);
 
 /// Converts a KDL Frame into a tf Pose
-void PoseKDLToTF(const KDL::Frame& frame, tf::Pose& pose);
+void poseKDLToTF(const KDL::Frame &k, tf::Pose &t);
 
-/// Converts a KDL Twist into a Twist message
-void TwistKDLToMsg(const KDL::Twist &t, geometry_msgs::Twist &m);
+/// Converts a tf Quaternion into a KDL Rotation
+void quaternionTFToKDL(const tf::Quaternion &t, KDL::Rotation &k);
 
-/// Converts a Twist message into a KDL Twist
-void TwistMsgToKDL(const geometry_msgs::Twist &m, KDL::Twist &t);
+/// Converts a tf Quaternion into a KDL Rotation
+void quaternionKDLToTF(const KDL::Rotation &k, tf::Quaternion &t);
 
-/// Converts a Pose message into a KDL Frame
-void PoseMsgToKDL(const geometry_msgs::Pose &p, KDL::Frame &t);
+/// Converts a tf Transform into a KDL Frame
+void transformTFToKDL(const tf::Transform &t, KDL::Frame &k);
 
-/// Converts a KDL Frame into a Pose message 
-void PoseKDLToMsg(const KDL::Frame &t, geometry_msgs::Pose &p);
+/// Converts a KDL Frame into a tf Transform
+void transformKDLToTF(const KDL::Frame &k, tf::Transform &t);
 
+/// Converts a tf Vector3 into a KDL Vector
+void vectorTFToKDL(const tf::Vector3 &t, KDL::Vector &k);
 
+/// Converts a tf Vector3 into a KDL Vector
+void vectorKDLToTF(const KDL::Vector &k, tf::Vector3 &t);
 
 /* DEPRECATED FUNCTIONS */
 /// Starting from a Pose from A to B, apply a Twist with reference frame A and reference point B, during a time t.
 geometry_msgs::Pose addDelta(const geometry_msgs::Pose &pose, const geometry_msgs::Twist &twist, const double &t)  __attribute__((deprecated));
 
-}
+} // namespace tf
 
 #endif

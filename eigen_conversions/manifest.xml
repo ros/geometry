@@ -10,7 +10,6 @@
   <url>http://ros.org/wiki/eigen_conversions</url>
   <depend package="geometry_msgs"/>
   <depend package="kdl"/>
-  <depend package="tf"/>
 
   <rosdep name="eigen"/>
   <export>

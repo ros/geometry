@@ -49,12 +49,12 @@ namespace tf {
 
   void poseTFToEigen(const tf::Pose &t, Eigen::Affine3d &e)
   {
-    TransformTFToEigen(t, e);
+    transformTFToEigen(t, e);
   }
 
   void poseEigenToTF(const Eigen::Affine3d &e, tf::Pose &t)
   {
-    TransformEigenToTF(e, t);
+    transformEigenToTF(e, t);
   }
 
   void quaternionTFToEigen(const tf::Quaternion& t, Eigen::Quaterniond& e)

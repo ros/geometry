@@ -28,7 +28,7 @@
  */
 
 /*
- * Author: Stuart Glaser
+ * Author: Adam Leeper, Stuart Glaser
  */
 
 #ifndef EIGEN_KDL_CONVERSIONS_H
@@ -41,11 +41,35 @@
 
 namespace tf {
 
-/// Converts a KDL twist into an Eigen matrix
-void twistKDLToEigen(const KDL::Twist &k, Eigen::Matrix<double, 6, 1> &e);
+/// Converts a KDL rotation into an Eigen quaternion
+void quaternionKDLToEigen(const KDL::Rotation &k, Eigen::Quaterniond &e);
+
+/// Converts an Eigen quaternion into a KDL rotation
+void quaternionEigenToKDL(const Eigen::Quaterniond &e, KDL::Rotation &k);
 
 /// Converts a KDL frame into an Eigen transform
 void transformKDLToEigen(const KDL::Frame &k, Eigen::Affine3d &e);
+
+/// Converts an Eigen transform into a KDL frame
+void transformEigenToKDL(const Eigen::Affine3d &e, KDL::Frame &k);
+
+/// Converts a KDL twist into an Eigen matrix
+void twistKDLToEigen(const KDL::Twist &k, Eigen::Matrix<double, 6, 1> &e);
+
+/// Converts an Eigen matrix into a KDL Twist
+void twistEigenToKDL(const Eigen::Matrix<double, 6, 1> &e, KDL::Twist &k);
+
+/// Converts a KDL vector into an Eigen matrix
+void vectorKDLToEigen(const KDL::Vector &k, Eigen::Matrix<double, 6, 1> &e);
+
+/// Converts an Eigen matrix into a KDL vector
+void vectorEigenToKDL(const Eigen::Matrix<double, 3, 1> &e, KDL::Twist &k);
+
+/// Converts a KDL wrench into an Eigen matrix
+void wrenchKDLToEigen(const KDL::Wrench &k, Eigen::Matrix<double, 6, 1> &e);
+
+/// Converts an Eigen matrix into a KDL wrench
+void wrenchEigenToKDL(const Eigen::Matrix<double, 6, 1> &e, KDL::Wrench &k);
 
 } // namespace
 

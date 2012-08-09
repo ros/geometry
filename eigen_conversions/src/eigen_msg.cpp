@@ -32,6 +32,20 @@
 
 namespace tf {
 
+void pointMsgToEigen(const geometry_msgs::Point &m, Eigen::Vector3d &e)
+{
+  e(0) = m.x; 
+  e(1) = m.y; 
+  e(2) = m.z; 
+}
+
+void pointEigenToMsg(const Eigen::Vector3d &e, geometry_msgs::Point &m)
+{
+  m.x = e(0);
+  m.y = e(1);
+  m.z = e(2);
+}
+
 void poseMsgToEigen(const geometry_msgs::Pose &m, Eigen::Affine3d &e)
 {
   e = Eigen::Translation3d(m.position.x,
@@ -59,6 +73,19 @@ void poseEigenToMsg(const Eigen::Affine3d &e, geometry_msgs::Pose &m)
     m.orientation.z *= -1;
     m.orientation.w *= -1;
   }
+}
+
+void quaternionMsgToEigen(const geometry_msgs::Quaternion &m, Eigen::Quaterniond &e)
+{
+  e = Eigen::Quaterniond(m.w, m.x, m.y, m.z);
+}
+
+void quaternionEigenToMsg(const Eigen::Quaterniond &e, geometry_msgs::Quaternion &m)
+{
+  m.x = e.x();
+  m.y = e.y();
+  m.z = e.z();
+  m.w = e.w();
 }
 
 void transformMsgToEigen(const geometry_msgs::Transform &m, Eigen::Affine3d &e)
@@ -90,41 +117,18 @@ void transformEigenToMsg(const Eigen::Affine3d &e, geometry_msgs::Transform &m)
   }
 }
 
-void quaternionMsgToEigen(const geometry_msgs::Quaternion &m, Eigen::Quaterniond &e)
-{
-  e = Eigen::Quaterniond(m.w, m.x, m.y, m.z);
-}
-
-void quaternionEigenToMsg(const Eigen::Quaterniond &e, geometry_msgs::Quaternion &m)
-{
-  m.x = e.x();
-  m.y = e.y();
-  m.z = e.z();
-  m.w = e.w();
-}
-
-void pointMsgToEigen(const geometry_msgs::Point &m, Eigen::Vector3d &e)
-{
-  e = Eigen::Vector3d(m.x, m.y, m.z);
-}
-
-void pointEigenToMsg(const Eigen::Vector3d &e, geometry_msgs::Point &m)
-{
-  m.x = e.x();
-  m.y = e.y();
-  m.z = e.z();
-}
-
 void vectorMsgToEigen(const geometry_msgs::Vector3 &m, Eigen::Vector3d &e)
 {
-  e = Eigen::Vector3d(m.x, m.y, m.z);
+  e(0) = m.x; 
+  e(1) = m.y; 
+  e(2) = m.z; 
 }
 
 void vectorEigenToMsg(const Eigen::Vector3d &e, geometry_msgs::Vector3 &m)
 {
-  m.x = e.x();
-  m.y = e.y();
-  m.z = e.z();
+  m.x = e(0);
+  m.y = e(1);
+  m.z = e(2);
 }
 
 void twistMsgToEigen(const geometry_msgs::Twist &m, Eigen::Matrix<double,6,1> &e)

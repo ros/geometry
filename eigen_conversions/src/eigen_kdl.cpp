@@ -31,36 +31,81 @@
 
 namespace tf {
 
-void twistKDLToEigen(const KDL::Twist &k, Eigen::Matrix<double, 6, 1> &e)
+void quaternionKDLToEigen(const KDL::Rotation &k, Eigen::Quaterniond &e)
 {
-  e[0] = k.vel.x();
-  e[1] = k.vel.y();
-  e[2] = k.vel.z();
-  e[3] = k.rot.x();
-  e[4] = k.rot.y();
-  e[5] = k.rot.z();
+  // // is it faster to do this?
+  k.GetQuaternion(e.x(), e.y(), e.z(), e.w());
+  
+  // or this?
+  //double x, y, z, w;
+  //k.GetQuaternion(x, y, z, w);
+  //e = Eigen::Quaterniond(w, x, y, z);
+}
+
+void quaternionEigenToKDL(const Eigen::Quaterniond &e, KDL::Rotation &k)
+{
+  k = KDL::Rotation::Quaternion(e.x(), e.y(), e.z(), e.w());  
 }
 
 void transformKDLToEigen(const KDL::Frame &k, Eigen::Affine3d &e)
 {
-  e(0,3) = k.p[0];
-  e(1,3) = k.p[1];
-  e(2,3) = k.p[2];
+  // translation
+  for (unsigned int i = 0; i < 3; ++i)
+    e(i, 3) = k.p[i];                                                                                                             
 
-  e(0,0) = k.M(0,0);
-  e(0,1) = k.M(0,1);
-  e(0,2) = k.M(0,2);
-  e(1,0) = k.M(1,0);
-  e(1,1) = k.M(1,1);
-  e(1,2) = k.M(1,2);
-  e(2,0) = k.M(2,0);
-  e(2,1) = k.M(2,1);
-  e(2,2) = k.M(2,2);
+  // rotation matrix
+  for (unsigned int i = 0; i < 9; ++i)
+    e(i/3, i%3) = k.M.data[i];
 
+  // "identity" row
   e(3,0) = 0.0;
   e(3,1) = 0.0;
   e(3,2) = 0.0;
   e(3,3) = 1.0;
 }
+
+void transformEigenToKDL(const Eigen::Affine3d &e, KDL::Frame &k)
+{
+  for (unsigned int i = 0; i < 3; ++i)
+    k.p[i] = e(i, 3);                                                                                                             
+  for (unsigned int i = 0; i < 9; ++i)
+    k.M.data[i] = e(i/3, i%3);
+}
+
+void twistEigenToKDL(const Eigen::Matrix<double, 6, 1> &e, KDL::Twist &k)
+{
+  for(int i = 0; i < 6; ++i)
+    k[i] = e[i];
+}
+
+void twistKDLToEigen(const KDL::Twist &k, Eigen::Matrix<double, 6, 1> &e)
+{
+  for(int i = 0; i < 6; ++i)
+    e[i] = k[i];
+}
+
+void vectorEigenToKDL(const Eigen::Matrix<double, 3, 1> &e, KDL::Twist &k)
+{
+  for(int i = 0; i < 6; ++i)
+    k[i] = e[i];
+}
+void vectorKDLToEigen(const KDL::Vector &k, Eigen::Matrix<double, 6, 1> &e)
+{
+  for(int i = 0; i < 3; ++i)
+    e[i] = k[i];
+}
+
+void wrenchKDLToEigen(const KDL::Wrench &k, Eigen::Matrix<double, 6, 1> &e)
+{
+  for(int i = 0; i < 6; ++i)
+    e[i] = k[i];
+}
+
+void wrenchEigenToKDL(const Eigen::Matrix<double, 6, 1> &e, KDL::Wrench &k)
+{
+  for(int i = 0; i < 6; ++i)
+    k[i] = e[i];
+}
+
 
 } // namespace

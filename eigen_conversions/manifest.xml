@@ -1,10 +1,12 @@
 <package>
   <description brief="eigen_conversions">
 
-     Conversion functions between Eigen and other geometry types.
+     Conversion functions between:
+      - Eigen and KDL
+      - Eigen and geometry_msgs.
 
   </description>
-  <author>Stuart Glaser</author>
+  <author>Stuart Glaser, Adam Leeper</author>
   <license>BSD</license>
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/eigen_conversions</url>
@@ -12,6 +14,7 @@
   <depend package="kdl"/>
 
   <rosdep name="eigen"/>
+  
   <export>
     <cpp cflags="-I${prefix}/include"
          lflags="-Wl,-rpath,${prefix}/lib -L${prefix}/lib -leigen_conversions" />

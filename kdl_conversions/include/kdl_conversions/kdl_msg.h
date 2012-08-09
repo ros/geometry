@@ -38,7 +38,7 @@
 #include <geometry_msgs/Quaternion.h>
 #include <geometry_msgs/Transform.h>
 #include <geometry_msgs/Twist.h>
-#include <geometry_msgs/Vector.h>
+#include <geometry_msgs/Vector3.h>
 #include <geometry_msgs/Wrench.h>
 
 

@@ -28,6 +28,7 @@
  */
 
 #include "tf_conversions/tf_kdl.h"
+#include "kdl_conversions/kdl_msg.h"
 
 namespace tf {
 
@@ -97,10 +98,10 @@ namespace tf {
     KDL::Twist kdl_twist;
     KDL::Frame kdl_pose_id, kdl_pose;
 
-    PoseMsgToKDL(pose,kdl_pose);
-    TwistMsgToKDL(twist,kdl_twist);
+    poseMsgToKDL(pose,kdl_pose);
+    twistMsgToKDL(twist,kdl_twist);
     kdl_pose = KDL::addDelta(kdl_pose_id,kdl_twist,t)*kdl_pose;
-    PoseKDLToMsg(kdl_pose,result);
+    poseKDLToMsg(kdl_pose,result);
     return result;
   }
 

@@ -86,7 +86,7 @@ namespace tf {
     e.matrix()(3,3) = 1;
   };
 
-  void transformEigenToTF(const Eigen::Affine3d &k, tf::Transform &t)
+  void transformEigenToTF(const Eigen::Affine3d &e, tf::Transform &t)
   {
     t.setOrigin(tf::Vector3( e.matrix()(0,3), e.matrix()(1,3), e.matrix()(2,3)));
     t.setBasis(tf::Matrix3x3(e.matrix()(0,0), e.matrix()(0,1),e.matrix()(0,2),

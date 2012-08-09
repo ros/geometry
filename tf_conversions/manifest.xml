@@ -18,6 +18,7 @@ the next major release cycle (see roadmap).
 
   <depend package="tf"/>
   <depend package="kdl"/>
+  <depend package="kdl_conversions"/>
   <depend package="geometry_msgs"/>
 
   <export>

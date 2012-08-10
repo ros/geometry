@@ -60,7 +60,7 @@ namespace tf {
     m.position.y = k.p[1];
     m.position.z = k.p[2];
     
-    k.GetQuaternion(m.orientation.x, m.orientation.y, m.orientation.z, m.orientation.w);
+    k.M.GetQuaternion(m.orientation.x, m.orientation.y, m.orientation.z, m.orientation.w);
   }
 
   void quaternionMsgToKDL(const geometry_msgs::Quaternion &m, KDL::Rotation &k)
@@ -88,7 +88,7 @@ namespace tf {
     m.translation.y = k.p[1];
     m.translation.z = k.p[2];
     
-    k.GetQuaternion(m.rotation.x, m.rotation.y, m.rotation.z, m.rotation.w);
+    k.M.GetQuaternion(m.rotation.x, m.rotation.y, m.rotation.z, m.rotation.w);
   }
 
   void twistKDLToMsg(const KDL::Twist &t, geometry_msgs::Twist &m)

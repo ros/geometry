@@ -17,11 +17,14 @@ find_package(Orocos-KDL REQUIRED)
 include_directories(${Orocos-KDL_INCLUDE_DIRS})
 link_directories(${Orocos-KDL_LIBRARY_DIRS})
 
+find_package(kdl_conversions REQUIRED)
+include_directories(${kdl_conversions_INCLUDE_DIRS})
+
 add_library(${PROJECT_NAME}
   src/tf_kdl.cpp
   src/tf_eigen.cpp
   )
-target_link_libraries(${PROJECT_NAME} ${tf_LIBRARIES} ${Orocos-KDL_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${tf_LIBRARIES} ${Orocos-KDL_LIBRARIES} ${kdl_conversions_LIBRARIES})
 
 add_gtest(test_eigen_tf test/test_eigen_tf.cpp)
 add_gtest(test_kdl_tf test/test_kdl_tf.cpp)

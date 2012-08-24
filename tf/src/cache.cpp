@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2008, Willow Garage, Inc.
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  *     * Redistributions of source code must retain the above copyright
  *       notice, this list of conditions and the following disclaimer.
  *     * Redistributions in binary form must reproduce the above copyright
@@ -13,7 +13,7 @@
  *     * Neither the name of the Willow Garage, Inc. nor the names of its
  *       contributors may be used to endorse or promote products derived from
  *       this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -57,7 +57,7 @@ TimeCache::TimeCache(ros::Duration max_storage_time)
 {}
 
 // hoisting these into separate functions causes an ~8% speedup.  Removing calling them altogether adds another ~10%
-void createEmptyException(std::string *error_str) 
+void createEmptyException(std::string *error_str)
 {
   if (error_str)
   {
@@ -95,7 +95,7 @@ void createExtrapolationException3(ros::Time t0, ros::Time t1, std::string* erro
   }
 }
 
-uint8_t TimeCache::findClosest(TransformStorage*& one, TransformStorage*& two, ros::Time target_time, std::string* error_str)
+uint8_t TimeCache::findClosest(const TransformStorage*& one, const TransformStorage*& two, ros::Time target_time, std::string* error_str)
 {
   //No values stored
   if (storage_.empty())
@@ -107,14 +107,14 @@ uint8_t TimeCache::findClosest(TransformStorage*& one, TransformStorage*& two, r
   //If time == 0 return the latest
   if (target_time.isZero())
   {
-    one = &storage_.front();
+    one = &(*storage_.rbegin());
     return 1;
   }
 
   // One value stored
   if (++storage_.begin() == storage_.end())
   {
-    TransformStorage& ts = *storage_.begin();
+    const TransformStorage& ts = *storage_.begin();
     if (ts.stamp_ == target_time)
     {
       one = &ts;
@@ -127,17 +127,17 @@ uint8_t TimeCache::findClosest(TransformStorage*& one, TransformStorage*& two, r
     }
   }
 
-  ros::Time latest_time = (*storage_.begin()).stamp_;
-  ros::Time earliest_time = (*(storage_.rbegin())).stamp_;
+  ros::Time latest_time = (*storage_.rbegin()).stamp_;
+  ros::Time earliest_time = (*(storage_.begin())).stamp_;
 
   if (target_time == latest_time)
   {
-    one = &(*storage_.begin());
+    one = &(*storage_.rbegin());
     return 1;
   }
   else if (target_time == earliest_time)
   {
-    one = &(*storage_.rbegin());
+    one = &(*storage_.begin());
     return 1;
   }
   // Catch cases that would require extrapolation
@@ -152,21 +152,18 @@ uint8_t TimeCache::findClosest(TransformStorage*& one, TransformStorage*& two, r
     return 0;
   }
 
-  //At least 2 values stored
-  //Find the first value less than the target value
-  L_TransformStorage::iterator storage_it = storage_.begin();
-  while(storage_it != storage_.end())
-  {
-    if (storage_it->stamp_ <= target_time)
-      break;
-    storage_it++;
-  }
+  //Create a temporary object to compare to when searching the lower bound via std::set
+  TransformStorage tmp;
+  tmp.stamp_ = target_time;
+
+  //Find the first value equal or higher than the target value
+  L_TransformStorage::iterator storage_it = storage_.upper_bound(tmp);
 
   //Finally the case were somewhere in the middle  Guarenteed no extrapolation :-)
-  one = &*(storage_it); //Older
-  two = &*(--storage_it); //Newer
-  return 2;
+  two = &*(storage_it); //Newer
+  one = &*(--storage_it); //Older
 
+  return 2;
 
 }
 
@@ -194,8 +191,8 @@ void TimeCache::interpolate(const TransformStorage& one, const TransformStorage&
 
 bool TimeCache::getData(ros::Time time, TransformStorage & data_out, std::string* error_str) //returns false if data not available
 {
-  TransformStorage* p_temp_1 = NULL;
-  TransformStorage* p_temp_2 = NULL;
+  const TransformStorage* p_temp_1 = NULL;
+  const TransformStorage* p_temp_2 = NULL;
 
   int num_nodes = findClosest(p_temp_1, p_temp_2, time, error_str);
   if (num_nodes == 0)
@@ -227,8 +224,8 @@ bool TimeCache::getData(ros::Time time, TransformStorage & data_out, std::string
 
 CompactFrameID TimeCache::getParent(ros::Time time, std::string* error_str)
 {
-  TransformStorage* p_temp_1 = NULL;
-  TransformStorage* p_temp_2 = NULL;
+  const TransformStorage* p_temp_1 = NULL;
+  const TransformStorage* p_temp_2 = NULL;
 
   int num_nodes = findClosest(p_temp_1, p_temp_2, time, error_str);
   if (num_nodes == 0)
@@ -241,26 +238,26 @@ CompactFrameID TimeCache::getParent(ros::Time time, std::string* error_str)
 
 bool TimeCache::insertData(const TransformStorage& new_data)
 {
-  L_TransformStorage::iterator storage_it = storage_.begin();
 
-  if(storage_it != storage_.end())
+  if (storage_.begin() != storage_.end())
   {
-    if (storage_it->stamp_ > new_data.stamp_ + max_storage_time_)
-    {
-      return false;
-    }
+      // trying to add data that dates back longer than we want to keep history
+      if (storage_.rbegin()->stamp_ > new_data.stamp_ + max_storage_time_)
+        return false;
+
+      // if we already have data at that exact time, delete it to ensure the latest data is stored
+      if (storage_.rbegin()->stamp_ >= new_data.stamp_)
+      {
+         L_TransformStorage::iterator storage_it  = storage_.find(new_data);
+         if (storage_it != storage_.end())
+                storage_.erase(storage_it);
+      }
   }
 
-
-  while(storage_it != storage_.end())
-  {
-    if (storage_it->stamp_ <= new_data.stamp_)
-      break;
-    storage_it++;
-  }
-  storage_.insert(storage_it, new_data);
+  storage_.insert(storage_.end(), new_data);
 
   pruneList();
+
   return true;
 }
 
@@ -281,29 +278,29 @@ P_TimeAndFrameID TimeCache::getLatestTimeAndParent()
     return std::make_pair(ros::Time(), 0);
   }
 
-  const TransformStorage& ts = storage_.front();
+  const TransformStorage& ts = *storage_.rbegin();
   return std::make_pair(ts.stamp_, ts.frame_id_);
 }
 
 ros::Time TimeCache::getLatestTimestamp()
 {
   if (storage_.empty()) return ros::Time(); //empty list case
-  return storage_.front().stamp_;
+  return storage_.rbegin()->stamp_;
 }
 
 ros::Time TimeCache::getOldestTimestamp()
 {
   if (storage_.empty()) return ros::Time(); //empty list case
-  return storage_.back().stamp_;
+  return storage_.begin()->stamp_;
 }
 
 void TimeCache::pruneList()
 {
-  ros::Time latest_time = storage_.begin()->stamp_;
-  
-  while(!storage_.empty() && storage_.back().stamp_ + max_storage_time_ < latest_time)
+  ros::Time latest_time = storage_.rbegin()->stamp_;
+
+  while(!storage_.empty() && storage_.begin()->stamp_ + max_storage_time_ < latest_time)
   {
-    storage_.pop_back();
+    storage_.erase(storage_.begin());
   }
-  
+
 }

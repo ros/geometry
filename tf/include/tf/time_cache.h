@@ -32,7 +32,7 @@
 #ifndef TF_TIME_CACHE_H
 #define TF_TIME_CACHE_H
 
-#include <list>
+#include <set>
 #include <boost/thread/mutex.hpp>
 
 #include "tf/transform_datatypes.h"
@@ -74,12 +74,19 @@ public:
     return *this;
   }
 
+  bool operator< (const TransformStorage &b) const
+  {
+    return this->stamp_ < b.stamp_;
+  }
+
+
   tf::Quaternion rotation_;
   tf::Vector3 translation_;
   ros::Time stamp_;
   CompactFrameID frame_id_;
   CompactFrameID child_frame_id_;
 };
+
 
 
 
@@ -109,7 +116,7 @@ class TimeCache
 
 
 private:
-  typedef std::list<TransformStorage> L_TransformStorage;
+  typedef std::set<TransformStorage> L_TransformStorage;
   L_TransformStorage storage_;
 
   ros::Duration max_storage_time_;
@@ -117,7 +124,7 @@ private:
 
   /// A helper function for getData
   //Assumes storage is already locked for it
-  inline uint8_t findClosest(TransformStorage*& one, TransformStorage*& two, ros::Time target_time, std::string* error_str);
+  inline uint8_t findClosest(const TransformStorage*& one, const TransformStorage*& two, ros::Time target_time, std::string* error_str);
 
   inline void interpolate(const TransformStorage& one, const TransformStorage& two, ros::Time time, TransformStorage& output);
 

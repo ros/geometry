@@ -11,8 +11,9 @@ find_package(Boost REQUIRED thread signals)
 include_directories(SYSTEM ${Boost_INCLUDE_DIR})
 
 find_package(genmsg REQUIRED)
-find_package(ROS REQUIRED COMPONENTS roscpp std_msgs geometry_msgs sensor_msgs)
-include_directories(${ROS_INCLUDE_DIRS})
+find_package(catkin REQUIRED COMPONENTS roscpp std_msgs geometry_msgs sensor_msgs)
+include_directories(${catkin_INCLUDE_DIRS})
+link_directories(${catkin_LIBRARY_DIRS})
 
 add_message_files(DIRECTORY msg FILES tfMessage.msg)
 add_service_files(DIRECTORY srv FILES FrameGraph.srv)
@@ -21,7 +22,7 @@ generate_messages(DEPENDENCIES std_msgs geometry_msgs)
 
 
 add_library(${PROJECT_NAME} src/tf.cpp src/transform_listener.cpp src/cache.cpp src/transform_broadcaster.cpp)
-target_link_libraries(${PROJECT_NAME} ${ROS_LIBRARIES} ${Boost_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_gencpp)
 
 # Debug
@@ -36,8 +37,6 @@ target_link_libraries(tf_change_notifier ${PROJECT_NAME})
 
 add_executable(tf_monitor src/tf_monitor.cpp)
 target_link_libraries(tf_monitor ${PROJECT_NAME})
-
-catkin_initialize_tests()
 
 add_gtest(tf_unittest test/tf_unittest.cpp)
 target_link_libraries(tf_unittest ${PROJECT_NAME})

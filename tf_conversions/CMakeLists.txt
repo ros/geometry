@@ -3,7 +3,7 @@ project(tf_conversions)
 catkin_project(${PROJECT_NAME} 
   LIBRARIES ${PROJECT_NAME}
   INCLUDE_DIRS include
-  DEPENDS tf Eigen)
+  DEPENDS tf)
 
 include_directories(include)
 

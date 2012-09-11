@@ -3,7 +3,7 @@ project(eigen_conversions)
 catkin_project(${PROJECT_NAME} 
   LIBRARIES ${PROJECT_NAME}
   INCLUDE_DIRS include
-  DEPENDS Eigen)
+  )
 
 include_directories(include)
 

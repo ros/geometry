@@ -3,7 +3,7 @@ project(tf_conversions)
 catkin_project(${PROJECT_NAME} 
   LIBRARIES ${PROJECT_NAME}
   INCLUDE_DIRS include
-  DEPENDS tf Orocos-KDL Eigen)
+  DEPENDS tf Eigen)
 
 include_directories(include)
 
@@ -26,8 +26,8 @@ add_library(${PROJECT_NAME}
   )
 target_link_libraries(${PROJECT_NAME} ${tf_LIBRARIES} ${Orocos-KDL_LIBRARIES} ${kdl_conversions_LIBRARIES})
 
-add_gtest(test_eigen_tf test/test_eigen_tf.cpp)
-add_gtest(test_kdl_tf test/test_kdl_tf.cpp)
+catkin_add_gtest(test_eigen_tf test/test_eigen_tf.cpp)
+catkin_add_gtest(test_kdl_tf test/test_kdl_tf.cpp)
 target_link_libraries(test_eigen_tf ${PROJECT_NAME} )
 target_link_libraries(test_kdl_tf ${PROJECT_NAME} )
 
@@ -39,7 +39,3 @@ install(DIRECTORY include/
 
 install(TARGETS ${PROJECT_NAME}
   DESTINATION lib)
-
-# for compatibility with old build system
-install(FILES manifest.xml
-        DESTINATION share/${PROJECT_NAME})

@@ -1,6 +1,6 @@
 <stack>
   <name>geometry</name>
-  <version>1.9.8</version>
+  <version>1.9.9</version>
   <description brief="geometry and math libraries">The basic geometric and math libraries used in ROS.</description>
   <author email="tfoote@willowgarage.com">Tully Foote</author>
   <maintainer email="tfoote@willowgarage.com">Tully Foote</maintainer>

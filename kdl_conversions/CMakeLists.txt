@@ -3,7 +3,7 @@ project(kdl_conversions)
 catkin_project(${PROJECT_NAME} 
   LIBRARIES ${PROJECT_NAME}
   INCLUDE_DIRS include
-  DEPENDS Orocos-KDL)
+  )
 
 include_directories(include)
 
@@ -15,14 +15,10 @@ add_library(${PROJECT_NAME}
   src/kdl_msg.cpp
   )
 
-target_link_libraries(${PROJECT_NAME}  ${Orocos-KDL_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${Orocos-KDL_LIBRARIES})
 
 install(DIRECTORY include/
   DESTINATION include)
 
 install(TARGETS ${PROJECT_NAME}
   DESTINATION lib)
-
-# for compatibility with old build system
-install(FILES manifest.xml
-        DESTINATION share/${PROJECT_NAME})

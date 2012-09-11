@@ -3,7 +3,7 @@ project(eigen_conversions)
 catkin_project(${PROJECT_NAME} 
   LIBRARIES ${PROJECT_NAME}
   INCLUDE_DIRS include
-  DEPENDS Orocos-KDL Eigen)
+  DEPENDS Eigen)
 
 include_directories(include)
 
@@ -26,7 +26,3 @@ install(DIRECTORY include/
 
 install(TARGETS ${PROJECT_NAME}
   DESTINATION lib)
-
-# for compatibility with old build system
-install(FILES manifest.xml
-        DESTINATION share/${PROJECT_NAME})

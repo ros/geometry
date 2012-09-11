@@ -11,18 +11,11 @@
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/eigen_conversions</url>
   <depend package="geometry_msgs"/>
-  <depend package="kdl"/>
-
   <rosdep name="eigen"/>
   
   <export>
-    <cpp cflags="-I${prefix}/include"
-         lflags="-Wl,-rpath,${prefix}/lib -L${prefix}/lib -leigen_conversions" />
+    <cpp cflags="`pkg-config --cflags eigen_conversions`"
+         lflags="`pkg-config --libs eigen_conversions`" />
   </export>
 
-  <platform os="ubuntu" version="9.04"/>
-  <platform os="ubuntu" version="9.10"/>
-  <platform os="ubuntu" version="10.04"/>
 </package>
-
-

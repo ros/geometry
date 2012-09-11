@@ -38,44 +38,44 @@ target_link_libraries(tf_change_notifier ${PROJECT_NAME})
 add_executable(tf_monitor src/tf_monitor.cpp)
 target_link_libraries(tf_monitor ${PROJECT_NAME})
 
-add_gtest(tf_unittest test/tf_unittest.cpp)
+catkin_add_gtest(tf_unittest test/tf_unittest.cpp)
 target_link_libraries(tf_unittest ${PROJECT_NAME})
 
-add_gtest(test_transform_datatypes test/test_transform_datatypes.cpp)
+catkin_add_gtest(test_transform_datatypes test/test_transform_datatypes.cpp)
 target_link_libraries(tf_unittest ${PROJECT_NAME})
 
-add_gtest(transform_listener_unittest test/transform_listener_unittest.cpp)
+catkin_add_gtest(transform_listener_unittest test/transform_listener_unittest.cpp)
 target_link_libraries(transform_listener_unittest ${PROJECT_NAME})
 #add_rostest(test/transform_listener_unittest.launch) # how does CATKIN do rostests?
 
 # Disabled because of changes in TransformStorage
-#add_gtest_future(tf_unittest_future test/tf_unittest_future.cpp)
+#catkin_add_gtest_future(tf_unittest_future test/tf_unittest_future.cpp)
 #target_link_libraries(tf_unittest_future ${PROJECT_NAME})
 
-add_gtest(test_velocity test/velocity_test.cpp)
+catkin_add_gtest(test_velocity test/velocity_test.cpp)
 target_link_libraries(test_velocity ${PROJECT_NAME})
 
 #add_executable(test_transform_twist test/transform_twist_test.cpp)
 #target_link_libraries(test_transform_twist ${PROJECT_NAME})
-#add_gtest_build_flags(test_transform_twist)
+#catkin_add_gtest_build_flags(test_transform_twist)
 #add_rostest(test/transform_twist_test.launch)
 
-add_gtest(cache_unittest test/cache_unittest.cpp)
+catkin_add_gtest(cache_unittest test/cache_unittest.cpp)
 target_link_libraries(cache_unittest ${PROJECT_NAME})
 
-add_gtest(test_message_filter EXCLUDE_FROM_ALL test/test_message_filter.cpp)
+catkin_add_gtest(test_message_filter EXCLUDE_FROM_ALL test/test_message_filter.cpp)
 target_link_libraries(test_message_filter tf ${Boost_LIBRARIES})
 
 # HOW DOES CATKIN do ROSTEST?
 # add_rostest(test/test_message_filter.xml)
 
 ### Benchmarking
-#add_gtest_future(tf_benchmark test/tf_benchmark.cpp)
+#catkin_add_gtest_future(tf_benchmark test/tf_benchmark.cpp)
 #target_link_libraries(tf_benchmark ${PROJECT_NAME})
 
 add_executable(btTest test/quaternion.cpp)
 
-add_gtest(testListener test/testListener.cpp)
+catkin_add_gtest(testListener test/testListener.cpp)
 target_link_libraries(testListener ${PROJECT_NAME})
 
 # HOW DOES CATKIN do ROSTEST?
@@ -131,7 +131,3 @@ install(DIRECTORY include/
 install(TARGETS ${PROJECT_NAME} pytf_py tf_echo tf_empty_listener tf_change_notifier tf_monitor static_transform_publisher
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin)
-
-# for compatibility with old build system
-install(FILES manifest.xml
-        DESTINATION share/${PROJECT_NAME})

@@ -12,7 +12,6 @@ any desired point in time.
   <license>BSD</license>
   <review status="doc reviewed" notes="http://www.ros.org/wiki/tf/Reviews/2009-10-07_Doc_Review"/>
   <url>http://www.ros.org/wiki/tf</url>
-  <depend package="bullet"/>
   <depend package="geometry_msgs"/>  
   <depend package="sensor_msgs"/><!-- for point cloud should be removed-->
   <depend package="roscpp"/>

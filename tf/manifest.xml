@@ -16,7 +16,6 @@ any desired point in time.
   <depend package="sensor_msgs"/><!-- for point cloud should be removed-->
   <depend package="roscpp"/>
   <depend package="rosconsole"/>
-  <depend package="angles"/>
   <depend package="rospy"/>
   <depend package="rostest"/>
   <depend package="roswtf"/>

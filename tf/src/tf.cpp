@@ -33,7 +33,7 @@
 #include <sys/time.h>
 #include "ros/assert.h"
 #include "ros/ros.h"
-#include <geometry_angles_utils/angles.h>
+#include <angles/angles.h>
 
 using namespace tf;
 

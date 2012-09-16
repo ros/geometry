@@ -9,11 +9,9 @@
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/kdl_conversions</url>
   <depend package="geometry_msgs"/>
-  <depend package="kdl"/>
 
-  <export>
-    <cpp cflags="-I${prefix}/include"
-         lflags="-Wl,-rpath,${prefix}/lib -L${prefix}/lib -lkdl_conversions" />
+  <export> 
+    <cpp cflags="`pkg-config --cflags kdl_conversions`" lflags="`pkg-config --libs kdl_conversions`"/>
   </export>
 
 </package>

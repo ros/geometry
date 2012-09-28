@@ -1,9 +1,10 @@
+cmake_minimum_required(VERSION 2.8)
 project(kdl_conversions)
 
-catkin_project(${PROJECT_NAME} 
-  LIBRARIES ${PROJECT_NAME}
-  INCLUDE_DIRS include
-  )
+find_package(catkin REQUIRED)
+catkin_package(LIBRARIES ${PROJECT_NAME}
+               INCLUDE_DIRS include
+)
 
 include_directories(include)
 

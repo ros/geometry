@@ -1,4 +1,6 @@
 <package>
+  <name>tf</name>
+  <version>1.9.14</version>
   <description brief='Transform Library'>
 
 tf is a package that lets the user keep track of multiple coordinate
@@ -9,22 +11,18 @@ any desired point in time.
 
   </description>
   <author>Tully Foote, Eitan Marder-Eppstein, Wim Meeussen</author>
+  <maintainer email="tfoote@willowgarage.com">Tully Foote</maintainer>
+
   <license>BSD</license>
-  <review status="doc reviewed" notes="http://www.ros.org/wiki/tf/Reviews/2009-10-07_Doc_Review"/>
   <url>http://www.ros.org/wiki/tf</url>
-  <depend package="geometry_msgs"/>  
-  <depend package="sensor_msgs"/><!-- for point cloud should be removed-->
-  <depend package="roscpp"/>
-  <depend package="rosconsole"/>
-  <depend package="rospy"/>
-  <depend package="rostest"/>
-  <depend package="roswtf"/>
-  <depend package="message_filters"/>
+
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>std_msgs</build_depend>
+
   <export>
-    <cpp cflags="`pkg-config --cflags tf`" lflags="`pkg-config --libs tf`"/>
     <roswtf plugin="tf.tfwtf" />
     <rosdoc config="rosdoc.yaml" />
   </export>
-  <rosdep name="python-numpy"/>
-  <rosdep name="graphviz"/>
 </package>

@@ -1,9 +1,12 @@
+cmake_minimum_required(VERSION 2.8)
 project(tf_conversions)
 
-catkin_project(${PROJECT_NAME} 
-  LIBRARIES ${PROJECT_NAME}
-  INCLUDE_DIRS include
-  DEPENDS tf)
+find_package(catkin REQUIRED)
+find_package(catkin REQUIRED tf)
+catkin_package(LIBRARIES ${PROJECT_NAME}
+               INCLUDE_DIRS include
+               DEPENDS tf
+)
 
 include_directories(include)
 

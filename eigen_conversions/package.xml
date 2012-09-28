@@ -1,0 +1,23 @@
+<package>
+  <name>eigen_conversions</name>
+  <version>1.9.14</version>
+  <description brief="eigen_conversions">
+
+     Conversion functions between:
+      - Eigen and KDL
+      - Eigen and geometry_msgs.
+
+  </description>
+  <author>Stuart Glaser</author>
+  <author>Adam Leeper</author>
+  <maintainer email="tfoote@willowgarage.com">Tully Foote</maintainer>
+
+  <license>BSD</license>
+  <url>http://ros.org/wiki/eigen_conversions</url>
+
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>eigen</build_depend>
+  <build_depend>orocos_kdl</build_depend>
+
+  <run_depend>orocos_kdl</run_depend>
+</package>

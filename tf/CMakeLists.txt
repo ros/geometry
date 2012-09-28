@@ -1,17 +1,17 @@
+cmake_minimum_required(VERSION 2.8)
 project(tf)
 
-catkin_project(${PROJECT_NAME} 
-  LIBRARIES ${PROJECT_NAME}
-  INCLUDE_DIRS include
-  )
+find_package(catkin REQUIRED)
+catkin_package(LIBRARIES ${PROJECT_NAME}
+               INCLUDE_DIRS include
+)
 
 include_directories(include)
 
 find_package(Boost REQUIRED thread signals)
 include_directories(SYSTEM ${Boost_INCLUDE_DIR})
 
-find_package(genmsg REQUIRED)
-find_package(catkin REQUIRED COMPONENTS roscpp std_msgs geometry_msgs sensor_msgs)
+find_package(catkin REQUIRED genmsg geometry_msgs roscpp sensor_msgs std_msgs)
 include_directories(${catkin_INCLUDE_DIRS})
 link_directories(${catkin_LIBRARY_DIRS})
 

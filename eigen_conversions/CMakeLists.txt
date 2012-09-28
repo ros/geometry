@@ -1,17 +1,18 @@
+cmake_minimum_required(VERSION 2.8)
 project(eigen_conversions)
 
-catkin_project(${PROJECT_NAME} 
-  LIBRARIES ${PROJECT_NAME}
-  INCLUDE_DIRS include
-  )
-
-include_directories(include)
+find_package(catkin REQUIRED)
+catkin_package(LIBRARIES ${PROJECT_NAME}
+               INCLUDE_DIRS include
+)
 
 find_package(Eigen REQUIRED)
-include_directories(${EIGEN_INCLUDE_DIRS})
-
 find_package(Orocos-KDL REQUIRED)
-include_directories(${Orocos-KDL_INCLUDE_DIRS})
+include_directories(SYSTEM ${EIGEN_INCLUDE_DIRS}
+                           ${Orocos-KDL_INCLUDE_DIRS}
+)
+include_directories(include)
+
 link_directories(${Orocos-KDL_LIBRARY_DIRS})
 
 add_library(${PROJECT_NAME}

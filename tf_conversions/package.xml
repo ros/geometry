@@ -1,4 +1,6 @@
 <package>
+  <name>tf_conversions</name>
+  <version>1.9.14</version>
   <description brief='Transform Library Conversions'>
 
    This package contains a set of conversion functions to convert
@@ -12,20 +14,20 @@ the next major release cycle (see roadmap).
 
   </description>
   <author>Tully Foote</author>
+  <maintainer email="tfoote@willowgarage.com">Tully Foote</maintainer>
+
   <license>BSD</license>
-  <review status="Doc reviewed" notes=""/>
   <url>http://www.ros.org/wiki/tf_conversions</url>
 
-  <depend package="tf"/>
-  <depend package="kdl_conversions"/>
-  <depend package="geometry_msgs"/>
+  <build_depend>eigen</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>kdl_conversions</build_depend>
+  <build_depend>tf</build_depend>
+
+  <run_depend>kdl_conversions</run_depend>
+  <run_depend>tf</run_depend>
 
   <export>
-    <cpp cflags="`pkg-config --cflags tf_conversions`" lflags="`pkg-config --libs tf_conversions`"/>
     <rosdoc config="rosdoc.yaml" />
   </export>
-  <platform os="ubuntu" version="9.04"/>
-  <platform os="ubuntu" version="9.10"/>
-  <platform os="ubuntu" version="10.04"/>
-  <rosdep name="eigen"/>
 </package>

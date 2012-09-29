@@ -10,7 +10,9 @@ transform points, vectors, etc between any two coordinate frames at
 any desired point in time.
 
   </description>
-  <author>Tully Foote, Eitan Marder-Eppstein, Wim Meeussen</author>
+  <author>Tully Foote</author>
+  <author>Eitan Marder-Eppstein</author>
+  <author>Wim Meeussen</author>
   <maintainer email="tfoote@willowgarage.com">Tully Foote</maintainer>
 
   <license>BSD</license>

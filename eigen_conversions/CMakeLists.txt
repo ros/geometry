@@ -8,8 +8,11 @@ catkin_package(LIBRARIES ${PROJECT_NAME}
 
 find_package(Eigen REQUIRED)
 find_package(Orocos-KDL REQUIRED)
+find_package(catkin REQUIRED geometry_msgs std_msgs)
 include_directories(SYSTEM ${EIGEN_INCLUDE_DIRS}
+                           ${geometry_msgs_INCLUDE_DIRS}
                            ${Orocos-KDL_INCLUDE_DIRS}
+                           ${std_msgs_INCLUDE_DIRS}
 )
 include_directories(include)
 
@@ -22,8 +25,8 @@ add_library(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME}  ${Orocos-KDL_LIBRARIES})
 
-install(DIRECTORY include/
-  DESTINATION include)
+install(DIRECTORY include/${PROJECT_NAME}/
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
 
 install(TARGETS ${PROJECT_NAME}
-  DESTINATION lib)
+  DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})

@@ -6,7 +6,7 @@
   <license>BSD</license>
   
   <url type="website">http://www.ros.org/wiki/geometry</url>
-  <url type="bugtracker">https://code.ros.org/trac/ros-pkg/query?component=geometry&status=assigned&status=new&status=reopened</url>
+  <url type="bugtracker">https://code.ros.org/trac/ros-pkg/query?component=geometry&amp;status=assigned&amp;status=new&amp;status=reopened</url>
   <url type="repository">https://kforge.ros.org/geometry/geometry</url>
   
   <author>Tully Foote</author>

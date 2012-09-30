@@ -1,6 +1,6 @@
 <package>
   <name>kdl_conversions</name>
-  <version>1.9.15</version>
+  <version>1.9.16</version>
   <description brief="kdl_conversions">
 
      Conversion functions between KDL and geometry_msgs types.

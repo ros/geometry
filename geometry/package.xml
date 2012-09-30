@@ -1,0 +1,24 @@
+<package>
+  <name>geometry</name>
+  <version>1.9.16</version>
+  <description>Geometry Library</description>
+  <maintainer email="tfoote@willowgarage.com">Tully Foote</maintainer>
+  <license>BSD</license>
+  
+  <url type="website">http://www.ros.org/wiki/geometry</url>
+  <url type="bugtracker">https://code.ros.org/trac/ros-pkg/query?component=geometry&status=assigned&status=new&status=reopened</url>
+  <url type="repository">https://kforge.ros.org/geometry/geometry</url>
+  
+  <author>Tully Foote</author>
+  
+  <!-- Old stack contents -->
+  <run_depend>tf</run_depend>
+  <run_depend>tf_conversions</run_depend>
+  <run_depend>eigen_conversions</run_depend>
+  <run_depend>kdl_conversions</run_depend>
+
+  <export>
+    <metapackage/>
+  </export>
+
+</package>

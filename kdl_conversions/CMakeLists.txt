@@ -2,14 +2,15 @@ cmake_minimum_required(VERSION 2.8)
 project(kdl_conversions)
 
 find_package(catkin REQUIRED)
-catkin_package(LIBRARIES ${PROJECT_NAME}
-               INCLUDE_DIRS include
-)
-
-include_directories(include)
 
 find_package(catkin REQUIRED geometry_msgs)
 find_package(Orocos-KDL REQUIRED)
+catkin_package(DEPENDS geometry_msgs Orocos-KDL 
+               INCLUDE_DIRS include
+               LIBRARIES ${PROJECT_NAME}
+)
+
+include_directories(include)
 include_directories(SYSTEM ${Orocos-KDL_INCLUDE_DIRS}
                            ${geometry_msgs_INCLUDE_DIRS}
 )

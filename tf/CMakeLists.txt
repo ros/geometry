@@ -2,17 +2,18 @@ cmake_minimum_required(VERSION 2.8)
 project(tf)
 
 find_package(catkin REQUIRED)
-catkin_package(LIBRARIES ${PROJECT_NAME}
-               INCLUDE_DIRS include
-)
-
-include_directories(include)
 
 find_package(Boost REQUIRED thread signals)
-include_directories(SYSTEM ${Boost_INCLUDE_DIR})
+find_package(catkin REQUIRED genmsg geometry_msgs message_filters rosconsole roscpp rostest rostime sensor_msgs std_msgs)
+catkin_package(DEPENDS Boost geometry_msgs message_filters rosconsole roscpp rostime sensor_msgs std_msgs
+               INCLUDE_DIRS include
+               LIBRARIES ${PROJECT_NAME}
+)
 
-find_package(catkin REQUIRED genmsg geometry_msgs roscpp sensor_msgs std_msgs)
-include_directories(${catkin_INCLUDE_DIRS})
+include_directories(SYSTEM ${Boost_INCLUDE_DIR}
+                           ${catkin_INCLUDE_DIRS}
+)
+include_directories(include)
 link_directories(${catkin_LIBRARY_DIRS})
 
 add_message_files(DIRECTORY msg FILES tfMessage.msg)
@@ -46,7 +47,7 @@ target_link_libraries(tf_unittest ${PROJECT_NAME})
 
 catkin_add_gtest(transform_listener_unittest test/transform_listener_unittest.cpp)
 target_link_libraries(transform_listener_unittest ${PROJECT_NAME})
-#add_rostest(test/transform_listener_unittest.launch) # how does CATKIN do rostests?
+add_rostest(test/transform_listener_unittest.launch)
 
 # Disabled because of changes in TransformStorage
 #catkin_add_gtest_future(tf_unittest_future test/tf_unittest_future.cpp)
@@ -66,8 +67,7 @@ target_link_libraries(cache_unittest ${PROJECT_NAME})
 catkin_add_gtest(test_message_filter EXCLUDE_FROM_ALL test/test_message_filter.cpp)
 target_link_libraries(test_message_filter tf ${Boost_LIBRARIES})
 
-# HOW DOES CATKIN do ROSTEST?
-# add_rostest(test/test_message_filter.xml)
+add_rostest(test/test_message_filter.xml)
 
 ### Benchmarking
 #catkin_add_gtest_future(tf_benchmark test/tf_benchmark.cpp)
@@ -78,9 +78,8 @@ add_executable(btTest test/quaternion.cpp)
 catkin_add_gtest(testListener test/testListener.cpp)
 target_link_libraries(testListener ${PROJECT_NAME})
 
-# HOW DOES CATKIN do ROSTEST?
-# add_rostest(test/test_broadcaster.launch)
-                                 
+add_rostest(test/test_broadcaster.launch)
+
 add_executable(testBroadcaster test/testBroadcaster.cpp)
 target_link_libraries(testBroadcaster ${PROJECT_NAME})
 add_executable(static_transform_publisher src/static_transform_publisher.cpp)

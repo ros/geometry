@@ -24,6 +24,8 @@ the next major release cycle (see roadmap).
   <build_depend>kdl_conversions</build_depend>
   <build_depend>tf</build_depend>
 
+  <run_depend>eigen</run_depend>
+  <run_depend>geometry_msgs</run_depend>
   <run_depend>kdl_conversions</run_depend>
   <run_depend>tf</run_depend>
 

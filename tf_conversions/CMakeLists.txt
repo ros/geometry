@@ -2,22 +2,18 @@ cmake_minimum_required(VERSION 2.8)
 project(tf_conversions)
 
 find_package(catkin REQUIRED)
-find_package(catkin REQUIRED tf)
-catkin_package(LIBRARIES ${PROJECT_NAME}
-               INCLUDE_DIRS include
-               DEPENDS tf
-)
-
-include_directories(include)
-
-find_package(catkin REQUIRED geometry_msgs)
-include_directories(SYSTEM ${geometry_msgs_INCLUDE_DIRS})
-
-find_package(tf)
-include_directories(${tf_INCLUDE_DIRS})
 
 find_package(Eigen REQUIRED)
-include_directories(SYSTEM ${EIGEN_INCLUDE_DIRS})
+find_package(catkin REQUIRED geometry_msgs kdl_conversions tf)
+catkin_package(DEPENDS Eigen geometry_msgs kdl_conversions tf
+               INCLUDE_DIRS include
+               LIBRARIES ${PROJECT_NAME}
+)
+
+include_directories(SYSTEM ${catkin_INCLUDE_DIRS}
+                           ${EIGEN_INCLUDE_DIRS}
+)
+include_directories(include)
 
 find_package(Orocos-KDL REQUIRED)
 include_directories(${Orocos-KDL_INCLUDE_DIRS})

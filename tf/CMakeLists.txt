@@ -10,6 +10,8 @@ catkin_package(DEPENDS Boost geometry_msgs message_filters rosconsole roscpp ros
                LIBRARIES ${PROJECT_NAME}
 )
 
+catkin_python_setup()
+
 include_directories(SYSTEM ${Boost_INCLUDE_DIR}
                            ${catkin_INCLUDE_DIRS}
 )
@@ -112,13 +114,15 @@ add_library(pytf_py src/pytf.cpp src/tf.cpp src/transform_listener.cpp src/cache
 add_dependencies(pytf_py ${PROJECT_NAME}_gencpp)
 
 find_package(PythonLibs REQUIRED)
-set_target_properties(pytf_py PROPERTIES OUTPUT_NAME tf PREFIX "_" SUFFIX ".so")
+set_target_properties(pytf_py PROPERTIES OUTPUT_NAME tf PREFIX "_" SUFFIX ".so"
+  LIBRARY_OUTPUT_DIRECTORY ${CATKIN_BUILD_PREFIX}/${PYTHON_INSTALL_DIR}/tf)
+
 # target_link_libraries(pytf_py ${PROJECT_NAME})
 # add_compile_flags(pytf_py -g -Wno-missing-field-initializers)
 #add_compile_flags(pytf_py ${SSE_FLAGS}) #conditionally adds sse flags if available
 # add_pyunit(test/testPython.py) 
 # DOES PYUNIT WORK IN CATKIN?
-target_link_libraries(pytf_py ${Boost_LIBRARIES})
+target_link_libraries(pytf_py ${Boost_LIBRARIES} ${catkin_LIBRARIES})
 
 add_executable(tf_speed_test EXCLUDE_FROM_ALL test/speed_test.cpp)
 target_link_libraries(tf_speed_test ${PROJECT_NAME})
@@ -127,6 +131,9 @@ target_link_libraries(tf_speed_test ${PROJECT_NAME})
 install(DIRECTORY include/${PROJECT_NAME}/
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
 
-install(TARGETS ${PROJECT_NAME} pytf_py tf_echo tf_empty_listener tf_change_notifier tf_monitor static_transform_publisher
+install(TARGETS ${PROJECT_NAME} tf_echo tf_empty_listener tf_change_notifier tf_monitor static_transform_publisher
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+
+install(TARGETS pytf_py
+  LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/${PYTHON_INSTALL_DIR}/tf)

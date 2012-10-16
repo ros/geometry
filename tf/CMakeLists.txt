@@ -137,3 +137,11 @@ install(TARGETS ${PROJECT_NAME} tf_echo tf_empty_listener tf_change_notifier tf_
 
 install(TARGETS pytf_py
   LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/${PYTHON_INSTALL_DIR}/tf)
+
+# Need to install python msg and srv directories manually because genmsg
+# specifically avoids installing python message code if catkin_python_setup()
+# has been used.  See https://github.com/ros/genmsg/issues/10
+install(DIRECTORY ${CATKIN_BUILD_PREFIX}/${PYTHON_INSTALL_DIR}/tf/msg
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/${PYTHON_INSTALL_DIR}/tf/msg)
+install(DIRECTORY ${CATKIN_BUILD_PREFIX}/${PYTHON_INSTALL_DIR}/tf/srv
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/${PYTHON_INSTALL_DIR}/tf/srv)

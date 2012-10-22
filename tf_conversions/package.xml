@@ -1,7 +1,7 @@
 <package>
   <name>tf_conversions</name>
   <version>1.9.18</version>
-  <description brief='Transform Library Conversions'>
+  <description>
 
    This package contains a set of conversion functions to convert
 common tf datatypes (point, vector, pose, etc) into semantically

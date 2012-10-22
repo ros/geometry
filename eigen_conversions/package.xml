@@ -1,7 +1,7 @@
 <package>
   <name>eigen_conversions</name>
   <version>1.9.18</version>
-  <description brief="eigen_conversions">
+  <description>
 
      Conversion functions between:
       - Eigen and KDL

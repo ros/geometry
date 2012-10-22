@@ -1,7 +1,7 @@
 <package>
   <name>tf</name>
   <version>1.9.18</version>
-  <description brief='Transform Library'>
+  <description>
 
 tf is a package that lets the user keep track of multiple coordinate
 frames over time. tf maintains the relationship between coordinate

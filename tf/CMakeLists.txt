@@ -5,10 +5,6 @@ find_package(catkin REQUIRED)
 
 find_package(Boost REQUIRED thread signals)
 find_package(catkin REQUIRED genmsg geometry_msgs message_filters rosconsole roscpp rostest rostime sensor_msgs std_msgs)
-catkin_package(DEPENDS Boost geometry_msgs message_filters rosconsole roscpp rostime sensor_msgs std_msgs
-               INCLUDE_DIRS include
-               LIBRARIES ${PROJECT_NAME}
-)
 
 catkin_python_setup()
 
@@ -23,6 +19,10 @@ add_service_files(DIRECTORY srv FILES FrameGraph.srv)
 
 generate_messages(DEPENDENCIES std_msgs geometry_msgs)
 
+catkin_package(DEPENDS Boost geometry_msgs message_filters rosconsole roscpp rostime sensor_msgs std_msgs
+               INCLUDE_DIRS include
+               LIBRARIES ${PROJECT_NAME}
+)
 
 add_library(${PROJECT_NAME} src/tf.cpp src/transform_listener.cpp src/cache.cpp src/transform_broadcaster.cpp)
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${Boost_LIBRARIES})

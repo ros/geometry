@@ -12,10 +12,11 @@
   <author>Tully Foote</author>
   
   <!-- Old stack contents -->
-  <run_depend>tf</run_depend>
-  <run_depend>tf_conversions</run_depend>
+  <run_depend>angles</run_depend>
   <run_depend>eigen_conversions</run_depend>
   <run_depend>kdl_conversions</run_depend>
+  <run_depend>tf</run_depend>
+  <run_depend>tf_conversions</run_depend>
 
   <export>
     <metapackage/>

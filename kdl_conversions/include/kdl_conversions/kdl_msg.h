@@ -87,6 +87,24 @@ void wrenchMsgToKDL(const geometry_msgs::Wrench &m, KDL::Wrench &k);
 /// Converts a KDL Wrench into a Wrench message
 void wrenchKDLToMsg(const KDL::Wrench &k, geometry_msgs::Wrench &m);
 
+
+//Deprecated methods use above:
+/// Converts a Pose message into a KDL Frame
+void PoseMsgToKDL(const geometry_msgs::Pose &m, KDL::Frame &k)__attribute__((deprecated));
+
+/// Converts a KDL Frame into a Pose message 
+void PoseKDLToMsg(const KDL::Frame &k, geometry_msgs::Pose &m) __attribute__((deprecated));
+
+
+
+/// Converts a Twist message into a KDL Twist
+void TwistMsgToKDL(const geometry_msgs::Twist &m, KDL::Twist &k) __attribute__((deprecated));
+
+/// Converts a KDL Twist into a Twist message
+void TwistKDLToMsg(const KDL::Twist &k, geometry_msgs::Twist &m) __attribute__((deprecated));
+
+
+
 }
 
 

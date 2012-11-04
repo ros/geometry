@@ -145,5 +145,21 @@ namespace tf {
     m.torque.z = k[5];
   }
 
+
+///// Deprecated methods for backwards compatability
+
+/// Converts a Pose message into a KDL Frame
+void PoseMsgToKDL(const geometry_msgs::Pose &m, KDL::Frame &k) { poseMsgToKDL(m, k);}
+
+/// Converts a KDL Frame into a Pose message 
+void PoseKDLToMsg(const KDL::Frame &k, geometry_msgs::Pose &m) { poseKDLToMsg(k, m);}
+
+/// Converts a Twist message into a KDL Twist
+void TwistMsgToKDL(const geometry_msgs::Twist &m, KDL::Twist &k) {twistMsgToKDL(m, k);};
+
+/// Converts a KDL Twist into a Twist message
+void TwistKDLToMsg(const KDL::Twist &k, geometry_msgs::Twist &m){twistKDLToMsg(k, m);};
+
+
 }  // namespace tf
 

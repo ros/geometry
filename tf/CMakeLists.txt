@@ -4,7 +4,7 @@ project(tf)
 find_package(catkin REQUIRED)
 
 find_package(Boost REQUIRED thread signals)
-find_package(catkin REQUIRED genmsg geometry_msgs message_filters rosconsole roscpp rostest rostime sensor_msgs std_msgs)
+find_package(catkin REQUIRED angles genmsg geometry_msgs message_filters rosconsole roscpp rostest rostime sensor_msgs std_msgs)
 
 catkin_python_setup()
 

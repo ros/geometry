@@ -1,40 +1,32 @@
 cmake_minimum_required(VERSION 2.8)
 project(tf_conversions)
 
-find_package(catkin REQUIRED)
-
 find_package(Eigen REQUIRED)
 find_package(catkin REQUIRED geometry_msgs kdl_conversions tf)
-catkin_package(DEPENDS Eigen geometry_msgs kdl_conversions tf
-               INCLUDE_DIRS include
-               LIBRARIES ${PROJECT_NAME}
+
+catkin_package(
+  INCLUDE_DIRS include
+  LIBRARIES ${PROJECT_NAME}
+  DEPENDS Eigen
+  CATKIN_DEPENDS geometry_msgs kdl_conversions tf
 )
 
-include_directories(SYSTEM ${catkin_INCLUDE_DIRS}
-                           ${EIGEN_INCLUDE_DIRS}
-)
-include_directories(include)
-
-find_package(Orocos-KDL REQUIRED)
-include_directories(${Orocos-KDL_INCLUDE_DIRS})
-link_directories(${Orocos-KDL_LIBRARY_DIRS})
-
-find_package(kdl_conversions REQUIRED)
-include_directories(${kdl_conversions_INCLUDE_DIRS})
+include_directories(SYSTEM ${EIGEN_INCLUDE_DIRS})
+include_directories(include ${catkin_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME}
   src/tf_kdl.cpp
   src/tf_eigen.cpp
-  )
-target_link_libraries(${PROJECT_NAME} ${tf_LIBRARIES} ${Orocos-KDL_LIBRARIES} ${kdl_conversions_LIBRARIES})
+)
+add_dependencies(${PROJECT_NAME} geometry_msgs_gencpp)
+target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
 
 catkin_add_gtest(test_eigen_tf test/test_eigen_tf.cpp)
 catkin_add_gtest(test_kdl_tf test/test_kdl_tf.cpp)
-target_link_libraries(test_eigen_tf ${PROJECT_NAME} )
-target_link_libraries(test_kdl_tf ${PROJECT_NAME} )
+target_link_libraries(test_eigen_tf ${PROJECT_NAME})
+target_link_libraries(test_kdl_tf ${PROJECT_NAME})
 
-#add_pyunit(test/posemath.py)
-# does CATKIN suppor pyunit?
+catkin_add_nosetests(test/posemath.py)
 
 install(DIRECTORY include/${PROJECT_NAME}/
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})

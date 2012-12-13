@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 
 from distutils.core import setup
-from catkin_pkg.package import parse_package_for_distutils
+from catkin_pkg.python_setup import generate_distutils_setup
 
-d = parse_package_for_distutils()
-d['packages'] = ['tf']
-d['package_dir'] = {'': 'src'}
-d['scripts'] = ['scripts/bullet_migration_sed.py',
-                'scripts/tf_remap',
-                'scripts/view_frames']
-d['install_requires'] = ['genmsg', 'genpy', 'roslib', 'rospkg', 'geometry_msgs', 'sensor_msgs', 'std_msgs']
+d = generate_distutils_setup(
+    packages=['tf'],
+    package_dir={'': 'src'},
+    scripts=['scripts/bullet_migration_sed.py',
+             'scripts/tf_remap',
+             'scripts/view_frames'],
+    requires=['genmsg', 'genpy', 'roslib', 'rospkg', 'geometry_msgs', 'sensor_msgs', 'std_msgs']
+)
 
 setup(**d)

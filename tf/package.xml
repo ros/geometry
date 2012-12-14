@@ -18,6 +18,8 @@ any desired point in time.
   <license>BSD</license>
   <url>http://www.ros.org/wiki/tf</url>
 
+  <buildtool_depend>catkin</buildtool_depend>
+
   <build_depend>angles</build_depend>
   <build_depend>geometry_msgs</build_depend>
   <build_depend>message_filters</build_depend>

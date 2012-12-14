@@ -19,6 +19,8 @@ the next major release cycle (see roadmap).
   <license>BSD</license>
   <url>http://www.ros.org/wiki/tf_conversions</url>
 
+  <buildtool_depend>catkin</buildtool_depend>
+
   <build_depend>eigen</build_depend>
   <build_depend>geometry_msgs</build_depend>
   <build_depend>kdl_conversions</build_depend>

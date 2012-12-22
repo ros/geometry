@@ -89,6 +89,7 @@ add_executable(static_transform_publisher src/static_transform_publisher.cpp)
 target_link_libraries(static_transform_publisher ${PROJECT_NAME})
 
 
+set(Python_ADDITIONAL_VERSIONS 2.7)
 find_package(PythonLibs REQUIRED)
 include_directories(${PYTHON_INCLUDE_PATH})
 

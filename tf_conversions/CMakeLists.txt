@@ -4,6 +4,8 @@ project(tf_conversions)
 find_package(Eigen REQUIRED)
 find_package(catkin REQUIRED geometry_msgs kdl_conversions tf)
 
+catkin_python_setup()
+
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES ${PROJECT_NAME}

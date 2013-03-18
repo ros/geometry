@@ -140,6 +140,13 @@ install(TARGETS ${PROJECT_NAME} tf_echo tf_empty_listener tf_change_notifier tf_
 install(TARGETS pytf_py
   LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/${PYTHON_INSTALL_DIR}/tf)
 
+# Install rosrun-able scripts
+install(PROGRAMS 
+  scripts/bullet_migration_sed.py
+  scripts/tf_remap
+  scripts/view_frames
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION} )
+
 # Need to install python msg and srv directories manually because genmsg
 # specifically avoids installing python message code if catkin_python_setup()
 # has been used.  See https://github.com/ros/genmsg/issues/10

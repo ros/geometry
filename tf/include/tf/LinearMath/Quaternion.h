@@ -154,7 +154,7 @@ public:
    * @param q The other quaternion */
 	tfScalar dot(const Quaternion& q) const
 	{
-		return m_floats[0] * q.x() + m_floats[1] * q.y() + m_floats[2] * q.z() + m_floats[3] * q.m_floats[3];
+		return m_floats[0] * q.x() + m_floats[1] * q.y() + m_floats[2] * q.z() + m_floats[3] * q.w();
 	}
 
   /**@brief Return the length squared of the quaternion */
@@ -235,13 +235,10 @@ public:
 	/**@brief Return the angle of rotation represented by this quaternion along the shortest path*/
 	tfScalar getAngleShortestPath() const 
 	{
-	tfScalar s;
-		if (dot(*this) < 0)
-			s = tfScalar(2.) * tfAcos(m_floats[3]);
+		if (dot(getIdentity()) < 0)
+			return tfAcos(-m_floats[3]) * tfScalar(2.0);
 		else
-			s = tfScalar(2.) * tfAcos(-m_floats[3]);
-
-		return s;
+			return tfAcos( m_floats[3]) * tfScalar(2.0);
 	}
 
 	/**@brief Return the axis of the rotation represented by this quaternion */

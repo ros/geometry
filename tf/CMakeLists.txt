@@ -77,6 +77,7 @@ add_rostest(test/test_message_filter.xml)
 #target_link_libraries(tf_benchmark ${PROJECT_NAME})
 
 add_executable(btTest test/quaternion.cpp)
+add_executable(quaternionAxisAngleTest test/quaternion_axis_angle.cpp)
 
 catkin_add_gtest(testListener test/testListener.cpp)
 target_link_libraries(testListener ${PROJECT_NAME})

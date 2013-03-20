@@ -78,7 +78,7 @@ int main(int argc, char **argv){
       tfScalar angle_out = 2*q_rotated.angle(q_identity); // why the HECK is this the half angle?
       tfScalar angle_shortest = q_rotated.angleShortestPath(q_identity);
       //std::printf("angle(identity), angleShortestPath(identity):\n");
-      std::printf("               angle(identity): %.3f @ [%.3f, %.3f, %.3f] \n",
+      std::printf("             2*angle(identity): %.3f @ [%.3f, %.3f, %.3f] \n",
                   angle_out, axis_out.x(), axis_out.y(), axis_out.z());
       std::printf("   angleShortestPath(identity): %.3f\n",
                   angle_shortest);

@@ -11,6 +11,8 @@
   
   <author>Tully Foote</author>
   
+  <buildtool_depend>catkin</buildtool_depend>
+
   <!-- Old stack contents -->
   <run_depend>angles</run_depend>
   <run_depend>eigen_conversions</run_depend>

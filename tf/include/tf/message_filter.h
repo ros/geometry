@@ -52,10 +52,10 @@
 #include <message_filters/simple_filter.h>
 
 #define TF_MESSAGEFILTER_DEBUG(fmt, ...) \
-  ROS_DEBUG_NAMED("message_filter", "MessageFilter [target=%s]: "fmt, getTargetFramesString().c_str(), __VA_ARGS__)
+  ROS_DEBUG_NAMED("message_filter", "MessageFilter [target=%s]: " fmt, getTargetFramesString().c_str(), __VA_ARGS__)
 
 #define TF_MESSAGEFILTER_WARN(fmt, ...) \
-  ROS_WARN_NAMED("message_filter", "MessageFilter [target=%s]: "fmt, getTargetFramesString().c_str(), __VA_ARGS__)
+  ROS_WARN_NAMED("message_filter", "MessageFilter [target=%s]: " fmt, getTargetFramesString().c_str(), __VA_ARGS__)
 
 namespace tf
 {

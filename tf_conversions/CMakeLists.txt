@@ -16,6 +16,9 @@ catkin_package(
 include_directories(SYSTEM ${EIGEN_INCLUDE_DIRS})
 include_directories(include ${catkin_INCLUDE_DIRS})
 
+# Needed due to no full filename in orocos_kdl pkg-config export
+link_directories(${orocos_kdl_LIBRARY_DIRS})
+
 add_library(${PROJECT_NAME}
   src/tf_kdl.cpp
   src/tf_eigen.cpp

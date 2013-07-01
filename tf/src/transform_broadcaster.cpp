@@ -35,40 +35,32 @@
 #include "tf/transform_broadcaster.h"
 #include "tf/transform_listener.h"
 
+#include <tf2_ros/transform_broadcaster.h>
+
+
+
 namespace tf {
 
-TransformBroadcaster::TransformBroadcaster()
+TransformBroadcaster::TransformBroadcaster():
+  tf2_broadcaster_()
 {
-  publisher_ = node_.advertise<tfMessage>("/tf", 100);
-  ros::NodeHandle l_nh("~");
-  tf_prefix_ = getPrefixParam(l_nh);
 };
 
 void TransformBroadcaster::sendTransform(const geometry_msgs::TransformStamped & msgtf)
 {
-  std::vector<geometry_msgs::TransformStamped> v1;
-  v1.push_back(msgtf);
-  sendTransform(v1);
+  tf2_broadcaster_.sendTransform(msgtf);
 }
 
 void TransformBroadcaster::sendTransform(const StampedTransform & transform)
 {
-  std::vector<StampedTransform> v1;
-  v1.push_back(transform);
-  sendTransform(v1);
+  geometry_msgs::TransformStamped msgtf;
+  transformStampedTFToMsg(transform, msgtf);
+  tf2_broadcaster_.sendTransform(msgtf);
 } 
 
 void TransformBroadcaster::sendTransform(const std::vector<geometry_msgs::TransformStamped> & msgtf)
 {
-  tfMessage message;
-  for (std::vector<geometry_msgs::TransformStamped>::const_iterator it = msgtf.begin(); it != msgtf.end(); ++it)
-  {
-    message.transforms.push_back(*it);
-    //Make sure to resolve anything published
-    message.transforms.back().header.frame_id = tf::resolve(tf_prefix_, message.transforms.back().header.frame_id);
-    message.transforms.back().child_frame_id = tf::resolve(tf_prefix_, message.transforms.back().child_frame_id);
-  }
-  publisher_.publish(message);
+  tf2_broadcaster_.sendTransform(msgtf);
 }
 
 void TransformBroadcaster::sendTransform(const std::vector<StampedTransform> & transforms)
@@ -81,7 +73,7 @@ void TransformBroadcaster::sendTransform(const std::vector<StampedTransform> & t
     msgtfs.push_back(msgtf);
 
   }
-  sendTransform(msgtfs);
+  tf2_broadcaster_.sendTransform(msgtfs);
 } 
   
 

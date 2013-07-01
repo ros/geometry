@@ -48,8 +48,8 @@ target_link_libraries(tf_unittest ${PROJECT_NAME})
 catkin_add_gtest(test_transform_datatypes test/test_transform_datatypes.cpp)
 target_link_libraries(tf_unittest ${PROJECT_NAME})
 
-catkin_add_gtest(transform_listener_unittest test/transform_listener_unittest.cpp)
-target_link_libraries(transform_listener_unittest ${PROJECT_NAME})
+add_executable(transform_listener_unittest test/transform_listener_unittest.cpp)
+target_link_libraries(transform_listener_unittest ${PROJECT_NAME} ${GTEST_LIBRARIES})
 add_rostest(test/transform_listener_unittest.launch)
 
 # Disabled because of changes in TransformStorage
@@ -67,10 +67,11 @@ target_link_libraries(test_velocity ${PROJECT_NAME})
 catkin_add_gtest(cache_unittest test/cache_unittest.cpp)
 target_link_libraries(cache_unittest ${PROJECT_NAME})
 
-catkin_add_gtest(test_message_filter EXCLUDE_FROM_ALL test/test_message_filter.cpp)
-target_link_libraries(test_message_filter tf ${Boost_LIBRARIES})
 
+add_executable(test_message_filter EXCLUDE_FROM_ALL test/test_message_filter.cpp)
+target_link_libraries(test_message_filter tf ${Boost_LIBRARIES} ${GTEST_LIBRARIES})
 add_rostest(test/test_message_filter.xml)
+
 
 ### Benchmarking
 #catkin_add_gtest_future(tf_benchmark test/tf_benchmark.cpp)
@@ -78,9 +79,8 @@ add_rostest(test/test_message_filter.xml)
 
 add_executable(btTest test/quaternion.cpp)
 
-catkin_add_gtest(testListener test/testListener.cpp)
-target_link_libraries(testListener ${PROJECT_NAME})
-
+add_executable(testListener test/testListener.cpp)
+target_link_libraries(testListener ${PROJECT_NAME} ${GTEST_LIBRARIES})
 add_rostest(test/test_broadcaster.launch)
 
 add_executable(testBroadcaster test/testBroadcaster.cpp)
@@ -154,3 +154,10 @@ install(DIRECTORY ${CATKIN_DEVEL_PREFIX}/${PYTHON_INSTALL_DIR}/tf/msg
   DESTINATION ${CMAKE_INSTALL_PREFIX}/${PYTHON_INSTALL_DIR}/tf)
 install(DIRECTORY ${CATKIN_DEVEL_PREFIX}/${PYTHON_INSTALL_DIR}/tf/srv
   DESTINATION ${CMAKE_INSTALL_PREFIX}/${PYTHON_INSTALL_DIR}/tf)
+
+
+if(TARGET tests)
+  add_dependencies(tests testListener transform_listener_unittest test_message_filter )
+endif()
+
+

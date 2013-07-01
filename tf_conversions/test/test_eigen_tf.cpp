@@ -48,7 +48,7 @@ TEST(TFEigenConversions, tf_eigen_vector)
   t[2] = gen_rand(-10,10);
 
   Eigen::Vector3d k;
-  VectorTFToEigen(t,k);
+  vectorTFToEigen(t,k);
 
   ASSERT_NEAR(t[0],k[0],1e-6);
   ASSERT_NEAR(t[1],k[1],1e-6);
@@ -64,7 +64,7 @@ TEST(TFEigenConversions, tf_eigen_quaternion)
   t[3] = gen_rand(-1.0,1.0);
   t.normalize();
   Eigen::Quaterniond k;
-  RotationTFToEigen(t,k);
+  quaternionTFToEigen(t,k);
 
   ASSERT_NEAR(t[0],k.coeffs()(0),1e-6);
   ASSERT_NEAR(t[1],k.coeffs()(1),1e-6);
@@ -86,7 +86,7 @@ TEST(TFEigenConversions, tf_eigen_transform)
   t.setRotation(tq);
 
   Eigen::Affine3d k;
-  TransformTFToEigen(t,k);
+  transformTFToEigen(t,k);
 
   for(int i=0; i < 3; i++)
   {
@@ -115,7 +115,7 @@ TEST(TFEigenConversions, eigen_tf_transform)
   k.translate(Eigen::Vector3d(gen_rand(-10,10),gen_rand(-10,10),gen_rand(-10,10)));
   k.rotate(kq);
 
-  TransformEigenToTF(k,t);
+  transformEigenToTF(k,t);
   for(int i=0; i < 3; i++)
   {
     ASSERT_NEAR(t.getOrigin()[i],k.matrix()(i,3),1e-6);

@@ -65,7 +65,7 @@ TEST(TFKDLConversions, tf_kdl_rotation)
   t.normalize();
 
   KDL::Rotation k;
-  RotationTFToKDL(t,k);
+  QuaternionTFToKDL(t,k);
 
   double x,y,z,w;
   k.GetQuaternion(x,y,z,w);

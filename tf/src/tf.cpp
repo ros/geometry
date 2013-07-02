@@ -202,8 +202,11 @@ Transformer::Transformer(bool interpolating,
   cache_time(cache_time),
   interpolating (interpolating), 
   using_dedicated_thread_(false),
-  fall_back_to_wall_time_(false)
+  fall_back_to_wall_time_(false),
+  tf2_buffer_(cache_time)
 {
+
+
   max_extrapolation_distance_.fromNSec(DEFAULT_MAX_EXTRAPOLATION_DISTANCE);
   frameIDs_["NO_PARENT"] = 0;
   frames_.push_back(NULL);// new TimeCache(interpolating, cache_time, max_extrapolation_distance));//unused but needed for iteration over all elements
@@ -226,6 +229,8 @@ Transformer::~Transformer()
 
 void Transformer::clear()
 {
+  tf2_buffer_.clear();
+
   boost::recursive_mutex::scoped_lock lock(frame_mutex_);
   if ( frames_.size() > 1 )
   {
@@ -371,7 +376,11 @@ int Transformer::walkToTopParent(F& f, ros::Time time, CompactFrameID target_id,
 
 bool Transformer::setTransform(const StampedTransform& transform, const std::string& authority)
 {
-
+  geometry_msgs::TransformStamped msgtf;
+  transformStampedTFToMsg(transform, msgtf);
+  return tf2_buffer_.setTransform(msgtf, authority);
+  
+  /*
   StampedTransform mapped_transform((tf::Transform)transform, transform.stamp_, transform.frame_id_, transform.child_frame_id_);
   mapped_transform.child_frame_id_ = assert_resolved(tf_prefix_, transform.child_frame_id_);
   mapped_transform.frame_id_ = assert_resolved(tf_prefix_, transform.frame_id_);
@@ -437,12 +446,19 @@ bool Transformer::setTransform(const StampedTransform& transform, const std::str
   }
 
   return true;
+  */
 };
 
 
 void Transformer::lookupTransform(const std::string& target_frame, const std::string& source_frame,
                      const ros::Time& time, StampedTransform& transform) const
 {
+  geometry_msgs::TransformStamped output = 
+    tf2_buffer_.lookupTransform(target_frame, source_frame, time);
+  transformStampedMsgToTF(output, transform);
+  return;
+    
+  /*
 	  std::string mapped_tgt = assert_resolved(tf_prefix_, target_frame);
 	  std::string mapped_src = assert_resolved(tf_prefix_, source_frame);
 
@@ -483,12 +499,18 @@ void Transformer::lookupTransform(const std::string& target_frame, const std::st
 	  transform.child_frame_id_ = mapped_src;
 	  transform.frame_id_       = mapped_tgt;
 	  transform.stamp_          = accum.time;
+  */
 };
 
 
 void Transformer::lookupTransform(const std::string& target_frame,const ros::Time& target_time, const std::string& source_frame,
                      const ros::Time& source_time, const std::string& fixed_frame, StampedTransform& transform) const
 {
+  geometry_msgs::TransformStamped output = 
+    tf2_buffer_.lookupTransform(target_frame, target_time, source_frame, source_time, fixed_frame);
+  transformStampedMsgToTF(output, transform);
+  return;
+  /*
   tf::StampedTransform temp1, temp2;
   lookupTransform(fixed_frame, source_frame, source_time, temp1);
   lookupTransform(target_frame, fixed_frame, target_time, temp2);
@@ -496,7 +518,7 @@ void Transformer::lookupTransform(const std::string& target_frame,const ros::Tim
   transform.stamp_ = temp2.stamp_;
   transform.frame_id_ = target_frame;
   transform.child_frame_id_ = source_frame;
-
+  */
 };
 
 
@@ -504,6 +526,7 @@ void Transformer::lookupTwist(const std::string& tracking_frame, const std::stri
                               const ros::Time& time, const ros::Duration& averaging_interval, 
                               geometry_msgs::Twist& twist) const
 {
+#warning skipped porting
   lookupTwist(tracking_frame, observation_frame, observation_frame, tf::Point(0,0,0), tracking_frame, time, averaging_interval, twist);
 };
 // ref point is origin of tracking_frame, ref_frame = obs_frame
@@ -514,6 +537,7 @@ void Transformer::lookupTwist(const std::string& tracking_frame, const std::stri
                  const ros::Time& time, const ros::Duration& averaging_interval, 
                  geometry_msgs::Twist& twist) const
 {
+#warning skipped porting
   ros::Time latest_time, target_time;
   getLatestCommonTime(observation_frame, tracking_frame, latest_time, NULL); ///\TODO check time on reference point too
 
@@ -591,6 +615,9 @@ bool Transformer::waitForTransform(const std::string& target_frame, const std::s
                                    const ros::Duration& timeout, const ros::Duration& polling_sleep_duration,
                                    std::string* error_msg) const
 {
+  return tf2_buffer_.canTransform(target_frame, source_frame, time, timeout, error_msg);
+  
+  /*
   if (!using_dedicated_thread_)
   {
     std::string error_string = "Do not call waitForTransform unless you are using another thread for populating data. Without a dedicated thread it will always timeout.  If you have a seperate thread servicing tf messages, call setUsingDedicatedThread(true)";
@@ -612,11 +639,13 @@ bool Transformer::waitForTransform(const std::string& target_frame, const std::s
 	  usleep(polling_sleep_duration.sec * 1000000 + polling_sleep_duration.nsec / 1000); //hack to avoid calling ros::Time::now() in Duration.sleep
   }
   return false;
+  */
 }
 
 bool Transformer::canTransformNoLock(CompactFrameID target_id, CompactFrameID source_id,
                     const ros::Time& time, std::string* error_msg) const
 {
+#warning skipped porting
   if (target_id == 0 || source_id == 0)
   {
     return false;
@@ -634,6 +663,7 @@ bool Transformer::canTransformNoLock(CompactFrameID target_id, CompactFrameID so
 bool Transformer::canTransformInternal(CompactFrameID target_id, CompactFrameID source_id,
                                   const ros::Time& time, std::string* error_msg) const
 {
+#warning skipped porting
   boost::recursive_mutex::scoped_lock lock(frame_mutex_);
   return canTransformNoLock(target_id, source_id, time, error_msg);
 }
@@ -641,6 +671,9 @@ bool Transformer::canTransformInternal(CompactFrameID target_id, CompactFrameID 
 bool Transformer::canTransform(const std::string& target_frame, const std::string& source_frame,
                            const ros::Time& time, std::string* error_msg) const
 {
+  return tf2_buffer_.canTransform(target_frame, source_frame, time, error_msg);
+  /*
+  
 	std::string mapped_tgt = assert_resolved(tf_prefix_, target_frame);
 	std::string mapped_src = assert_resolved(tf_prefix_, source_frame);
 
@@ -656,6 +689,7 @@ bool Transformer::canTransform(const std::string& target_frame, const std::strin
   CompactFrameID source_id = lookupFrameNumber(mapped_src);
 
   return canTransformNoLock(target_id, source_id, time, error_msg);
+  */
 }
 
 
@@ -664,7 +698,8 @@ bool Transformer::canTransform(const std::string& target_frame,const ros::Time& 
                                const ros::Time& source_time, const std::string& fixed_frame,
                                std::string* error_msg) const
 {
-  return canTransform(target_frame, fixed_frame, target_time) && canTransform(fixed_frame, source_frame, source_time, error_msg);
+  return tf2_buffer_.canTransform(target_frame, target_time, source_frame, source_time, fixed_frame, ros::Duration(), error_msg);
+  //  return canTransform(target_frame, fixed_frame, target_time) && canTransform(fixed_frame, source_frame, source_time, error_msg);
 };
 
 bool Transformer::waitForTransform(const std::string& target_frame,const ros::Time& target_time, const std::string& source_frame,
@@ -672,12 +707,14 @@ bool Transformer::waitForTransform(const std::string& target_frame,const ros::Ti
                                    const ros::Duration& timeout, const ros::Duration& polling_sleep_duration,
                                    std::string* error_msg) const
 {
-  return waitForTransform(target_frame, fixed_frame, target_time, timeout, polling_sleep_duration, error_msg) && waitForTransform(fixed_frame, source_frame, source_time, timeout, polling_sleep_duration, error_msg);
+  return tf2_buffer_.canTransform(target_frame, target_time, source_frame, source_time, fixed_frame, timeout, error_msg);
+  //return waitForTransform(target_frame, fixed_frame, target_time, timeout, polling_sleep_duration, error_msg) && waitForTransform(fixed_frame, source_frame, source_time, timeout, polling_sleep_duration, error_msg);
 };
 
 
 bool Transformer::getParent(const std::string& frame_id, ros::Time time, std::string& parent) const
 {
+#warning skipped porting
   std::string mapped_frame_id = assert_resolved(tf_prefix_, frame_id);
   tf::TimeCache* cache;
   try
@@ -707,6 +744,7 @@ bool Transformer::getParent(const std::string& frame_id, ros::Time time, std::st
 
 bool Transformer::frameExists(const std::string& frame_id_str) const
 {
+#warning skipped porting
   boost::recursive_mutex::scoped_lock lock(frame_mutex_);
   std::string frame_id_resolveped = assert_resolved(tf_prefix_, frame_id_str);
   
@@ -715,6 +753,7 @@ bool Transformer::frameExists(const std::string& frame_id_str) const
 
 void Transformer::setExtrapolationLimit(const ros::Duration& distance)
 {
+#warning skipped porting
   max_extrapolation_distance_ = distance;
 }
 
@@ -761,6 +800,7 @@ int Transformer::getLatestCommonTime(const std::string &source_frame, const std:
 
 int Transformer::getLatestCommonTime(CompactFrameID target_id, CompactFrameID source_id, ros::Time & time, std::string * error_string) const
 {
+#warning skipped porting
   if (source_id == target_id)
   {
     //Set time to latest timestamp of frameid in case of target and source frame id are the same
@@ -1250,6 +1290,7 @@ std::string Transformer::chainAsString(const std::string & target_frame, ros::Ti
 //@todo - Fix this to work with new data structures
 void Transformer::chainAsVector(const std::string & target_frame, ros::Time target_time, const std::string & source_frame, ros::Time source_time, const std::string& fixed_frame, std::vector<std::string>& output) const
 {
+#warning skipped porting
   std::string error_string;
 
   output.clear(); //empty vector
@@ -1278,6 +1319,8 @@ void Transformer::chainAsVector(const std::string & target_frame, ros::Time targ
 
 std::string Transformer::allFramesAsString() const
 {
+  return tf2_buffer_.allFramesAsString();
+  /*
   std::stringstream mstream;
   boost::recursive_mutex::scoped_lock lock(frame_mutex_);
 
@@ -1300,10 +1343,12 @@ std::string Transformer::allFramesAsString() const
   }
 
   return mstream.str();
+  */
 }
 
 std::string Transformer::allFramesAsDot() const
 {
+#warning skipped porting
   std::stringstream mstream;
   mstream << "digraph G {" << std::endl;
   boost::recursive_mutex::scoped_lock lock(frame_mutex_);
@@ -1381,6 +1426,7 @@ bool Transformer::ok() const { return true; }
 
 void Transformer::getFrameStrings(std::vector<std::string> & vec) const
 {
+#warning skipped porting
   vec.clear();
 
   boost::recursive_mutex::scoped_lock lock(frame_mutex_);

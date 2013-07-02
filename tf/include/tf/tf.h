@@ -46,6 +46,8 @@
 #include <boost/signals.hpp>
 #include "geometry_msgs/TwistStamped.h"
 
+#include <tf2_ros/buffer.h>
+
 namespace tf
 {
 /** \brief resolve tf names */
@@ -472,6 +474,8 @@ protected:
 	*/
 
  private:
+  tf2_ros::Buffer tf2_buffer_;
+
   /**@brief Return the latest rostime which is common across the spanning set
    * zero if fails to cross */
   int getLatestCommonTime(CompactFrameID target_frame, CompactFrameID source_frame, ros::Time& time, std::string* error_string) const;

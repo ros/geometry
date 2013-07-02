@@ -421,37 +421,15 @@ protected:
   /// String to number for frame lookup with dynamic allocation of new frames
   CompactFrameID lookupFrameNumber(const std::string& frameid_str) const
   {
-    unsigned int retval = 0;
-    boost::recursive_mutex::scoped_lock(frame_mutex_);
-    M_StringToCompactFrameID::const_iterator map_it = frameIDs_.find(frameid_str);
-    if (map_it == frameIDs_.end())
-    {
-      std::stringstream ss;
-      ss << "Frame id " << frameid_str << " does not exist! Frames (" << frameIDs_.size() << "): " << allFramesAsString();
-      throw tf::LookupException(ss.str());
-    }
-    else
-      retval = map_it->second;
-    return retval;
+    return tf2_buffer_._lookupFrameNumber(frameid_str);
   };
 
   /// String to number for frame lookup with dynamic allocation of new frames
   CompactFrameID lookupOrInsertFrameNumber(const std::string& frameid_str)
   {
-    unsigned int retval = 0;
-    boost::recursive_mutex::scoped_lock(frame_mutex_);
-    M_StringToCompactFrameID::iterator map_it = frameIDs_.find(frameid_str);
-    if (map_it == frameIDs_.end())
-    {
-      retval = frames_.size();
-      frameIDs_[frameid_str] = retval;
-      frames_.push_back( new TimeCache(cache_time));
-      frameIDs_reverse.push_back(frameid_str);
-    }
-    else
-      retval = frameIDs_[frameid_str];
-    return retval;
+    return tf2_buffer_._lookupOrInsertFrameNumber(frameid_str);
   };
+
   ///Number to string frame lookup may throw LookupException if number invalid
   std::string lookupFrameString(unsigned int frame_id_num) const
   {

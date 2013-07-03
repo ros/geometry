@@ -44,72 +44,26 @@ std::string tf::remap(const std::string& frame_id)
 
 
 TransformListener::TransformListener(ros::Duration max_cache_time, bool spin_thread):
-  Transformer(true, max_cache_time), dedicated_listener_thread_(NULL)
+  Transformer(true, max_cache_time), tf2_listener_(Transformer::tf2_buffer_, node_, spin_thread)
 {
-  if (spin_thread)
-    initWithThread();
-  else
-    init();
+  //Everything is done inside tf2 init
 }
 
 TransformListener::TransformListener(const ros::NodeHandle& nh, ros::Duration max_cache_time, bool spin_thread):
-  Transformer(true, max_cache_time), dedicated_listener_thread_(NULL), node_(nh)
+  Transformer(true, max_cache_time), tf2_listener_(Transformer::tf2_buffer_, nh, spin_thread), node_(nh)
 {
-  if (spin_thread)
-    initWithThread();
-  else
-    init();
+  //Everything is done inside tf2 init
 }
 
 TransformListener::~TransformListener()
 {
-  using_dedicated_thread_ = false;
-  if (dedicated_listener_thread_)
-  {
-    dedicated_listener_thread_->join();
-    delete dedicated_listener_thread_;
-  }
+  //Everything is done inside tf2 init
 }
 
 //Override Transformer::ok() for ticket:4882
 bool TransformListener::ok() const { return ros::ok(); }
 
-void TransformListener::init()
-{
-  message_subscriber_tf_ = node_.subscribe<tf::tfMessage>("/tf", 100, boost::bind(&TransformListener::subscription_callback, this, _1)); ///\todo magic number
-  
-  
-  if (! ros::service::exists("~tf_frames", false))  // Avoid doublely advertizing if multiple instances of this library
-    {
-      ros::NodeHandle nh("~");
-      tf_frames_srv_ = nh.advertiseService("tf_frames", &TransformListener::getFrames, this);
-    }
 
-  ros::NodeHandle local_nh("~");
-  
-  tf_prefix_ = getPrefixParam(local_nh);
-  last_update_ros_time_ = ros::Time::now();
-}
-
-void TransformListener::initWithThread()
-{
-  using_dedicated_thread_ = true;
-  ros::SubscribeOptions ops_tf = ros::SubscribeOptions::create<tf::tfMessage>("/tf", 100, boost::bind(&TransformListener::subscription_callback, this, _1), ros::VoidPtr(), &tf_message_callback_queue_); ///\todo magic number
-    
-    message_subscriber_tf_ = node_.subscribe(ops_tf);
-  
-  dedicated_listener_thread_ = new boost::thread(boost::bind(&TransformListener::dedicatedListenerThread, this));
-
-  if (! ros::service::exists("~tf_frames", false))  // Avoid doublely advertizing if multiple instances of this library
-    {
-      ros::NodeHandle nh("~");
-      tf_frames_srv_ = nh.advertiseService("tf_frames", &TransformListener::getFrames, this);
-    }
-    
-  ros::NodeHandle local_nh("~");
-  tf_prefix_ = getPrefixParam(local_nh);
-  last_update_ros_time_ = ros::Time::now();
-}
 
 void TransformListener::transformQuaternion(const std::string& target_frame,
     const geometry_msgs::QuaternionStamped& msg_in,
@@ -289,52 +243,6 @@ void TransformListener::transformPointCloud(const std::string & target_frame, co
     transformPointMatVec(origin, basis, cloudIn.points[i], cloudOut.points[i]);
   }
 }
-
-
-void TransformListener::subscription_callback(const tf::tfMessageConstPtr& msg)
-{
-  ros::Duration ros_diff = ros::Time::now() - last_update_ros_time_;
-  float ros_dt = ros_diff.toSec();
-
-  if (ros_dt < 0.0)
-  {
-    ROS_WARN("Saw a negative time change of %f seconds, clearing the tf buffer.", ros_dt);
-    clear();
-  }
-
-  last_update_ros_time_ = ros::Time::now();
-
-  const tf::tfMessage& msg_in = *msg;
-  for (unsigned int i = 0; i < msg_in.transforms.size(); i++)
-  {
-    StampedTransform trans;
-    transformStampedMsgToTF(msg_in.transforms[i], trans);
-    try
-    {
-      std::map<std::string, std::string>* msg_header_map = msg_in.__connection_header.get();
-      std::string authority;
-      std::map<std::string, std::string>::iterator it = msg_header_map->find("callerid");
-      if (it == msg_header_map->end())
-      {
-        ROS_WARN("Message recieved without callerid");
-        authority = "no callerid";
-      }
-      else 
-      {
-        authority = it->second;
-      }
-      setTransform(trans, authority);
-    }
-
-    catch (TransformException& ex)
-    {
-      ///\todo Use error reporting
-      std::string temp = ex.what();
-      ROS_ERROR("Failure to set recieved transform from %s to %s with error: %s\n", msg_in.transforms[i].child_frame_id.c_str(), msg_in.transforms[i].header.frame_id.c_str(), temp.c_str());
-    }
-  }
-};
-
 
 
 

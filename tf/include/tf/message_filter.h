@@ -282,6 +282,7 @@ public:
    */
   void add(const MConstPtr& message)
   {
+    
     boost::shared_ptr<std::map<std::string, std::string> > header(new std::map<std::string, std::string>);
     (*header)["callerid"] = "unknown";
     add(MEvent(message, header, ros::Time::now()));
@@ -361,7 +362,6 @@ private:
         ros::Time latest_transform_time ;
 
         tf_.getLatestCommonTime(frame_id, target_frame, latest_transform_time, 0) ;
-        ROS_ERROR("Latest common time %g", latest_transform_time.toSec());
         
         if (stamp + tf_.getCacheLength() < latest_transform_time)
         {

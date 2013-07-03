@@ -337,6 +337,8 @@ public:
 
 protected:
 
+  
+
   /** \brief The internal storage class for ReferenceTransform.
    *
    * An instance of this class is created for each frame in the system.
@@ -451,9 +453,10 @@ protected:
   bool test_extrapolation(const ros::Time& target_time, const TransformLists& t_lists, std::string * error_string) const;
 	*/
 
- private:
+protected:
   tf2_ros::Buffer tf2_buffer_;
 
+private:
   /**@brief Return the latest rostime which is common across the spanning set
    * zero if fails to cross */
   int getLatestCommonTime(CompactFrameID target_frame, CompactFrameID source_frame, ros::Time& time, std::string* error_string) const;

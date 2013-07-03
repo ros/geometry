@@ -245,6 +245,8 @@ void Transformer::clear()
 template<typename F>
 int Transformer::walkToTopParent(F& f, ros::Time time, CompactFrameID target_id, CompactFrameID source_id, std::string* error_string) const
 {
+  ROS_ASSERT("walk to top parent internal not ported");
+
   // Short circuit if zero length transform to allow lookups on non existant links
   if (source_id == target_id)
   {
@@ -419,7 +421,7 @@ void Transformer::lookupTwist(const std::string& tracking_frame, const std::stri
                  const ros::Time& time, const ros::Duration& averaging_interval, 
                  geometry_msgs::Twist& twist) const
 {
-#warning skipped porting
+  
   ros::Time latest_time, target_time;
   getLatestCommonTime(observation_frame, tracking_frame, latest_time, NULL); ///\TODO check time on reference point too
 
@@ -511,20 +513,6 @@ bool Transformer::waitForTransform(const std::string& target_frame, const std::s
     ROS_ASSERT("should not be here");
 
   return tf2_buffer_.canTransform(target_frame, source_frame, time, timeout, error_msg);
-  /*
-  ros::Time start_time = now();
-  std::string mapped_tgt = assert_resolved(tf_prefix_, target_frame);
-  std::string mapped_src = assert_resolved(tf_prefix_, source_frame);
-
-  while (ok() && (now() - start_time) < timeout)
-  {
-	  if (frameExists(mapped_tgt) && frameExists(mapped_src) && (canTransform(mapped_tgt, mapped_src, time, error_msg)))
-		  return true;
-
-	  usleep(polling_sleep_duration.sec * 1000000 + polling_sleep_duration.nsec / 1000); //hack to avoid calling ros::Time::now() in Duration.sleep
-  }
-  return false;
-  */
 }
 
 bool Transformer::canTransformNoLock(CompactFrameID target_id, CompactFrameID source_id,
@@ -611,8 +599,10 @@ struct TimeAndFrameIDFrameComparator
 
 int Transformer::getLatestCommonTime(const std::string &source_frame, const std::string &target_frame, ros::Time& time, std::string* error_string) const
 {
-  //internal method not ported
-  ROS_ASSERT("getLatestCommonTime" == "str format");
+  CompactFrameID target_id = tf2_buffer_._lookupFrameNumber(target_frame);
+  CompactFrameID source_id = tf2_buffer_._lookupFrameNumber(source_frame);
+
+  return tf2_buffer_._getLatestCommonTime(source_id, target_id, time, error_string);
 }
 
 

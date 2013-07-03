@@ -543,6 +543,7 @@ private:
   boost::mutex failure_signal_mutex_;
 };
 
+
 } // namespace tf
 
 #endif

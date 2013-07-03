@@ -848,12 +848,10 @@ void Transformer::transformPose(const std::string& target_frame, const ros::Time
 
 boost::signals::connection Transformer::addTransformsChangedListener(boost::function<void(void)> callback)
 {
-  boost::mutex::scoped_lock lock(transforms_changed_mutex_);
-  return transforms_changed_.connect(callback);
+  return tf2_buffer_._addTransformsChangedListener(callback);
 }
 
 void Transformer::removeTransformsChangedListener(boost::signals::connection c)
 {
-  boost::mutex::scoped_lock lock(transforms_changed_mutex_);
-  c.disconnect();
+  tf2_buffer_._removeTransformsChangedListener(c);
 }

@@ -1568,8 +1568,6 @@ TEST(tf, waitForTransform)
 
   
 
-  //  dedicated thread warning not in tf2
-
   // Check assertion of extra string
   std::string error_str;
   EXPECT_FALSE(mTR.waitForTransform("parent", "me", ros::Time().fromNSec(10000000), ros::Duration().fromSec(1.0), ros::Duration().fromSec(0.01), &error_str));

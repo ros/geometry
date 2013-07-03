@@ -331,9 +331,9 @@ public:
   std::string getTFPrefix() const { return tf_prefix_;};
 
   //Declare that it is safe to call waitForTransform
-  void setUsingDedicatedThread(bool value) { using_dedicated_thread_ = value;};
-  // Get the state of using_dedicated_thread_
-  bool isUsingDedicatedThread() { return using_dedicated_thread_;};
+  void setUsingDedicatedThread(bool value) { tf2_buffer_.setUsingDedicatedThread(value);};
+  // Get the state of using_dedicated_thread_ from the buffer
+  bool isUsingDedicatedThread() { return tf2_buffer_.isUsingDedicatedThread();};
 
 protected:
 
@@ -388,8 +388,6 @@ protected:
   TransformsChangedSignal transforms_changed_;
   boost::mutex transforms_changed_mutex_;
 
-  //Whether it is safe to use waitForTransform.  This is basically stating that tf is multithreaded.  
-  bool using_dedicated_thread_;
   
  public:
   // A flag to allow falling back to wall time

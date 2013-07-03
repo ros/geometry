@@ -50,7 +50,7 @@ TransformListener::TransformListener(ros::Duration max_cache_time, bool spin_thr
 }
 
 TransformListener::TransformListener(const ros::NodeHandle& nh, ros::Duration max_cache_time, bool spin_thread):
-  Transformer(true, max_cache_time), tf2_listener_(Transformer::tf2_buffer_, nh, spin_thread), node_(nh)
+  Transformer(true, max_cache_time), node_(nh), tf2_listener_(Transformer::tf2_buffer_, nh, spin_thread)
 {
   //Everything is done inside tf2 init
 }

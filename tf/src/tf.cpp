@@ -201,7 +201,6 @@ Transformer::Transformer(bool interpolating,
                                 ros::Duration cache_time):
   cache_time(cache_time),
   interpolating (interpolating), 
-  using_dedicated_thread_(false),
   fall_back_to_wall_time_(false),
   tf2_buffer_(cache_time)
 {
@@ -499,19 +498,6 @@ bool Transformer::waitForTransform(const std::string& target_frame, const std::s
                                    const ros::Duration& timeout, const ros::Duration& polling_sleep_duration,
                                    std::string* error_msg) const
 {
-  if (!using_dedicated_thread_)
-  {
-    std::string error_string = "Do not call waitForTransform unless you are using another thread for populating data. Without a dedicated thread it will always timeout.  If you have a seperate thread servicing tf messages, call setUsingDedicatedThread(true)";
-    ROS_ERROR("%s",error_string.c_str());
-    
-    if (error_msg) 
-      *error_msg = error_string;
-    return false;
-    
-  }
-  else
-    ROS_ASSERT("should not be here");
-
   return tf2_buffer_.canTransform(target_frame, source_frame, time, timeout, error_msg);
 }
 
@@ -541,8 +527,7 @@ bool Transformer::canTransform(const std::string& target_frame,const ros::Time& 
                                const ros::Time& source_time, const std::string& fixed_frame,
                                std::string* error_msg) const
 {
-  return tf2_buffer_.canTransform(target_frame, target_time, source_frame, source_time, fixed_frame, ros::Duration(), error_msg);
-  //  return canTransform(target_frame, fixed_frame, target_time) && canTransform(fixed_frame, source_frame, source_time, error_msg);
+  return tf2_buffer_.canTransform(target_frame, target_time, source_frame, source_time, fixed_frame, error_msg);
 };
 
 bool Transformer::waitForTransform(const std::string& target_frame,const ros::Time& target_time, const std::string& source_frame,
@@ -551,7 +536,6 @@ bool Transformer::waitForTransform(const std::string& target_frame,const ros::Ti
                                    std::string* error_msg) const
 {
   return tf2_buffer_.canTransform(target_frame, target_time, source_frame, source_time, fixed_frame, timeout, error_msg);
-  //return waitForTransform(target_frame, fixed_frame, target_time, timeout, polling_sleep_duration, error_msg) && waitForTransform(fixed_frame, source_frame, source_time, timeout, polling_sleep_duration, error_msg);
 };
 
 

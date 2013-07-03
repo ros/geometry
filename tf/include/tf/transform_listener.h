@@ -169,39 +169,8 @@ private:
   /// replacing implementation with tf2_ros'
   tf2_ros::TransformListener tf2_listener_;
 
-  /// last time
-  //ros::Time last_update_ros_time_;
-
-  /// Initialize this transform listener, subscribing, advertising services, etc.
-  //void init();
-  //void initWithThread();
-
-  /// Callback function for ros message subscriptoin
-  //void subscription_callback(const tf::tfMessageConstPtr& msg);
-
   /** @brief a helper function to be used for both transfrom pointCloud methods */
   void transformPointCloud(const std::string & target_frame, const Transform& transform, const ros::Time& target_time, const sensor_msgs::PointCloud& pcin, sensor_msgs::PointCloud& pcout) const;
-
-  /// clear the cached data
-  /*std_msgs::Empty empty_;
-  ros::ServiceServer tf_frames_srv_;
-
-
-  ros::CallbackQueue tf_message_callback_queue_;
-  boost::thread* dedicated_listener_thread_;
-  */
-  /*
-  ros::Subscriber message_subscriber_tf_, reset_time_subscriber_;
-
-
-  void dedicatedListenerThread()
-  {
-    while (using_dedicated_thread_)
-    {
-      tf_message_callback_queue_.callAvailable(ros::WallDuration(0.01));
-    }
-  };
-  */
 
 };
 }

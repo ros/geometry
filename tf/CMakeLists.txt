@@ -157,7 +157,7 @@ install(DIRECTORY ${CATKIN_DEVEL_PREFIX}/${PYTHON_INSTALL_DIR}/tf/srv
 
 
 if(TARGET tests)
-  add_dependencies(tests testListener transform_listener_unittest test_message_filter )
+  add_dependencies(tests testBroadcaster testListener transform_listener_unittest test_message_filter )
 endif()
 
 

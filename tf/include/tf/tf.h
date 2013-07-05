@@ -41,7 +41,6 @@
 
 #include <tf/exceptions.h>
 #include "tf/time_cache.h"
-#include <boost/thread/recursive_mutex.hpp>
 #include <boost/unordered_map.hpp>
 #include <boost/signals.hpp>
 #include "geometry_msgs/TwistStamped.h"
@@ -91,11 +90,11 @@ public:
   /************* Constants ***********************/
   static const unsigned int MAX_GRAPH_DEPTH = 100UL;   //!< The maximum number of time to recurse before assuming the tree has a loop.
   static const double DEFAULT_CACHE_TIME;  //!< 10.0 is the default amount of time to cache data in seconds, set in cpp file. 
-  static const int64_t DEFAULT_MAX_EXTRAPOLATION_DISTANCE = 0ULL; //!< The default amount of time to extrapolate
+  static const int64_t DEFAULT_MAX_EXTRAPOLATION_DISTANCE = 0ULL; //!< The default amount of time to extrapolate //deprecated since integration with tf2
 
 
   /** Constructor
-   * \param interpolating Whether to interpolate, if this is false the closest value will be returned
+   * \param interpolating Unused, legacy always true
    * \param cache_time How long to keep a history of transforms in nanoseconds
    *
    */
@@ -313,7 +312,7 @@ public:
   void setExtrapolationLimit(const ros::Duration& distance);
 
   /**@brief Get the duration over which this transformer will cache */
-  ros::Duration getCacheLength() { return cache_time;}
+  ros::Duration getCacheLength() { return tf2_buffer_.getCacheLength();}
 
   /**
    * \brief Add a callback that happens when a new transform has arrived
@@ -352,41 +351,9 @@ protected:
 
   /******************** Internal Storage ****************/
 
-  /** \brief A map from string frame ids to CompactFrameID */
-  typedef boost::unordered_map<std::string, CompactFrameID> M_StringToCompactFrameID;
-  M_StringToCompactFrameID frameIDs_;
-  /** \brief A map from CompactFrameID frame_id_numbers to string for debugging and output */
-  std::vector<std::string> frameIDs_reverse;
-  /** \brief A map to lookup the most recent authority for a given frame */
-  std::map<CompactFrameID, std::string> frame_authority_;
-
-  /// How long to cache transform history
-  ros::Duration cache_time_;
-
-  /** \brief The pointers to potential frames that the tree can be made of.
-   * The frames will be dynamically allocated at run time when set the first time. */
-  std::vector<TimeCache*> frames_;
-
-  /** \brief A mutex to protect testing and allocating new frames on the above vector. */
-  mutable boost::recursive_mutex frame_mutex_;
-
-  /// How long to cache transform history
-  ros::Duration cache_time;
-
-  /// whether or not to interpolate or extrapolate
-  bool interpolating;
-
-  /// whether or not to allow extrapolation
-  ros::Duration max_extrapolation_distance_;
-
 
   /// transform prefix to apply as necessary
   std::string tf_prefix_;
-
-  typedef boost::signal<void(void)> TransformsChangedSignal;
-  /// Signal which is fired whenever new transform data has arrived, from the thread the data arrived in
-  TransformsChangedSignal transforms_changed_;
-  boost::mutex transforms_changed_mutex_;
 
   
  public:
@@ -410,64 +377,12 @@ protected:
    
   /************************* Internal Functions ****************************/
 
-  /** \brief An accessor to get a frame, which will throw an exception if the frame is no there.
-   * \param frame_number The frameID of the desired Reference Frame
-   *
-   * This is an internal function which will get the pointer to the frame associated with the frame id
-   * Possible Exception: tf::LookupException
-   */
-  TimeCache* getFrame(unsigned int frame_number) const;
 
-  /// String to number for frame lookup with dynamic allocation of new frames
-  CompactFrameID lookupFrameNumber(const std::string& frameid_str) const
-  {
-    return tf2_buffer_._lookupFrameNumber(frameid_str);
-  };
 
-  /// String to number for frame lookup with dynamic allocation of new frames
-  CompactFrameID lookupOrInsertFrameNumber(const std::string& frameid_str)
-  {
-    return tf2_buffer_._lookupOrInsertFrameNumber(frameid_str);
-  };
-
-  ///Number to string frame lookup may throw LookupException if number invalid
-  std::string lookupFrameString(unsigned int frame_id_num) const
-  {
-    if (frame_id_num >= frameIDs_reverse.size())
-    {
-      std::stringstream ss;
-      ss << "Reverse lookup of frame id " << frame_id_num << " failed!";
-      throw LookupException(ss.str());
-    }
-    else
-      return frameIDs_reverse[frame_id_num];
-
-  };
-
-  /*
-  bool test_extrapolation_one_value(const ros::Time& target_time, const TransformStorage& tr, std::string* error_string) const;
-  bool test_extrapolation_past(const ros::Time& target_time, const TransformStorage& tr, std::string* error_string) const;
-  bool test_extrapolation_future(const ros::Time& target_time, const TransformStorage& tr, std::string* error_string) const;
-  bool test_extrapolation(const ros::Time& target_time, const TransformLists& t_lists, std::string * error_string) const;
-	*/
 
 protected:
   tf2_ros::Buffer tf2_buffer_;
 
-private:
-  /**@brief Return the latest rostime which is common across the spanning set
-   * zero if fails to cross */
-  int getLatestCommonTime(CompactFrameID target_frame, CompactFrameID source_frame, ros::Time& time, std::string* error_string) const;
-
-  template<typename F>
-  int walkToTopParent(F& f, ros::Time time, CompactFrameID target_id, CompactFrameID source_id, std::string* error_string) const;
-
-  bool canTransformInternal(CompactFrameID target_id, CompactFrameID source_id,
-                    const ros::Time& time, std::string* error_msg) const;
-  bool canTransformNoLock(CompactFrameID target_id, CompactFrameID source_id,
-                      const ros::Time& time, std::string* error_msg) const;
-
-  void createConnectivityErrorString(CompactFrameID source_frame, CompactFrameID target_frame, std::string* out) const;
 };
 
 

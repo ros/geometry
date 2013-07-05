@@ -199,29 +199,14 @@ std::string tf::resolve(const std::string& prefix, const std::string& frame_name
 
 Transformer::Transformer(bool interpolating,
                                 ros::Duration cache_time):
-  cache_time(cache_time),
-  interpolating (interpolating), 
   fall_back_to_wall_time_(false),
   tf2_buffer_(cache_time)
 {
 
-
-  max_extrapolation_distance_.fromNSec(DEFAULT_MAX_EXTRAPOLATION_DISTANCE);
-  frameIDs_["NO_PARENT"] = 0;
-  frames_.push_back(NULL);// new TimeCache(interpolating, cache_time, max_extrapolation_distance));//unused but needed for iteration over all elements
-  frameIDs_reverse.push_back("NO_PARENT");
-
-  return;
 }
 
 Transformer::~Transformer()
 {
-  /* deallocate all frames */
-  boost::recursive_mutex::scoped_lock lock(frame_mutex_);
-  for (std::vector<TimeCache*>::iterator  cache_it = frames_.begin(); cache_it != frames_.end(); ++cache_it)
-  {
-    delete (*cache_it);
-  }
 
 };
 
@@ -229,152 +214,7 @@ Transformer::~Transformer()
 void Transformer::clear()
 {
   tf2_buffer_.clear();
-
-  boost::recursive_mutex::scoped_lock lock(frame_mutex_);
-  if ( frames_.size() > 1 )
-  {
-    for (std::vector< TimeCache*>::iterator  cache_it = frames_.begin() + 1; cache_it != frames_.end(); ++cache_it)
-    {
-      (*cache_it)->clearList();
-    }
-  }
 }
-
-
-template<typename F>
-int Transformer::walkToTopParent(F& f, ros::Time time, CompactFrameID target_id, CompactFrameID source_id, std::string* error_string) const
-{
-  ROS_ASSERT("walk to top parent internal not ported");
-
-  // Short circuit if zero length transform to allow lookups on non existant links
-  if (source_id == target_id)
-  {
-    f.finalize(Identity, time);
-    return NO_ERROR;
-  }
-
-  //If getting the latest get the latest common time
-  if (time == ros::Time())
-  {
-    int retval = getLatestCommonTime(target_id, source_id, time, error_string);
-    if (retval != NO_ERROR)
-    {
-      return retval;
-    }
-  }
-
-  // Walk the tree to its root from the source frame, accumulating the transform
-  CompactFrameID frame = source_id;
-  CompactFrameID top_parent = frame;
-  uint32_t depth = 0;
-
-  while (frame != 0)
-  {
-    TimeCache* cache = getFrame(frame);
-
-    if (!cache)
-    {
-      // There will be no cache for the very root of the tree
-      top_parent = frame;
-      break;
-    }
-
-    CompactFrameID parent = f.gather(cache, time, 0);
-    if (parent == 0)
-    {
-      // Just break out here... there may still be a path from source -> target
-      top_parent = frame;
-      break;
-    }
-
-    // Early out... target frame is a direct parent of the source frame
-    if (frame == target_id)
-    {
-      f.finalize(TargetParentOfSource, time);
-      return NO_ERROR;
-    }
-
-    f.accum(true);
-
-    top_parent = frame;
-    frame = parent;
-
-    ++depth;
-    if (depth > MAX_GRAPH_DEPTH)
-    {
-      if (error_string)
-      {
-        std::stringstream ss;
-        ss << "The tf tree is invalid because it contains a loop." << std::endl
-           << allFramesAsString() << std::endl;
-        *error_string = ss.str();
-      }
-      return LOOKUP_ERROR;
-    }
-  }
-
-  // Now walk to the top parent from the target frame, accumulating its transform
-  frame = target_id;
-  depth = 0;
-  while (frame != top_parent)
-  {
-    TimeCache* cache = getFrame(frame);
-
-    if (!cache)
-    {
-      break;
-    }
-
-    CompactFrameID parent = f.gather(cache, time, error_string);
-    if (parent == 0)
-    {
-      if (error_string)
-      {
-        std::stringstream ss;
-        ss << *error_string << ", when looking up transform from frame [" << lookupFrameString(source_id) << "] to frame [" << lookupFrameString(target_id) << "]";
-        *error_string = ss.str();
-      }
-
-      return EXTRAPOLATION_ERROR;
-    }
-
-    // Early out... source frame is a direct parent of the target frame
-    if (frame == source_id)
-    {
-      f.finalize(SourceParentOfTarget, time);
-      return NO_ERROR;
-    }
-
-    f.accum(false);
-
-    frame = parent;
-
-    ++depth;
-    if (depth > MAX_GRAPH_DEPTH)
-    {
-      if (error_string)
-      {
-        std::stringstream ss;
-        ss << "The tf tree is invalid because it contains a loop." << std::endl
-           << allFramesAsString() << std::endl;
-        *error_string = ss.str();
-      }
-      return LOOKUP_ERROR;
-    }
-  }
-
-
-  if (frame != top_parent)
-  {
-    createConnectivityErrorString(source_id, target_id, error_string);
-    return CONNECTIVITY_ERROR;
-  }
-
-  f.finalize(FullPath, time);
-
-  return NO_ERROR;
-}
-
 
 
 bool Transformer::setTransform(const StampedTransform& transform, const std::string& authority)
@@ -409,10 +249,10 @@ void Transformer::lookupTwist(const std::string& tracking_frame, const std::stri
                               const ros::Time& time, const ros::Duration& averaging_interval, 
                               geometry_msgs::Twist& twist) const
 {
-#warning skipped porting
+  // ref point is origin of tracking_frame, ref_frame = obs_frame
   lookupTwist(tracking_frame, observation_frame, observation_frame, tf::Point(0,0,0), tracking_frame, time, averaging_interval, twist);
 };
-// ref point is origin of tracking_frame, ref_frame = obs_frame
+
 
 
 void Transformer::lookupTwist(const std::string& tracking_frame, const std::string& observation_frame, const std::string& reference_frame,
@@ -501,26 +341,12 @@ bool Transformer::waitForTransform(const std::string& target_frame, const std::s
   return tf2_buffer_.canTransform(target_frame, source_frame, time, timeout, error_msg);
 }
 
-bool Transformer::canTransformNoLock(CompactFrameID target_id, CompactFrameID source_id,
-                    const ros::Time& time, std::string* error_msg) const
-{
-  ROS_FATAL("THis method is internal and should not be called.  It should be calling the version in tf2");
-  return false;
-}
-
-bool Transformer::canTransformInternal(CompactFrameID target_id, CompactFrameID source_id,
-                                  const ros::Time& time, std::string* error_msg) const
-{
-  ROS_FATAL("THis method is internal and should not be called.  It should be calling the version in tf2");
-  return false;
-}
 
 bool Transformer::canTransform(const std::string& target_frame, const std::string& source_frame,
                            const ros::Time& time, std::string* error_msg) const
 {
   return tf2_buffer_.canTransform(target_frame, source_frame, time, error_msg);
 }
-
 
 
 bool Transformer::canTransform(const std::string& target_frame,const ros::Time& target_time, const std::string& source_frame,
@@ -552,20 +378,9 @@ bool Transformer::frameExists(const std::string& frame_id_str) const
 
 void Transformer::setExtrapolationLimit(const ros::Duration& distance)
 {
-#warning skipped porting
-  max_extrapolation_distance_ = distance;
+  ROS_WARN("Transformer::setExtrapolationLimit is deprecated and does not do anything");
 }
 
-void Transformer::createConnectivityErrorString(CompactFrameID source_frame, CompactFrameID target_frame, std::string* out) const
-{
-  if (!out)
-  {
-    return;
-  }
-  *out = std::string("Could not find a connection between '"+lookupFrameString(target_frame)+"' and '"+
-                     lookupFrameString(source_frame)+"' because they are not part of the same tree."+
-                     "Tf has two or more unconnected trees.");
-}
 
 struct TimeAndFrameIDFrameComparator
 {
@@ -590,19 +405,12 @@ int Transformer::getLatestCommonTime(const std::string &source_frame, const std:
 }
 
 
-int Transformer::getLatestCommonTime(CompactFrameID target_id, CompactFrameID source_id, ros::Time & time, std::string * error_string) const
-{
-  //internal method not ported
-  ROS_ASSERT("getLatestCommonTime" == "Compact");
-}
-
-
-
-
 //@todo - Fix this to work with new data structures
 void Transformer::chainAsVector(const std::string & target_frame, ros::Time target_time, const std::string & source_frame, ros::Time source_time, const std::string& fixed_frame, std::vector<std::string>& output) const
 {
 #warning skipped porting
+
+  /*
   std::string error_string;
 
   output.clear(); //empty vector
@@ -627,6 +435,7 @@ void Transformer::chainAsVector(const std::string & target_frame, ros::Time targ
       }
       output.push_back(frameIDs_reverse[frame_id_num]);
   }
+  */
 }
 
 std::string Transformer::allFramesAsString() const
@@ -638,7 +447,8 @@ std::string Transformer::allFramesAsDot() const
 {
 #warning skipped porting
   std::stringstream mstream;
-  mstream << "digraph G {" << std::endl;
+  /*
+    mstream << "digraph G {" << std::endl;
   boost::recursive_mutex::scoped_lock lock(frame_mutex_);
 
   TransformStorage temp;
@@ -706,6 +516,7 @@ std::string Transformer::allFramesAsDot() const
     }
   }
   mstream << "}";
+  */
   return mstream.str();
 }
 
@@ -716,14 +527,6 @@ void Transformer::getFrameStrings(std::vector<std::string> & vec) const
 {
   tf2_buffer_._getFrameStrings(vec);
 }
-
-tf::TimeCache* Transformer::getFrame(unsigned int frame_id) const
-{
-  if (frame_id == 0) /// @todo check larger values too
-    return NULL;
-  else
-    return frames_[frame_id];
-};
 
 
 void Transformer::transformQuaternion(const std::string& target_frame, const Stamped<Quaternion>& stamped_in, Stamped<Quaternion>& stamped_out) const

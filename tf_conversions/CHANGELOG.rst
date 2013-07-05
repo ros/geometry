@@ -2,8 +2,8 @@
 Changelog for package tf_conversions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.10.0 (2013-07-05)
+-------------------
 * fixing unit tests
 * fixing kdl linking
 

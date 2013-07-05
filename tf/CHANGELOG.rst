@@ -2,8 +2,8 @@
 Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.10.0 (2013-07-05)
+-------------------
 * adding versioned dependency on recent geometry_experimental changes
 * fixing test dependencies
 * fixing callbacks for message filters

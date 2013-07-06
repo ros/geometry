@@ -2,6 +2,18 @@
 Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.10.1 (2013-07-05)
+-------------------
+* updating dependency requirement to tf2_ros 0.4.3
+* removing unused functions
+  removing unused private methods
+  removing max_extrapolation_distance_
+  removing unused data storage _frameIDs frameIDS_reverse frame_authority_
+  removing cache_time from tf, passing through method to tf2 buffer_core
+  removing unused variables frames_ and frame_mutex_ and interpolating_
+  removing unused mutex and transformchanged signaling
+  commenting on deprecation of MAX_EXTRAPOLATION_DISTANCE
+
 1.10.0 (2013-07-05)
 -------------------
 * adding versioned dependency on recent geometry_experimental changes

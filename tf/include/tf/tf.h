@@ -52,6 +52,9 @@ namespace tf
 /** \brief resolve tf names */
 std::string resolve(const std::string& prefix, const std::string& frame_name);
 
+/** strip a leading slash for */
+std::string strip_leading_slash(const std::string& frame_name);
+
 /** \deprecated This has been renamed to tf::resolve */
 __attribute__((deprecated)) static inline std::string remap(const std::string& prefix, const std::string& frame_name) { return tf::resolve(prefix, frame_name);} ;
 

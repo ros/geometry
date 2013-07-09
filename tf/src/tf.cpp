@@ -152,9 +152,7 @@ struct TransformAccum
 
 std::string assert_resolved(const std::string& prefix, const std::string& frame_id)
 {
-  if (frame_id.size() > 0)
-    if (frame_id[0] != '/')
-      ROS_DEBUG("TF operating on not fully resolved frame id %s, resolving using local prefix %s", frame_id.c_str(), prefix.c_str());
+  ROS_DEBUG("tf::assert_resolved just calls tf::resolve");
   return tf::resolve(prefix, frame_id);
 };
 
@@ -164,13 +162,13 @@ std::string tf::resolve(const std::string& prefix, const std::string& frame_name
   if (frame_name.size() > 0)
     if (frame_name[0] == '/')
     {
-      return frame_name;
+      return strip_leading_slash(frame_name);
     }
   if (prefix.size() > 0)
   {
     if (prefix[0] == '/')
     {
-      std::string composite = prefix;
+      std::string composite = strip_leading_slash(prefix);
       composite.append("/");
       composite.append(frame_name);
       return composite;
@@ -178,7 +176,6 @@ std::string tf::resolve(const std::string& prefix, const std::string& frame_name
     else
     {
       std::string composite;
-      composite = "/";
       composite.append(prefix);
       composite.append("/");
       composite.append(frame_name);
@@ -189,12 +186,24 @@ std::string tf::resolve(const std::string& prefix, const std::string& frame_name
   else
  {
     std::string composite;
-    composite = "/";
     composite.append(frame_name);
     return composite;
   }
 };
 
+
+std::string tf::strip_leading_slash(const std::string& frame_name)
+{
+  if (frame_name.size() > 0)
+    if (frame_name[0] == '/')
+    {
+      std::string shorter = frame_name;
+      shorter.erase(0);
+      return shorter;
+    }
+  
+  return frame_name;
+}
 
 
 Transformer::Transformer(bool interpolating,
@@ -230,7 +239,8 @@ void Transformer::lookupTransform(const std::string& target_frame, const std::st
                      const ros::Time& time, StampedTransform& transform) const
 {
   geometry_msgs::TransformStamped output = 
-    tf2_buffer_.lookupTransform(target_frame, source_frame, time);
+    tf2_buffer_.lookupTransform(strip_leading_slash(target_frame),
+                                strip_leading_slash(source_frame), time);
   transformStampedMsgToTF(output, transform);
   return;
 };
@@ -240,7 +250,9 @@ void Transformer::lookupTransform(const std::string& target_frame,const ros::Tim
                      const ros::Time& source_time, const std::string& fixed_frame, StampedTransform& transform) const
 {
   geometry_msgs::TransformStamped output = 
-    tf2_buffer_.lookupTransform(target_frame, target_time, source_frame, source_time, fixed_frame);
+    tf2_buffer_.lookupTransform(strip_leading_slash(target_frame), target_time,
+                                strip_leading_slash(source_frame), source_time,
+                                strip_leading_slash(fixed_frame));
   transformStampedMsgToTF(output, transform);
 };
 
@@ -338,14 +350,16 @@ bool Transformer::waitForTransform(const std::string& target_frame, const std::s
                                    const ros::Duration& timeout, const ros::Duration& polling_sleep_duration,
                                    std::string* error_msg) const
 {
-  return tf2_buffer_.canTransform(target_frame, source_frame, time, timeout, error_msg);
+  return tf2_buffer_.canTransform(strip_leading_slash(target_frame),
+                                  strip_leading_slash(source_frame), time, timeout, error_msg);
 }
 
 
 bool Transformer::canTransform(const std::string& target_frame, const std::string& source_frame,
                            const ros::Time& time, std::string* error_msg) const
 {
-  return tf2_buffer_.canTransform(target_frame, source_frame, time, error_msg);
+  return tf2_buffer_.canTransform(strip_leading_slash(target_frame),
+                                  strip_leading_slash(source_frame), time, error_msg);
 }
 
 
@@ -353,7 +367,9 @@ bool Transformer::canTransform(const std::string& target_frame,const ros::Time& 
                                const ros::Time& source_time, const std::string& fixed_frame,
                                std::string* error_msg) const
 {
-  return tf2_buffer_.canTransform(target_frame, target_time, source_frame, source_time, fixed_frame, error_msg);
+  return tf2_buffer_.canTransform(strip_leading_slash(target_frame), target_time,
+                                  strip_leading_slash(source_frame), source_time,
+                                  strip_leading_slash(fixed_frame), error_msg);
 };
 
 bool Transformer::waitForTransform(const std::string& target_frame,const ros::Time& target_time, const std::string& source_frame,
@@ -361,7 +377,9 @@ bool Transformer::waitForTransform(const std::string& target_frame,const ros::Ti
                                    const ros::Duration& timeout, const ros::Duration& polling_sleep_duration,
                                    std::string* error_msg) const
 {
-  return tf2_buffer_.canTransform(target_frame, target_time, source_frame, source_time, fixed_frame, timeout, error_msg);
+  return tf2_buffer_.canTransform(strip_leading_slash(target_frame), target_time,
+                                  strip_leading_slash(source_frame), source_time,
+                                  strip_leading_slash(fixed_frame), timeout, error_msg);
 };
 
 
@@ -398,8 +416,8 @@ struct TimeAndFrameIDFrameComparator
 
 int Transformer::getLatestCommonTime(const std::string &source_frame, const std::string &target_frame, ros::Time& time, std::string* error_string) const
 {
-  CompactFrameID target_id = tf2_buffer_._lookupFrameNumber(target_frame);
-  CompactFrameID source_id = tf2_buffer_._lookupFrameNumber(source_frame);
+  CompactFrameID target_id = tf2_buffer_._lookupFrameNumber(strip_leading_slash(target_frame));
+  CompactFrameID source_id = tf2_buffer_._lookupFrameNumber(strip_leading_slash(source_frame));
 
   return tf2_buffer_._getLatestCommonTime(source_id, target_id, time, error_string);
 }

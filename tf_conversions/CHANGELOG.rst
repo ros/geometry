@@ -2,6 +2,10 @@
 Changelog for package tf_conversions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.10.2 (2013-07-09)
+-------------------
+* adding unit test if CATKIN_ENABLE_TESTING statements for tf_conversions to make the whole repo compliant.
+
 1.10.1 (2013-07-05)
 -------------------
 

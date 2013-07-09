@@ -2,6 +2,13 @@
 Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.10.2 (2013-07-09)
+-------------------
+* strip leading slashes in resolve, and also any time a method is passed from tf to tf2 assert the leading slash is stripped as well.  tf::resolve with two arguments will end up with foo/bar instead of /foo/bar.  Fixes https://github.com/ros/geometry_experimental/issues/12
+* added two whitespaces to make message_filter compile with c++11
+  more on this here: http://stackoverflow.com/questions/10329942/error-unable-to-find-string-literal-operator-slashes
+* using CATKIN_ENABLE_TESTING to optionally configure tests in tf
+
 1.10.1 (2013-07-05)
 -------------------
 * updating dependency requirement to tf2_ros 0.4.3

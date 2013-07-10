@@ -2,6 +2,10 @@
 Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.10.3 (2013-07-09)
+-------------------
+* fixing unittest for new resolve syntax
+
 1.10.2 (2013-07-09)
 -------------------
 * strip leading slashes in resolve, and also any time a method is passed from tf to tf2 assert the leading slash is stripped as well.  tf::resolve with two arguments will end up with foo/bar instead of /foo/bar.  Fixes https://github.com/ros/geometry_experimental/issues/12

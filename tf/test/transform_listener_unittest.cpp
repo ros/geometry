@@ -61,7 +61,7 @@ TEST(transform_listener, resolve)
   tf::TransformListener tl; 
   
   //no prefix
-  EXPECT_STREQ("/id", tl.resolve("id").c_str());
+  EXPECT_STREQ("id", tl.resolve("id").c_str());
   
   n.setParam("tf_prefix", "a_tf_prefix");
   tf::TransformListener tp; 
@@ -70,9 +70,9 @@ TEST(transform_listener, resolve)
 
   EXPECT_STREQ("a_tf_prefix", prefix_str.c_str());
 
-  EXPECT_STREQ("/a_tf_prefix/id", tf::resolve(prefix_str, "id").c_str());
+  EXPECT_STREQ("a_tf_prefix/id", tf::resolve(prefix_str, "id").c_str());
 
-  EXPECT_STREQ("/a_tf_prefix/id", tp.resolve("id").c_str());
+  EXPECT_STREQ("a_tf_prefix/id", tp.resolve("id").c_str());
   
 
 }

@@ -198,7 +198,7 @@ std::string tf::strip_leading_slash(const std::string& frame_name)
     if (frame_name[0] == '/')
     {
       std::string shorter = frame_name;
-      shorter.erase(0);
+      shorter.erase(0,1);
       return shorter;
     }
   

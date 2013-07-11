@@ -10,6 +10,8 @@
   <url type="repository">https://kforge.ros.org/geometry/geometry</url>
   
   <author>Tully Foote</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
   
   <!-- Old stack contents -->
   <run_depend>angles</run_depend>

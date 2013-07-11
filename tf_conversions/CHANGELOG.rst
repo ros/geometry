@@ -2,6 +2,9 @@
 Changelog for package tf_conversions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.10.4 (2013-07-11)
+-------------------
+
 1.10.3 (2013-07-09)
 -------------------
 * calling out versioned catkin requirement for CATKIN_ENABLE_TESTING

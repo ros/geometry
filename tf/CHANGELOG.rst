@@ -2,6 +2,11 @@
 Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.10.4 (2013-07-11)
+-------------------
+* fixing erase syntax 
+* resolving https://github.com/ros/geometry/issues/18 using implementation added in tf2::BufferCore, adding dependency on next version of tf2 for this
+
 1.10.3 (2013-07-09)
 -------------------
 * fixing unittest for new resolve syntax

@@ -8,6 +8,7 @@ Forthcoming
 1.10.3 (2013-07-09 17:33)
 -------------------------
 * changelogs for 1.10.3
+* CMakeLists.txt and buildtool_depend on catkin for metapackage.
 
 1.10.2 (2013-07-09 16:58)
 -------------------------

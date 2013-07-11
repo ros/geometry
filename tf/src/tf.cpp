@@ -426,34 +426,9 @@ int Transformer::getLatestCommonTime(const std::string &source_frame, const std:
 //@todo - Fix this to work with new data structures
 void Transformer::chainAsVector(const std::string & target_frame, ros::Time target_time, const std::string & source_frame, ros::Time source_time, const std::string& fixed_frame, std::vector<std::string>& output) const
 {
-#warning skipped porting
-
-  /*
-  std::string error_string;
-
-  output.clear(); //empty vector
-
-  std::stringstream mstream;
-  boost::recursive_mutex::scoped_lock lock(frame_mutex_);
-
-  TransformStorage temp;
-
-  ///regular transforms
-  for (unsigned int counter = 1; counter < frames_.size(); counter ++)
-  {
-    TimeCache* frame_ptr = getFrame(CompactFrameID(counter));
-    if (frame_ptr == NULL)
-      continue;
-    CompactFrameID frame_id_num;
-    if (frame_ptr->getData(ros::Time(), temp))
-        frame_id_num = temp.frame_id_;
-      else
-      {
-        frame_id_num = 0;
-      }
-      output.push_back(frameIDs_reverse[frame_id_num]);
-  }
-  */
+  tf2_buffer_._chainAsVector(target_frame, target_time, 
+                             source_frame, source_time, 
+                             fixed_frame, output);
 }
 
 std::string Transformer::allFramesAsString() const
@@ -463,79 +438,7 @@ std::string Transformer::allFramesAsString() const
 
 std::string Transformer::allFramesAsDot() const
 {
-#warning skipped porting
-  std::stringstream mstream;
-  /*
-    mstream << "digraph G {" << std::endl;
-  boost::recursive_mutex::scoped_lock lock(frame_mutex_);
-
-  TransformStorage temp;
-
-  ros::Time current_time = now();
-
-  if (frames_.size() ==1)
-    mstream <<"\"no tf data recieved\"";
-
-  mstream.precision(3);
-  mstream.setf(std::ios::fixed,std::ios::floatfield);
-    
-   //  for (std::vector< TimeCache*>::iterator  it = frames_.begin(); it != frames_.end(); ++it)
-  for (unsigned int counter = 1; counter < frames_.size(); counter ++)//one referenced for 0 is no frame
-  {
-    unsigned int frame_id_num;
-    if(  getFrame(counter)->getData(ros::Time(), temp))
-      frame_id_num = temp.frame_id_;
-    else
-    {
-      frame_id_num = 0;
-    }
-    if (frame_id_num != 0)
-    {
-      std::string authority = "no recorded authority";
-      std::map<unsigned int, std::string>::const_iterator it = frame_authority_.find(counter);
-      if (it != frame_authority_.end())
-        authority = it->second;
-
-      double rate = getFrame(counter)->getListLength() / std::max((getFrame(counter)->getLatestTimestamp().toSec() -
-                                                                   getFrame(counter)->getOldestTimestamp().toSec() ), 0.0001);
-
-      mstream << std::fixed; //fixed point notation
-      mstream.precision(3); //3 decimal places
-      mstream << "\"" << frameIDs_reverse[frame_id_num] << "\"" << " -> "
-              << "\"" << frameIDs_reverse[counter] << "\"" << "[label=\""
-        //<< "Time: " << current_time.toSec() << "\\n"
-              << "Broadcaster: " << authority << "\\n"
-              << "Average rate: " << rate << " Hz\\n"
-              << "Most recent transform: " << (current_time - getFrame(counter)->getLatestTimestamp()).toSec() << " sec old \\n"
-        //    << "(time: " << getFrame(counter)->getLatestTimestamp().toSec() << ")\\n"
-        //    << "Oldest transform: " << (current_time - getFrame(counter)->getOldestTimestamp()).toSec() << " sec old \\n"
-        //    << "(time: " << (getFrame(counter)->getOldestTimestamp()).toSec() << ")\\n"
-              << "Buffer length: " << (getFrame(counter)->getLatestTimestamp()-getFrame(counter)->getOldestTimestamp()).toSec() << " sec\\n"
-              <<"\"];" <<std::endl;
-    }
-  }
-  
-  for (unsigned int counter = 1; counter < frames_.size(); counter ++)//one referenced for 0 is no frame
-  {
-    unsigned int frame_id_num;
-    if(  getFrame(counter)->getData(ros::Time(), temp))
-      frame_id_num = temp.frame_id_;
-    else
-      {
-	frame_id_num = 0;
-      }
-
-    if(frameIDs_reverse[frame_id_num]=="NO_PARENT")
-    {
-      mstream << "edge [style=invis];" <<std::endl;
-      mstream << " subgraph cluster_legend { style=bold; color=black; label =\"view_frames Result\";\n"
-              << "\"Recorded at time: " << current_time.toSec() << "\"[ shape=plaintext ] ;\n "
-	      << "}" << "->" << "\"" << frameIDs_reverse[counter]<<"\";" <<std::endl;
-    }
-  }
-  mstream << "}";
-  */
-  return mstream.str();
+  return tf2_buffer_._allFramesAsDot();
 }
 
 

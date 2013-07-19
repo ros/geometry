@@ -2,9 +2,16 @@
 Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.10.5 (2013-07-19)
+-------------------
+* tf: export dependency on tf2_ros
+  Fixes `#21 <https://github.com/ros/geometry/issues/21>`_
+* added run dependency on graphviz
+  closes `#19 <https://github.com/ros/geometry/issues/19>`_
+
 1.10.4 (2013-07-11)
 -------------------
-* fixing erase syntax 
+* fixing erase syntax
 * resolving https://github.com/ros/geometry/issues/18 using implementation added in tf2::BufferCore, adding dependency on next version of tf2 for this
 
 1.10.3 (2013-07-09)
@@ -23,10 +30,10 @@ Changelog for package tf
 * updating dependency requirement to tf2_ros 0.4.3
 * removing unused functions
   removing unused private methods
-  removing max_extrapolation_distance_
-  removing unused data storage _frameIDs frameIDS_reverse frame_authority_
+  removing ``max_extrapolation_distance_``
+  removing unused data storage _frameIDs frameIDS_reverse ``frame_authority_``
   removing cache_time from tf, passing through method to tf2 buffer_core
-  removing unused variables frames_ and frame_mutex_ and interpolating_
+  removing unused variables ``frames_`` and ``frame_mutex_`` and ``interpolating_``
   removing unused mutex and transformchanged signaling
   commenting on deprecation of MAX_EXTRAPOLATION_DISTANCE
 
@@ -183,13 +190,13 @@ Changelog for package tf
 * remove bullet dep
 * fix bug `#5089 <https://github.com/ros/geometry/issues/5089>`_
 * add link flag for OSX
-* tf: MessageFilter: added public getter/setter for queue_size_
+* tf: MessageFilter: added public getter/setter for ``queue_size_``
 * adding btQuaternion constructor for ease of use
 * fixing method naming for camelCase and adding bt* Constructor methods
 * tf.tfwtf now uses rosgraph.Master instead of roslib
 * Added tf and angles to catkin
 * cleanup up last errors
-* SIMD_ -> TFSIMD_ defines to not conflict
+* ``SIMD_`` -> ``TFSIMD_`` defines to not conflict
 * write in bullet assignment and return methods
 * executable bit on conversion script
 * changing defines from BT to TF
@@ -210,7 +217,7 @@ Changelog for package tf
 * copying in bullet datatypes
 * switching to a recursive mutex and actually holding locks for the right amount of time.  ticket:5
 * Giving error message when time cache is empty for lookup failures
-* Moving lct_cache_ to local variable from class member. As class member, using this variable makes lookupTransform not thread-safe
+* Moving ``lct_cache_`` to local variable from class member. As class member, using this variable makes lookupTransform not thread-safe
 * velocity test precision a little lower requirements
 * Fix to error message for earliest extrapolation time exception, ros-pkg5085
 * Fixing epsilon to prevent test failures

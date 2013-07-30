@@ -173,6 +173,8 @@ public:
    */
   ~MessageFilter()
   {
+    // Explicitly stop callbacks; they could execute after we're destroyed
+    max_rate_timer_.stop();
     message_connection_.disconnect();
     tf_.removeTransformsChangedListener(tf_connection_);
 

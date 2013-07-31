@@ -28,7 +28,9 @@
  */
 
 #include <cstdio>
+#include <dynamic_reconfigure/server.h>
 #include "tf/transform_broadcaster.h"
+#include "tf/TransformSenderConfig.h"
 
 class TransformSender
 {
@@ -40,9 +42,13 @@ public:
     tf::Quaternion q;
     q.setRPY(roll, pitch,yaw);
     transform_ = tf::StampedTransform(tf::Transform(q, tf::Vector3(x,y,z)), time, frame_id, child_frame_id );
+    reconf_init();
   };
   TransformSender(double x, double y, double z, double qx, double qy, double qz, double qw, ros::Time time, const std::string& frame_id, const std::string& child_frame_id) :
-    transform_(tf::Transform(tf::Quaternion(qx,qy,qz,qw), tf::Vector3(x,y,z)), time, frame_id, child_frame_id){};
+    transform_(tf::Transform(tf::Quaternion(qx,qy,qz,qw), tf::Vector3(x,y,z)), time, frame_id, child_frame_id)
+  {
+    reconf_init();
+  };
   //Clean up ros connections
   ~TransformSender() { }
 
@@ -57,9 +63,43 @@ public:
     broadcaster.sendTransform(transform_);
   };
 
+  //
+  void reconf_callback(tf::TransformSenderConfig &config, uint32_t level)
+  {
+    if(level == 0xffffffff) // sent by dynamic reconfigure at first run
+    {
+      double R, P, Y;
+
+      // Update config with current values
+      config.x = transform_.getOrigin().x();
+      config.y = transform_.getOrigin().y();
+      config.z = transform_.getOrigin().z();
+
+      transform_.getBasis().getRPY(R, P, Y);
+      config.roll = R;
+      config.pitch = P;
+      config.yaw = Y;
+    }
+    else
+    {
+      tf::Quaternion q;
+      tf::Transform t;
+
+      q.setRPY(config.roll, config.pitch, config.yaw);
+      t = tf::Transform(q, tf::Vector3(config.x, config.y, config.z));
+      transform_ = tf::StampedTransform(t, ros::Time::now(), transform_.frame_id_, transform_.child_frame_id_);
+    }
+  }
+
 private:
   tf::StampedTransform transform_;
+  dynamic_reconfigure::Server<tf::TransformSenderConfig> reconf_server_;
 
+  // Set dynamic reconfigure callback
+  void reconf_init()
+  {
+    reconf_server_.setCallback(boost::bind(&TransformSender::reconf_callback, this, _1, _2));
+  }
 };
 
 int main(int argc, char ** argv)
@@ -85,6 +125,7 @@ int main(int argc, char ** argv)
     {
       tf_sender.send(ros::Time::now() + sleeper);
       ROS_DEBUG("Sending transform from %s with parent %s\n", argv[8], argv[9]);
+      ros::spinOnce();
       sleeper.sleep();
     }
 
@@ -108,6 +149,7 @@ int main(int argc, char ** argv)
     {
       tf_sender.send(ros::Time::now() + sleeper);
       ROS_DEBUG("Sending transform from %s with parent %s\n", argv[7], argv[8]);
+      ros::spinOnce();
       sleeper.sleep();
     }
 

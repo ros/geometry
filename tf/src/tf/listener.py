@@ -35,6 +35,7 @@ from tf import transformations
 import numpy
 
 from tf.msg import tfMessage
+import rosgraph.masterapi
 import geometry_msgs.msg
 import sensor_msgs.msg
 from tf.srv import FrameGraph,FrameGraphResponse
@@ -234,7 +235,13 @@ class TransformListenerThread(threading.Thread):
     
     def run(self):
         rospy.Subscriber("/tf",         tfMessage, self.transformlistener_callback)
-        self.tl.frame_graph_server = rospy.Service('~tf_frames', FrameGraph, self.frame_graph_service)
+        #Check to see if the service has already been advertised in this node
+        try:
+            m = rosgraph.masterapi.Master(rospy.get_name())
+            m.lookupService('~tf_frames')
+        except (rosgraph.masterapi.Error, rosgraph.masterapi.Failure):
+            self.tl.frame_graph_server = rospy.Service('~tf_frames', FrameGraph, self.frame_graph_service)
+
         rospy.spin()
 
     def transformlistener_callback(self, data):

@@ -78,10 +78,16 @@ public:
         config.y = transform_.getOrigin().y();
         config.z = transform_.getOrigin().z();
 
+        // Update RPY in radians
         transform_.getBasis().getRPY(R, P, Y);
-        config.roll = R;
-        config.pitch = P;
-        config.yaw = Y;
+        config.roll_rad = R;
+        config.pitch_rad = P;
+        config.yaw_rad = Y;
+        // Update RPY in degrees
+        toDegrees(R, P, Y);
+        config.roll_deg= R;
+        config.pitch_deg= P;
+        config.yaw_deg = Y;
 
         config.qw = transform_.getRotation().w();
         config.qx = transform_.getRotation().x();
@@ -94,8 +100,13 @@ public:
         transform_ = tf::StampedTransform(t, ros::Time::now(), transform_.frame_id_, transform_.child_frame_id_);
         break;
 
-      case CHANGE_RPY:
-        q.setRPY(config.roll, config.pitch, config.yaw);
+      case CHANGE_RPY_DEG:
+        R = config.roll_deg;
+        P = config.pitch_deg;
+        Y = config.yaw_deg;
+        toRadians(R, P, Y);
+
+        q.setRPY(R, P, Y);
         t = tf::Transform(q, transform_.getOrigin());
         transform_ = tf::StampedTransform(t, ros::Time::now(), transform_.frame_id_, transform_.child_frame_id_);
         // Update quaternion
@@ -103,6 +114,30 @@ public:
         config.qx = transform_.getRotation().x();
         config.qy = transform_.getRotation().y();
         config.qz = transform_.getRotation().z();
+        // Update RPY in radians
+        config.roll_rad = R;
+        config.pitch_rad = P;
+        config.yaw_rad = Y;
+        break;
+
+      case CHANGE_RPY_RAD:
+        R = config.roll_rad;
+        P = config.pitch_rad;
+        Y = config.yaw_rad;
+
+        q.setRPY(R, P, Y);
+        t = tf::Transform(q, transform_.getOrigin());
+        transform_ = tf::StampedTransform(t, ros::Time::now(), transform_.frame_id_, transform_.child_frame_id_);
+        // Update quaternion
+        config.qw = transform_.getRotation().w();
+        config.qx = transform_.getRotation().x();
+        config.qy = transform_.getRotation().y();
+        config.qz = transform_.getRotation().z();
+        // Update RPY in degrees
+        toDegrees(R, P, Y);
+        config.roll_deg= R;
+        config.pitch_deg= P;
+        config.yaw_deg = Y;
         break;
 
       case CHANGE_QUAT:
@@ -119,7 +154,6 @@ public:
           q = q.normalize();
           ROS_WARN("Reconfigure: quaternion is not normalized. Normalizing.");
         }
-
         t = tf::Transform(q, transform_.getOrigin());
         transform_ = tf::StampedTransform(t, ros::Time::now(), transform_.frame_id_, transform_.child_frame_id_);
 
@@ -129,11 +163,16 @@ public:
         config.qy = q.y();
         config.qz = q.z();
 
-        // Update RPY
+        // Update RPY in radians
         transform_.getBasis().getRPY(R, P, Y);
-        config.roll = R;
-        config.pitch = P;
-        config.yaw = Y;
+        config.roll_rad = R;
+        config.pitch_rad = P;
+        config.yaw_rad = Y;
+        // Update RPY in degrees
+        toDegrees(R, P, Y);
+        config.roll_deg= R;
+        config.pitch_deg= P;
+        config.yaw_deg = Y;
 
         // Reset checkbox
         config.use_quaternion = false;
@@ -145,8 +184,9 @@ private:
   enum{
     CHANGE_NOTHING = 0,
     CHANGE_XYZ = 1 << 0,
-    CHANGE_RPY = 1 << 1,
-    CHANGE_QUAT = 1 << 2,
+    CHANGE_RPY_RAD = 1 << 1,
+    CHANGE_RPY_DEG = 1 << 2,
+    CHANGE_QUAT = 1 << 3,
     CHANGE_ALL = 0xffffffff
   };
 
@@ -158,6 +198,20 @@ private:
   {
     reconf_server_.setCallback(boost::bind(&TransformSender::reconf_callback, this, _1, _2));
   }
+
+  void toDegrees(double &r, double &p, double &y)
+    {
+      r = r * 180.0 / M_PI;
+      p = p * 180.0 / M_PI;
+      y = y * 180.0 / M_PI;
+    }
+
+    void toRadians(double &r, double &p, double &y)
+    {
+      r = r / 180.0 * M_PI;
+      p = p / 180.0 * M_PI;
+      y = y / 180.0 * M_PI;
+    }
 };
 
 int main(int argc, char ** argv)

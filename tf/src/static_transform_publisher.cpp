@@ -63,7 +63,7 @@ public:
     broadcaster.sendTransform(transform_);
   };
 
-  //
+  // Dynamic reconfigure callback
   void reconf_callback(tf::TransformSenderConfig &config, uint32_t level)
   {
     tf::Quaternion q;
@@ -82,6 +82,11 @@ public:
         config.roll = R;
         config.pitch = P;
         config.yaw = Y;
+
+        config.qw = transform_.getRotation().w();
+        config.qx = transform_.getRotation().x();
+        config.qy = transform_.getRotation().y();
+        config.qz = transform_.getRotation().z();
         break;
 
       case CHANGE_XYZ:
@@ -93,6 +98,45 @@ public:
         q.setRPY(config.roll, config.pitch, config.yaw);
         t = tf::Transform(q, transform_.getOrigin());
         transform_ = tf::StampedTransform(t, ros::Time::now(), transform_.frame_id_, transform_.child_frame_id_);
+        // Update quaternion
+        config.qw = transform_.getRotation().w();
+        config.qx = transform_.getRotation().x();
+        config.qy = transform_.getRotation().y();
+        config.qz = transform_.getRotation().z();
+        break;
+
+      case CHANGE_QUAT:
+        q = tf::Quaternion(config.qx, config.qy, config.qz, config.qw);
+
+        // If new quaternion is not valid use previous one and issue error
+        if(q.length2() == 0.0){
+          q = transform_.getRotation();
+          ROS_ERROR("Reconfigure: quaternion length is 0.0. Using previous value");
+        }
+        // Check normalization
+        else if(q.length2() > 1.0 + DBL_EPSILON || q.length2() < 1.0 - DBL_EPSILON)
+        {
+          q = q.normalize();
+          ROS_WARN("Reconfigure: quaternion is not normalized. Normalizing.");
+        }
+
+        t = tf::Transform(q, transform_.getOrigin());
+        transform_ = tf::StampedTransform(t, ros::Time::now(), transform_.frame_id_, transform_.child_frame_id_);
+
+        // Update quaternion with corrected value
+        config.qw = q.w();
+        config.qx = q.x();
+        config.qy = q.y();
+        config.qz = q.z();
+
+        // Update RPY
+        transform_.getBasis().getRPY(R, P, Y);
+        config.roll = R;
+        config.pitch = P;
+        config.yaw = Y;
+
+        // Reset checkbox
+        config.use_quaternion = false;
         break;
     }
   }
@@ -102,6 +146,7 @@ private:
     CHANGE_NOTHING = 0,
     CHANGE_XYZ = 1 << 0,
     CHANGE_RPY = 1 << 1,
+    CHANGE_QUAT = 1 << 2,
     CHANGE_ALL = 0xffffffff
   };
 

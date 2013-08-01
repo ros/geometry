@@ -66,32 +66,45 @@ public:
   //
   void reconf_callback(tf::TransformSenderConfig &config, uint32_t level)
   {
-    if(level == 0xffffffff) // sent by dynamic reconfigure at first run
+    tf::Quaternion q;
+    tf::Transform t;
+    double R, P, Y;
+
+    switch(level) // sent by dynamic reconfigure at first run
     {
-      double R, P, Y;
+      case CHANGE_ALL:
+        // Update config with current values
+        config.x = transform_.getOrigin().x();
+        config.y = transform_.getOrigin().y();
+        config.z = transform_.getOrigin().z();
 
-      // Update config with current values
-      config.x = transform_.getOrigin().x();
-      config.y = transform_.getOrigin().y();
-      config.z = transform_.getOrigin().z();
+        transform_.getBasis().getRPY(R, P, Y);
+        config.roll = R;
+        config.pitch = P;
+        config.yaw = Y;
+        break;
 
-      transform_.getBasis().getRPY(R, P, Y);
-      config.roll = R;
-      config.pitch = P;
-      config.yaw = Y;
-    }
-    else
-    {
-      tf::Quaternion q;
-      tf::Transform t;
+      case CHANGE_XYZ:
+        t = tf::Transform(transform_.getRotation(), tf::Vector3(config.x, config.y, config.z));
+        transform_ = tf::StampedTransform(t, ros::Time::now(), transform_.frame_id_, transform_.child_frame_id_);
+        break;
 
-      q.setRPY(config.roll, config.pitch, config.yaw);
-      t = tf::Transform(q, tf::Vector3(config.x, config.y, config.z));
-      transform_ = tf::StampedTransform(t, ros::Time::now(), transform_.frame_id_, transform_.child_frame_id_);
+      case CHANGE_RPY:
+        q.setRPY(config.roll, config.pitch, config.yaw);
+        t = tf::Transform(q, transform_.getOrigin());
+        transform_ = tf::StampedTransform(t, ros::Time::now(), transform_.frame_id_, transform_.child_frame_id_);
+        break;
     }
   }
 
 private:
+  enum{
+    CHANGE_NOTHING = 0,
+    CHANGE_XYZ = 1 << 0,
+    CHANGE_RPY = 1 << 1,
+    CHANGE_ALL = 0xffffffff
+  };
+
   tf::StampedTransform transform_;
   dynamic_reconfigure::Server<tf::TransformSenderConfig> reconf_server_;
 

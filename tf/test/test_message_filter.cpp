@@ -344,6 +344,35 @@ TEST(MessageFilter, emptyFrameIDFailure)
   EXPECT_EQ(1, n.failure_count_);
 }
 
+TEST(MessageFilter, removeCallback)
+{
+  // Callback queue in separate thread
+  ros::CallbackQueue cbqueue;
+  ros::AsyncSpinner spinner(1, &cbqueue);
+  ros::NodeHandle threaded_nh;
+  threaded_nh.setCallbackQueue(&cbqueue);
+
+  // TF filters; no data needs to be published
+  boost::scoped_ptr<tf::TransformListener> tf_listener;
+  boost::scoped_ptr<tf::MessageFilter<geometry_msgs::PointStamped> > tf_filter;
+
+  spinner.start();
+  for (int i = 0; i < 3; ++i) {
+    tf_listener.reset(new tf::TransformListener());
+    // Have callback fire at high rate to increase chances of race condition
+    tf_filter.reset(
+      new tf::MessageFilter<geometry_msgs::PointStamped>(*tf_listener,
+                                                         "map", 5, threaded_nh,
+                                                         ros::Duration(0.000001)));
+
+    // Sleep and reset; sleeping increases chances of race condition
+    ros::Duration(0.001).sleep();
+    tf_filter.reset();
+    tf_listener.reset();
+  }
+  spinner.stop();
+}
+
 int main(int argc, char** argv)
 {
 	testing::InitGoogleTest(&argc, argv);

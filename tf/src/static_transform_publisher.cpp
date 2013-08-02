@@ -42,12 +42,12 @@ public:
     tf::Quaternion q;
     q.setRPY(roll, pitch,yaw);
     transform_ = tf::StampedTransform(tf::Transform(q, tf::Vector3(x,y,z)), time, frame_id, child_frame_id );
-    reconf_init();
+    reconfInit();
   };
   TransformSender(double x, double y, double z, double qx, double qy, double qz, double qw, ros::Time time, const std::string& frame_id, const std::string& child_frame_id) :
     transform_(tf::Transform(tf::Quaternion(qx,qy,qz,qw), tf::Vector3(x,y,z)), time, frame_id, child_frame_id)
   {
-    reconf_init();
+    reconfInit();
   };
   //Clean up ros connections
   ~TransformSender() { }
@@ -64,7 +64,7 @@ public:
   };
 
   // Dynamic reconfigure callback
-  void reconf_callback(tf::TransformSenderConfig &config, uint32_t level)
+  void reconfCallback(tf::TransformSenderConfig &config, uint32_t level)
   {
     tf::Quaternion q;
     tf::Transform t;
@@ -194,9 +194,9 @@ private:
   dynamic_reconfigure::Server<tf::TransformSenderConfig> reconf_server_;
 
   // Set dynamic reconfigure callback
-  void reconf_init()
+  void reconfInit()
   {
-    reconf_server_.setCallback(boost::bind(&TransformSender::reconf_callback, this, _1, _2));
+    reconf_server_.setCallback(boost::bind(&TransformSender::reconfCallback, this, _1, _2));
   }
 
   void toDegrees(double &r, double &p, double &y)

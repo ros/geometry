@@ -34,6 +34,7 @@ any desired point in time.
   <run_depend>message_filters</run_depend>
   <run_depend>message_runtime</run_depend>
   <run_depend>roscpp</run_depend>
+  <run_depend>roswtf</run_depend>
   <run_depend>sensor_msgs</run_depend>
   <run_depend>std_msgs</run_depend>
 

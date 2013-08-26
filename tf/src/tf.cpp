@@ -604,7 +604,7 @@ bool Transformer::waitForTransform(const std::string& target_frame, const std::s
   std::string mapped_tgt = assert_resolved(tf_prefix_, target_frame);
   std::string mapped_src = assert_resolved(tf_prefix_, source_frame);
 
-  while (ok() && (now() - start_time) < timeout)
+  while (ok() && now() > start_time && (now() - start_time) < timeout)
   {
 	  if (frameExists(mapped_tgt) && frameExists(mapped_src) && (canTransform(mapped_tgt, mapped_src, time, error_msg)))
 		  return true;

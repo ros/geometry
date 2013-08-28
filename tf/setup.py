@@ -7,6 +7,8 @@ d = generate_distutils_setup(
     packages=['tf'],
     package_dir={'': 'src'},
     requires=['genmsg', 'genpy', 'roslib', 'rospkg', 'geometry_msgs', 'sensor_msgs', 'std_msgs']
+    scripts=['scripts/groovy_compatability/tf_remap',
+             'scripts/groovy_compatability/view_frames']
 )
 
 setup(**d)

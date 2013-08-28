@@ -2,6 +2,20 @@
 Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.10.6 (2013-08-28)
+-------------------
+* switching to wrapper scripts which will provide a deprecation warning for `#3 <https://github.com/ros/geometry/issues/3>`_
+* add missing roswtf dependency to really export the plugin (fix `#27 <https://github.com/ros/geometry/issues/27>`_)
+* Update listener.py
+  Fix the tf listener service exception in rospy. See:
+  http://answers.ros.org/question/10777/service-exception-using-tf-listener-in-rospy/
+* Fix MessageFilter race condition
+  If MessageFilter does not explicitly stop its callback timer when it's
+  being destroyed, there is a race condition when that timer is processed in
+  a callback queue run by a different thread.  Specifically,
+  maxRateTimerCallback() may be called after messages_mutex_ has been
+  destroyed, causing a unrecoverable error.
+
 1.10.5 (2013-07-19)
 -------------------
 * tf: export dependency on tf2_ros

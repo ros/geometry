@@ -3,8 +3,8 @@ Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 
-Forthcoming
------------
+1.9.31 (2013-08-27)
+-------------------
 * Fix deadlock with `rosbag play --clock --loop`
 * add missing roswtf dependency to really export the plugin (fix `#27 <https://github.com//ros/geometry/issues/27>`_)
 * Update listener.py

@@ -2,8 +2,8 @@
 Changelog for package geometry
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.9.31 (2013-08-27)
+-------------------
 * metapackage errata for release
 
 1.9.30 (2013-04-18 16:26)

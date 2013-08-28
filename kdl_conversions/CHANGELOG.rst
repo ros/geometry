@@ -2,8 +2,8 @@
 Changelog for package kdl_conversions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.9.31 (2013-08-27)
+-------------------
 * add link directories
 
 1.9.30 (2013-04-18 16:26)

@@ -2,69 +2,16 @@
 Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
+
 Forthcoming
 -----------
+* Fix deadlock with `rosbag play --clock --loop`
+* add missing roswtf dependency to really export the plugin (fix `#27 <https://github.com//ros/geometry/issues/27>`_)
+* Update listener.py
+  Fix the tf listener service exception in rospy. See:
+  http://answers.ros.org/question/10777/service-exception-using-tf-listener-in-rospy/
 * added two whitespaces to make message_filter compile with c++11
   more on this here: http://stackoverflow.com/questions/10329942/error-unable-to-find-string-literal-operator-slashes
-
-1.10.3 (2013-07-09 17:33)
--------------------------
-* changelogs for 1.10.3
-* fixing unittest for new resolve syntax
-
-1.10.2 (2013-07-09 16:58)
--------------------------
-* updating changelog for 1.10.2
-* strip leading slashes in resolve, and also any time a method is passed from tf to tf2 assert the leading slash is stripped as well.  tf::resolve with two arguments will end up with foo/bar instead of /foo/bar.  Fixes https://github.com/ros/geometry_experimental/issues/12
-* added two whitespaces to make message_filter compile with c++11
-  more on this here: http://stackoverflow.com/questions/10329942/error-unable-to-find-string-literal-operator-slashes
-* Merge pull request `#17 <https://github.com//ros/geometry/issues/17>`_ from bulwahn/hydro-devel
-  using CATKIN_ENABLE_TESTING to optionally configure tests in tf
-* using CATKIN_ENABLE_TESTING to optionally configure tests in tf
-  Since version 0.5.68,  catkin provides to optionally configure
-  tests. This commit adjusts the CMakeLists.txt to opt-in the tests.
-  Furthermore, it groups static_transformer_publisher to the other
-  debug tools and adds some structuring comments in CMakeLists.txt.
-  This commit is currently needed for cross-compiling tf (without
-  tests) in the meta-ros project (github.com/bmwcarit/meta-ros)
-  without requiring gtest. Details are found at
-  https://github.com/bmwcarit/meta-ros/issues/95.
-  Signed-off-by: Lukas Bulwahn <lukas.bulwahn@oss.bmw-carit.de>
-
-1.10.1 (2013-07-05 19:19)
--------------------------
-* changelog for 0.10.1
-* updating dependency requirement to tf2_ros 0.4.3
-* removing unused functions
-  removing unused private methods
-  removing max_extrapolation_distance_
-  removing unused data storage _frameIDs frameIDS_reverse frame_authority_
-  removing cache_time from tf, passing through method to tf2 buffer_core
-  removing unused variables frames_ and frame_mutex_ and interpolating_
-  removing unused mutex and transformchanged signaling
-  commenting on deprecation of MAX_EXTRAPOLATION_DISTANCE
-
-1.10.0 (2013-07-05 13:57)
--------------------------
-* tagging changelogs 1.10.0
-* populating changelogs
-* adding versioned dependency on recent geometry_experimental changes
-* fixing test dependencies
-* fixing callbacks for message filters
-* remove extra invalid comment
-* dedicated thread logic all implemented
-* removing commented out code
-* mostly completed conversion of tf::TransformListener to use tf2 under the hood
-* lookuptwist working
-* tf::Transformer converted to use tf2::Buffer under the hood.  passing tf_unittest.cpp
-* making tf exceptions typedefs of tf2 exceptions for compatability
-* first stage of converting Transformer to Buffer
-* switching to use tf2's TransformBroadcaster
-* adding dependency on tf2_ros to start moving over contents
-* fixing unit tests
-
-1.9.31 (2013-04-18 18:16)
--------------------------
 
 1.9.30 (2013-04-18 16:26)
 -------------------------

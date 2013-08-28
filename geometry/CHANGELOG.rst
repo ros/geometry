@@ -4,27 +4,7 @@ Changelog for package geometry
 
 Forthcoming
 -----------
-
-1.10.3 (2013-07-09 17:33)
--------------------------
-* changelogs for 1.10.3
-* CMakeLists.txt and buildtool_depend on catkin for metapackage.
-
-1.10.2 (2013-07-09 16:58)
--------------------------
-* updating changelog for 1.10.2
-
-1.10.1 (2013-07-05 19:19)
--------------------------
-* changelog for 0.10.1
-
-1.10.0 (2013-07-05 13:57)
--------------------------
-* tagging changelogs 1.10.0
-* populating changelogs
-
-1.9.31 (2013-04-18 18:16)
--------------------------
+* metapackage errata for release
 
 1.9.30 (2013-04-18 16:26)
 -------------------------

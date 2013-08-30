@@ -234,6 +234,7 @@ class TransformListenerThread(threading.Thread):
         self.tl = tl
     
     def run(self):
+        self.last_update_ros_time = rospy.Time.now()
         rospy.Subscriber("/tf",         tfMessage, self.transformlistener_callback)
         #Check to see if the service has already been advertised in this node
         try:
@@ -245,6 +246,12 @@ class TransformListenerThread(threading.Thread):
         rospy.spin()
 
     def transformlistener_callback(self, data):
+        ros_dt = (rospy.Time.now() - self.last_update_ros_time).to_sec()
+        if ros_dt < 0.0:
+            rospy.logwarn("Saw a negative time change of %f seconds, clearing the tf buffer." % ros_dt)
+            self.tl.clear()
+        self.last_update_ros_time = rospy.Time.now()
+
         who = data._connection_header.get('callerid', "default_authority")
         for transform in data.transforms:
             self.tl.setTransform(transform, who)

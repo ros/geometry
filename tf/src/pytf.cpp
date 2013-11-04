@@ -110,6 +110,10 @@ static int Transformer_init(PyObject *self, PyObject *args, PyObject *kw)
   int interpolating = 1;
   ros::Duration cache_time;
 
+  // Initialize time in c++ for the python instance so it won't throw.  This will not get simulated time. 
+  // https://github.com/ros/geometry/issues/30
+  ros::Time::init();
+
   cache_time.fromSec(tf::Transformer::DEFAULT_CACHE_TIME);
 
   if (!PyArg_ParseTuple(args, "|iO&", &interpolating, rosduration_converter, &cache_time))

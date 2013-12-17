@@ -42,6 +42,32 @@ void seed_rand()
   srand(temp_time_struct.tv_usec);
 };
 
+void testQuatRPY(tf::Quaternion q_baseline)
+{
+  q_baseline.normalize();
+  tf::Matrix3x3 m(q_baseline);
+  double roll, pitch, yaw;
+
+  for (int solution = 1 ; solution < 2 ; ++solution)
+  {
+    m.getRPY(roll, pitch, yaw, solution);
+    tf::Quaternion q_from_rpy;
+    q_from_rpy.setRPY(roll, pitch, yaw);
+    // use angleShortestPath() because angle() can return PI for equivalent
+    // quaternions
+    std::printf("%f, angle between quaternions\n",
+      q_from_rpy.angleShortestPath(q_baseline));
+
+    tf::Matrix3x3 m2;
+    m2.setRPY(roll, pitch, yaw);
+    tf::Quaternion q_from_m_from_rpy;
+    m2.getRotation(q_from_m_from_rpy);
+    // use angleShortestPath() because angle() can return PI for equivalent
+    // quaternions
+    std::printf("%f, angle between quaternions\n",
+      q_from_m_from_rpy.angleShortestPath(q_baseline));
+  }
+}
 
 int main(int argc, char **argv){
   
@@ -66,7 +92,15 @@ int main(int argc, char **argv){
     tf::Quaternion q_from_m;
     mat.getRotation(q_from_m);
     std::printf("%f, angle between quaternions\n", q_from_m.angle(q_baseline));
+    testQuatRPY(q_baseline);
   } 
+
+  // test some corner cases
+  testQuatRPY(tf::Quaternion( 0.5,  0.5,  0.5, -0.5));
+  testQuatRPY(tf::Quaternion( 0.5,  0.5,  0.5,  0.5));
+  testQuatRPY(tf::Quaternion( 0.5, -0.5,  0.5,  0.5));
+  testQuatRPY(tf::Quaternion( 0.5,  0.5, -0.5,  0.5));
+  testQuatRPY(tf::Quaternion(-0.5,  0.5,  0.5,  0.5));
   
   return 0;  
 }

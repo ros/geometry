@@ -2,8 +2,8 @@
 Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.10.7 (2013-12-27)
+-------------------
 * fix bug in tf::Matrix3x3::getEulerYPR()
   Fixes a bug in tf::Matrix3x3::getEulerYPR() implementation's handling
   of gimbal lock cases (when the new x axis aligns with the old +/-z

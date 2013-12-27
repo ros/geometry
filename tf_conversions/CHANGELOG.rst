@@ -2,8 +2,8 @@
 Changelog for package tf_conversions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.10.7 (2013-12-27)
+-------------------
 * Fix build error in tf_conversions with orocos_kdl dependency
   Fixes `#45 <https://github.com/ros/geometry/issues/45>`_
 * Contributors: Tessa Lau

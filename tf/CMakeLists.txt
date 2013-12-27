@@ -54,7 +54,6 @@ target_link_libraries(tf_unittest ${PROJECT_NAME})
 catkin_add_gtest(tf_quaternion_unittest test/quaternion.cpp)
 target_link_libraries(tf_quaternion_unittest ${PROJECT_NAME})
 
-
 catkin_add_gtest(test_transform_datatypes test/test_transform_datatypes.cpp)
 target_link_libraries(tf_unittest ${PROJECT_NAME})
 
@@ -86,8 +85,6 @@ add_rostest(test/test_message_filter.xml)
 ### Benchmarking
 #catkin_add_gtest_future(tf_benchmark test/tf_benchmark.cpp)
 #target_link_libraries(tf_benchmark ${PROJECT_NAME})
-
-add_executable(btTest test/quaternion.cpp)
 
 add_executable(testListener test/testListener.cpp)
 target_link_libraries(testListener ${PROJECT_NAME} ${GTEST_LIBRARIES})

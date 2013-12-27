@@ -310,9 +310,9 @@ public:
 			euler_out2.yaw = 0;
 	
 			// From difference of angles formula
-			tfScalar delta = tfAtan2(m_el[2].y(),m_el[2].z());
 			if (m_el[2].x() < 0)  //gimbal locked down
 			{
+			  tfScalar delta = tfAtan2(m_el[0].y(),m_el[0].z());
 				euler_out.pitch = TFSIMD_PI / tfScalar(2.0);
 				euler_out2.pitch = TFSIMD_PI / tfScalar(2.0);
 				euler_out.roll = delta;
@@ -320,6 +320,7 @@ public:
 			}
 			else // gimbal locked up
 			{
+			  tfScalar delta = tfAtan2(-m_el[0].y(),-m_el[0].z());
 				euler_out.pitch = -TFSIMD_PI / tfScalar(2.0);
 				euler_out2.pitch = -TFSIMD_PI / tfScalar(2.0);
 				euler_out.roll = delta;

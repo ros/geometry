@@ -22,7 +22,7 @@ generate_messages(DEPENDENCIES geometry_msgs sensor_msgs std_msgs)
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES ${PROJECT_NAME}
-  CATKIN_DEPENDS geometry_msgs message_filters message_runtime roscpp sensor_msgs std_msgs tf2_ros
+  CATKIN_DEPENDS geometry_msgs message_filters message_runtime roscpp sensor_msgs std_msgs tf2_ros rosconsole
 )
 
 add_library(${PROJECT_NAME} src/tf.cpp src/transform_listener.cpp src/cache.cpp src/transform_broadcaster.cpp)
@@ -50,6 +50,9 @@ if(CATKIN_ENABLE_TESTING)
 
 catkin_add_gtest(tf_unittest test/tf_unittest.cpp)
 target_link_libraries(tf_unittest ${PROJECT_NAME})
+
+catkin_add_gtest(tf_quaternion_unittest test/quaternion.cpp)
+target_link_libraries(tf_quaternion_unittest ${PROJECT_NAME})
 
 catkin_add_gtest(test_transform_datatypes test/test_transform_datatypes.cpp)
 target_link_libraries(tf_unittest ${PROJECT_NAME})
@@ -82,8 +85,6 @@ add_rostest(test/test_message_filter.xml)
 ### Benchmarking
 #catkin_add_gtest_future(tf_benchmark test/tf_benchmark.cpp)
 #target_link_libraries(tf_benchmark ${PROJECT_NAME})
-
-add_executable(btTest test/quaternion.cpp)
 
 add_executable(testListener test/testListener.cpp)
 target_link_libraries(testListener ${PROJECT_NAME} ${GTEST_LIBRARIES})

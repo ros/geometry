@@ -1,6 +1,6 @@
 <package>
   <name>tf_conversions</name>
-  <version>1.10.6</version>
+  <version>1.10.7</version>
   <description>
 
    This package contains a set of conversion functions to convert
@@ -24,11 +24,13 @@ the next major release cycle (see roadmap).
   <build_depend>eigen</build_depend>
   <build_depend>geometry_msgs</build_depend>
   <build_depend>kdl_conversions</build_depend>
+  <build_depend>orocos_kdl</build_depend>
   <build_depend>tf</build_depend>
 
   <run_depend>eigen</run_depend>
   <run_depend>geometry_msgs</run_depend>
   <run_depend>kdl_conversions</run_depend>
+  <run_depend>orocos_kdl</run_depend>
   <run_depend>python_orocos_kdl</run_depend>
   <run_depend>tf</run_depend>
 

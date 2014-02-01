@@ -2,6 +2,23 @@
 Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.10.7 (2013-12-27)
+-------------------
+* fix bug in tf::Matrix3x3::getEulerYPR()
+  Fixes a bug in tf::Matrix3x3::getEulerYPR() implementation's handling
+  of gimbal lock cases (when the new x axis aligns with the old +/-z
+  axis).
+* add test that demonstrated bug in tf::Matrix3x3
+  tf::Matrix3x3::getEulerYPR() has a bug which returns an incorrect rpy
+  for certain corner case inputs.  This test demonstrates that bug.
+* Fix const correctness of tf::Vector3 rotate() method
+  The method does not modify the class thus should be const.
+  This has already been fixed in Bullet itself.
+* add automatic tf buffer cleaning on bag loop for python
+  This logic was already implemented for c++
+  but not for the python module.
+* Contributors: Acorn Pooley, Timo Rohling, Tully Foote, v4hn
+
 1.10.6 (2013-08-28)
 -------------------
 * switching to wrapper scripts which will provide a deprecation warning for `#3 <https://github.com/ros/geometry/issues/3>`_

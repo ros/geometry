@@ -30,8 +30,11 @@
 #include <vector>
 #include <sys/time.h>
 #include <cstdio>
+#include <gtest/gtest.h>
 
 #include "tf/LinearMath/Transform.h"
+
+double epsilon = 10E-6;
 
 
 void seed_rand()
@@ -42,9 +45,37 @@ void seed_rand()
   srand(temp_time_struct.tv_usec);
 };
 
+void testQuatRPY(tf::Quaternion q_baseline)
+{
+  q_baseline.normalize();
+  tf::Matrix3x3 m(q_baseline);
+  double roll, pitch, yaw;
 
-int main(int argc, char **argv){
-  
+  for (int solution = 1 ; solution < 2 ; ++solution)
+  {
+    m.getRPY(roll, pitch, yaw, solution);
+    tf::Quaternion q_from_rpy;
+    q_from_rpy.setRPY(roll, pitch, yaw);
+    // use angleShortestPath() because angle() can return PI for equivalent
+    // quaternions
+    double angle1 = q_from_rpy.angleShortestPath(q_baseline);
+    ASSERT_NEAR(0.0, angle1, epsilon);
+    //std::printf("%f, angle between quaternions\n", angle1);
+
+    tf::Matrix3x3 m2;
+    m2.setRPY(roll, pitch, yaw);
+    tf::Quaternion q_from_m_from_rpy;
+    m2.getRotation(q_from_m_from_rpy);
+    // use angleShortestPath() because angle() can return PI for equivalent
+    // quaternions
+    double angle2 = q_from_m_from_rpy.angleShortestPath(q_baseline);
+    ASSERT_NEAR(0.0, angle2, epsilon);
+    //std::printf("%f, angle between quaternions\n", angle2);
+  }
+}
+
+TEST(tf, Quaternion)
+{  
   unsigned int runs = 400;
   seed_rand();
   
@@ -65,10 +96,21 @@ int main(int argc, char **argv){
     mat.setRotation(q_baseline);
     tf::Quaternion q_from_m;
     mat.getRotation(q_from_m);
-    std::printf("%f, angle between quaternions\n", q_from_m.angle(q_baseline));
+    double angle = q_from_m.angle(q_baseline);
+    ASSERT_NEAR(0.0, angle, epsilon);
+    testQuatRPY(q_baseline);
   } 
-  
-  return 0;  
+
+  // test some corner cases
+  testQuatRPY(tf::Quaternion( 0.5,  0.5,  0.5, -0.5));
+  testQuatRPY(tf::Quaternion( 0.5,  0.5,  0.5,  0.5));
+  testQuatRPY(tf::Quaternion( 0.5, -0.5,  0.5,  0.5));
+  testQuatRPY(tf::Quaternion( 0.5,  0.5, -0.5,  0.5));
+  testQuatRPY(tf::Quaternion(-0.5,  0.5,  0.5,  0.5));
 }
 
 
+int main(int argc, char **argv){
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}

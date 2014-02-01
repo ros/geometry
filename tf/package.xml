@@ -1,6 +1,6 @@
 <package>
   <name>tf</name>
-  <version>1.10.6</version>
+  <version>1.10.7</version>
   <description>
 
 tf is a package that lets the user keep track of multiple coordinate
@@ -36,6 +36,7 @@ any desired point in time.
   <run_depend>graphviz</run_depend>
   <run_depend>message_filters</run_depend>
   <run_depend>message_runtime</run_depend>
+  <run_depend>rosconsole</run_depend>
   <run_depend>roscpp</run_depend>
   <run_depend>roswtf</run_depend>
   <run_depend>sensor_msgs</run_depend>

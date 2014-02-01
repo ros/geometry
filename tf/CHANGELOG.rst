@@ -2,8 +2,8 @@
 Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.10.8 (2014-02-01)
+-------------------
 * Port groovy-devel patch to hydro-devel
 * Added rosconsole as catkin dependency for catkin_package
 * Add rosconsole as runtime dependency

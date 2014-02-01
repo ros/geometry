@@ -2,6 +2,13 @@
 Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Port groovy-devel patch to hydro-devel
+* Added rosconsole as catkin dependency for catkin_package
+* Add rosconsole as runtime dependency
+* Contributors: Michael Ferguson, Mirza Shah
+
 1.10.7 (2013-12-27)
 -------------------
 * fix bug in tf::Matrix3x3::getEulerYPR()

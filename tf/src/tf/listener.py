@@ -247,7 +247,7 @@ class TransformListenerThread(threading.Thread):
 
     def transformlistener_callback(self, data):
         ros_dt = (rospy.Time.now() - self.last_update_ros_time).to_sec()
-        if ros_dt < 0.0:
+        if ros_dt < -0.5:
             rospy.logwarn("Saw a negative time change of %f seconds, clearing the tf buffer." % ros_dt)
             self.tl.clear()
         self.last_update_ros_time = rospy.Time.now()

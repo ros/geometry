@@ -29,6 +29,7 @@ the next major release cycle (see roadmap).
   <run_depend>eigen</run_depend>
   <run_depend>geometry_msgs</run_depend>
   <run_depend>kdl_conversions</run_depend>
+  <run_depend>python_orocos_kdl</run_depend>
   <run_depend>tf</run_depend>
 
   <export>

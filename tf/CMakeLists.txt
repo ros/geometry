@@ -4,7 +4,7 @@ project(tf)
 find_package(catkin REQUIRED)
 
 find_package(Boost REQUIRED thread signals)
-find_package(catkin REQUIRED angles geometry_msgs message_filters message_generation rosconsole roscpp rostest rostime sensor_msgs std_msgs)
+find_package(catkin REQUIRED angles dynamic_reconfigure geometry_msgs message_filters message_generation rosconsole roscpp rostest rostime sensor_msgs std_msgs)
 
 catkin_python_setup()
 
@@ -19,6 +19,8 @@ add_service_files(DIRECTORY srv FILES FrameGraph.srv)
 
 generate_messages(DEPENDENCIES geometry_msgs sensor_msgs std_msgs)
 
+generate_dynamic_reconfigure_options(cfg/TransformSender.cfg)
+
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES ${PROJECT_NAME}
@@ -28,6 +30,7 @@ catkin_package(
 add_library(${PROJECT_NAME} src/tf.cpp src/transform_listener.cpp src/cache.cpp src/transform_broadcaster.cpp)
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_gencpp)
+add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_gencfg)
 
 # Debug
 add_executable(tf_empty_listener src/empty_listener.cpp)

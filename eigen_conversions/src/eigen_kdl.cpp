@@ -84,12 +84,12 @@ void twistKDLToEigen(const KDL::Twist &k, Eigen::Matrix<double, 6, 1> &e)
     e[i] = k[i];
 }
 
-void vectorEigenToKDL(const Eigen::Matrix<double, 3, 1> &e, KDL::Twist &k)
+void vectorEigenToKDL(const Eigen::Matrix<double, 3, 1> &e, KDL::Vector &k)
 {
-  for(int i = 0; i < 6; ++i)
+  for(int i = 0; i < 3; ++i)
     k[i] = e[i];
 }
-void vectorKDLToEigen(const KDL::Vector &k, Eigen::Matrix<double, 6, 1> &e)
+void vectorKDLToEigen(const KDL::Vector &k, Eigen::Matrix<double, 3, 1> &e)
 {
   for(int i = 0; i < 3; ++i)
     e[i] = k[i];

@@ -1,6 +1,6 @@
 <package>
   <name>eigen_conversions</name>
-  <version>1.10.8</version>
+  <version>1.11.0</version>
   <description>
 
      Conversion functions between:

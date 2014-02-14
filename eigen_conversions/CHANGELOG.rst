@@ -2,8 +2,8 @@
 Changelog for package eigen_conversions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.11.0 (2014-02-14)
+-------------------
 * fixed Eigen-KDL 3D Vector conversion functions
 * Contributors: fevb
 

@@ -2,6 +2,9 @@
 Changelog for package kdl_conversions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 1.10.8 (2014-02-01)
 -------------------
 

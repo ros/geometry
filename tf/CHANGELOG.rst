@@ -2,6 +2,11 @@
 Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* TF uses ros::MessageEvent to get connection information
+* Contributors: Kevin Watts, Tully Foote
+
 1.10.8 (2014-02-01)
 -------------------
 * Port groovy-devel patch to hydro-devel

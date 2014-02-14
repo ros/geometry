@@ -63,7 +63,7 @@ public:
   tf::tfMessage message_;
 
   boost::mutex map_lock_;
-  void callback(const ros::MessageEvent<tf::tfMessage>& msg_evt)
+  void callback(const ros::MessageEvent<tf::tfMessage const>& msg_evt)
   {
     const tf::tfMessage& message = *(msg_evt.getConstMessage());
     std::string authority = msg_evt.getPublisherName(); // lookup the authority 

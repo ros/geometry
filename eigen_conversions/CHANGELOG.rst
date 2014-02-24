@@ -2,8 +2,8 @@
 Changelog for package eigen_conversions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.11.1 (2014-02-23)
+-------------------
 * add dep on cmake_modules for finding eigen
 * Contributors: Ioan Sucan
 

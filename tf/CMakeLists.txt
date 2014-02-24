@@ -55,7 +55,7 @@ catkin_add_gtest(tf_quaternion_unittest test/quaternion.cpp)
 target_link_libraries(tf_quaternion_unittest ${PROJECT_NAME})
 
 catkin_add_gtest(test_transform_datatypes test/test_transform_datatypes.cpp)
-target_link_libraries(tf_unittest ${PROJECT_NAME})
+target_link_libraries(tf_unittest ${PROJECT_NAME} ${Boost_LIBRARIES})
 
 add_executable(transform_listener_unittest test/transform_listener_unittest.cpp)
 target_link_libraries(transform_listener_unittest ${PROJECT_NAME} ${GTEST_LIBRARIES})

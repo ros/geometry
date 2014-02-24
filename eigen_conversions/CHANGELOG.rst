@@ -2,6 +2,11 @@
 Changelog for package eigen_conversions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* add dep on cmake_modules for finding eigen
+* Contributors: Ioan Sucan
+
 1.11.0 (2014-02-14)
 -------------------
 * fixed Eigen-KDL 3D Vector conversion functions

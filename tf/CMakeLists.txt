@@ -3,7 +3,7 @@ project(tf)
 
 find_package(catkin REQUIRED)
 
-find_package(Boost REQUIRED thread signals)
+find_package(Boost REQUIRED thread signals system)
 find_package(catkin REQUIRED angles geometry_msgs message_filters message_generation rosconsole roscpp rostest rostime sensor_msgs std_msgs tf2_ros)
 
 catkin_python_setup()

@@ -2,8 +2,8 @@
 Changelog for package tf_conversions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.11.2 (2014-02-25)
+-------------------
 * fixing eigen usage in tf_conversions
 * Contributors: Tully Foote
 

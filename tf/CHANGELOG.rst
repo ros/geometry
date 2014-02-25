@@ -2,6 +2,11 @@
 Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* fixing test linking
+* Contributors: Tully Foote
+
 1.11.1 (2014-02-23)
 -------------------
 

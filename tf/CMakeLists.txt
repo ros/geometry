@@ -4,7 +4,7 @@ project(tf)
 find_package(catkin REQUIRED)
 
 find_package(Boost COMPONENTS thread signals system REQUIRED)
-find_package(catkin COMPONENTS angles geometry_msgs message_filters message_generation rosconsole roscpp rostest rostime sensor_msgs std_msgs tf2_ros REQUIRED)
+find_package(catkin COMPONENTS angles geometry_msgs message_filters message_generation rosconsole roscpp rostime sensor_msgs std_msgs tf2_ros REQUIRED)
 
 catkin_python_setup()
 
@@ -47,6 +47,8 @@ target_link_libraries(static_transform_publisher ${PROJECT_NAME})
 
 # Tests
 if(CATKIN_ENABLE_TESTING)
+
+find_package(rostest)
 
 catkin_add_gtest(tf_unittest test/tf_unittest.cpp)
 target_link_libraries(tf_unittest ${PROJECT_NAME})

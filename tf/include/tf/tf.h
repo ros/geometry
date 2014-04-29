@@ -42,7 +42,7 @@
 #include <tf/exceptions.h>
 #include "tf/time_cache.h"
 #include <boost/unordered_map.hpp>
-#include <boost/signals.hpp>
+#include <boost/signals2.hpp>
 #include "geometry_msgs/TwistStamped.h"
 
 #include <tf2_ros/buffer.h>
@@ -321,11 +321,11 @@ public:
    * \brief Add a callback that happens when a new transform has arrived
    *
    * \param callback The callback, of the form void func();
-   * \return A boost::signals::connection object that can be used to remove this
+   * \return A boost::signals2::connection object that can be used to remove this
    * listener
    */
-  boost::signals::connection addTransformsChangedListener(boost::function<void(void)> callback);
-  void removeTransformsChangedListener(boost::signals::connection c);
+  boost::signals2::connection addTransformsChangedListener(boost::function<void(void)> callback);
+  void removeTransformsChangedListener(boost::signals2::connection c);
 
   /** 
    * \brief Get the tf_prefix this is running with

@@ -570,12 +570,12 @@ void Transformer::transformPose(const std::string& target_frame, const ros::Time
   stamped_out.frame_id_ = target_frame;
 };
 
-boost::signals::connection Transformer::addTransformsChangedListener(boost::function<void(void)> callback)
+boost::signals2::connection Transformer::addTransformsChangedListener(boost::function<void(void)> callback)
 {
   return tf2_buffer_._addTransformsChangedListener(callback);
 }
 
-void Transformer::removeTransformsChangedListener(boost::signals::connection c)
+void Transformer::removeTransformsChangedListener(boost::signals2::connection c)
 {
   tf2_buffer_._removeTransformsChangedListener(c);
 }

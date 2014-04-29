@@ -44,7 +44,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 #include <boost/thread.hpp>
-#include <boost/signals.hpp>
+#include <boost/signals2.hpp>
 
 #include <ros/callback_queue.h>
 
@@ -109,7 +109,7 @@ public:
   typedef boost::shared_ptr<M const> MConstPtr;
   typedef ros::MessageEvent<M const> MEvent;
   typedef boost::function<void(const MConstPtr&, FilterFailureReason)> FailureCallback;
-  typedef boost::signal<void(const MConstPtr&, FilterFailureReason)> FailureSignal;
+  typedef boost::signals2::signal<void(const MConstPtr&, FilterFailureReason)> FailureSignal;
 
   // If you hit this assert your message does not have a header, or does not have the HasHeader trait defined for it
   ROS_STATIC_ASSERT(ros::message_traits::HasHeader<M>::value);
@@ -538,7 +538,7 @@ private:
 
   ros::Duration time_tolerance_; ///< Provide additional tolerance on time for messages which are stamped but can have associated duration
 
-  boost::signals::connection tf_connection_;
+  boost::signals2::connection tf_connection_;
   message_filters::Connection message_connection_;
 
   FailureSignal failure_signal_;

@@ -42,7 +42,7 @@ class TransformBroadcaster:
     """
 
     def __init__(self):
-        self.pub_tf = rospy.Publisher("/tf", tf.msg.tfMessage)
+        self.pub_tf = rospy.Publisher("/tf", tf.msg.tfMessage, queue_size=1)
 
     def sendTransform(self, translation, rotation, time, child, parent):
         """

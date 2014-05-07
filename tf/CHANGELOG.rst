@@ -2,8 +2,8 @@
 Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.11.3 (2014-05-07)
+-------------------
 * convert to boost signals2 following `ros/ros_comm#267 <https://github.com/ros/ros_comm/issues/267>`_ Fixes `#23 <https://github.com/ros/geometry/issues/23>`_. Requires `ros/geometry_experimental#61 <https://github.com/ros/geometry_experimental/issues/61>`_ as well.
 * add rospy publisher queue_size argument
   `ros/ros_comm#169 <https://github.com/ros/ros_comm/issues/169>`_

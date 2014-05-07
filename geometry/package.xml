@@ -1,6 +1,6 @@
 <package>
   <name>geometry</name>
-  <version>1.11.2</version>
+  <version>1.11.3</version>
   <description>Geometry Library</description>
   <maintainer email="tfoote@willowgarage.com">Tully Foote</maintainer>
   <license>BSD</license>

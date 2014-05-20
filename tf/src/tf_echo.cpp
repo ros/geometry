@@ -57,8 +57,9 @@ int main(int argc, char ** argv)
 {
   //Initialize ROS
   ros::init(argc, argv, "tf_echo", ros::init_options::AnonymousName);
+  double default_rate = 1;
 
-  if (argc != 3)
+  if (argc < 3)
   {
     printf("Usage: tf_echo source_frame target_frame\n\n");
     printf("This will echo the transform from the coordinate frame of the source_frame\n");
@@ -66,8 +67,14 @@ int main(int argc, char ** argv)
     printf("Note: This is the transform to get data from target_frame into the source_frame.\n");
     return -1;
   }
+  if (argc == 4)
+  {
+      default_rate = atof(argv[3]);
+  }
 
   ros::NodeHandle nh;
+  //Initiate a default rate of 500 Hz
+  ros::Rate rate(default_rate);
   //Instantiate a local listener
   echoListener echoListener;
 
@@ -109,7 +116,7 @@ int main(int argc, char ** argv)
         std::cout << echoListener.tf.allFramesAsString()<<std::endl;
         
       }
-      sleep(1);
+      rate.sleep();
     }
 
   return 0;

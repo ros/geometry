@@ -40,6 +40,8 @@ import rospy
 
 import tf.msg
 
+import math
+
 
 # global list of messages received
 _msgs = []
@@ -128,6 +130,16 @@ def multiple_authority(ctx):
 def no_msgs(ctx):
     return not _msgs
 
+def not_normalized(ctx):
+    errors = []
+    for m, stamp, callerid in _msgs:
+        for t in m.transforms:
+            q = t.transform.rotation
+            length = math.sqrt(q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w)
+            if math.fabs(length - 1) > 1e-6:
+                errors.append("rotation from [%s] to [%s] is not unit length, %f"%(t.header.frame_id, t.child_frame_id, length))
+    return errors
+
 ################################################################################
 # roswtf PLUGIN
 
@@ -136,6 +148,7 @@ def no_msgs(ctx):
 tf_warnings = [
   (no_msgs, "No tf messages"),
   (rostime_delta, "Received out-of-date/future transforms:"),  
+  (not_normalized, "Received non-normalized rotation in transforms:"),
 ]
 tf_errors = [
   (reparenting, "TF re-parenting contention:"),

@@ -91,7 +91,7 @@ def generate(dot_graph):
         args = ["dot", "-V"]
         try:
             vstr = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[1]
-        except OSError, ex:
+        except OSError as ex:
             print("Warning: Could not execute `dot -V`.  Is graphviz installed?")
             sys.exit(-1)
         v = distutils.version.StrictVersion('2.16')

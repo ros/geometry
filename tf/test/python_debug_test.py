@@ -153,7 +153,7 @@ try:
 
     print("done")
 
-except ValueError, e:
+except ValueError as e:
     print("Exception %s Improperly thrown: %s"%(type(e), e))
 
 

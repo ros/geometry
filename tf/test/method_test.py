@@ -41,5 +41,5 @@ try:
     print("After assignment of Rotation Transformation")
     print(transform_stamped.transform)
     
-except ValueError, e:
+except ValueError as e:
     print("Exception %s Improperly thrown: %s"%(type(e), e))

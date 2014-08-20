@@ -193,7 +193,7 @@ class TestPython(unittest.TestCase):
           tr.waitForTransform("PARENT", "THISFRAME", rospy.Time().from_sec(4.0), rospy.Duration(3.0))
           self.assertFalse("This should throw")
         except tf.Exception, ex:
-          print "successfully caught"
+          print("successfully caught")
           pass 
         
 

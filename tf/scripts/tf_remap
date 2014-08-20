@@ -35,6 +35,8 @@
 
 ## remap a tf topic
 
+from __future__ import print_function
+
 import roslib; roslib.load_manifest('tf')
 
 import rospy
@@ -50,7 +52,7 @@ class TfRemapper:
             if "old" in i and "new" in i:
                 self.mappings[i["old"]] = i["new"]
 
-        print "Applying the following mappings to incoming tf frame ids", self.mappings
+        print("Applying the following mappings to incoming tf frame ids", self.mappings)
         rospy.Subscriber("/tf_old", tfMessage, self.callback)
 
     def callback(self, tf_msg):

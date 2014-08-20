@@ -30,6 +30,8 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+from __future__ import print_function
+
 import roslib
 roslib.load_manifest('tf')
 import rostest
@@ -83,11 +85,11 @@ for t in [tf.msg.tfMessage, tf.cMsg.tfMessage]:
     m2 = t()
     m2.deserialize(mstr)
     for m in m2.transforms:
-        print type(m), sys.getrefcount(m)
+        print(type(m), sys.getrefcount(m))
     assert deserel_to_string(m2) == mstr, "deserel screwed up for type %s" % repr(t)
 
     m2 = t()
-    print "deserialize only ", 1e6 * Timer(lambda: m2.deserialize(mstr)).mean(), "us each"
+    print("deserialize only ", 1e6 * Timer(lambda: m2.deserialize(mstr)).mean(), "us each")
 
 sys.exit(0)
 
@@ -96,7 +98,7 @@ for i in xrange(iterations):
     for m in tm.transforms:
         t.setTransform(m)
 took = time.time() - started
-print "setTransform only", iterations, "took", took, "%f us each" % (1e6 * took / iterations)
+print("setTransform only", iterations, "took", took, "%f us each" % (1e6 * took / iterations))
 
 started = time.time()
 for i in xrange(iterations):
@@ -105,6 +107,6 @@ for i in xrange(iterations):
     for m in m2.transforms:
         t.setTransform(m)
 took = time.time() - started
-print "deserialize+setTransform ", iterations, "took", took, "%f us each" % (1e6 * took / iterations)
+print("deserialize+setTransform ", iterations, "took", took, "%f us each" % (1e6 * took / iterations))
 
 from tf import TransformListener

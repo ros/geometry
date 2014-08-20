@@ -40,7 +40,11 @@ import numpy
 import unittest
 import sys
 import time
-import StringIO
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from io import StringIO
+
 
 import tf.transformations
 import geometry_msgs.msg
@@ -63,7 +67,7 @@ def mkm():
 tm = tfMessage([mkm() for i in range(20)])
 
 def deserel_to_string(o):
-    s = StringIO.StringIO()
+    s = StringIO()
     o.serialize(s)
     return s.getvalue()
 
@@ -74,7 +78,7 @@ class Timer:
         self.func = func
     def mean(self, iterations = 1000000):
         started = time.time()
-        for i in xrange(iterations):
+        for i in range(iterations):
             self.func()
         took = time.time() - started
         return took / iterations
@@ -94,14 +98,14 @@ for t in [tf.msg.tfMessage, tf.cMsg.tfMessage]:
 sys.exit(0)
 
 started = time.time()
-for i in xrange(iterations):
+for i in range(iterations):
     for m in tm.transforms:
         t.setTransform(m)
 took = time.time() - started
 print("setTransform only", iterations, "took", took, "%f us each" % (1e6 * took / iterations))
 
 started = time.time()
-for i in xrange(iterations):
+for i in range(iterations):
     m2 = tfMessage()
     m2.deserialize(mstr)
     for m in m2.transforms:

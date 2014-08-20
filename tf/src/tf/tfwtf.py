@@ -61,7 +61,7 @@ def rostime_delta(ctx):
                     deltas[callerid]  = secs
 
     errors = []
-    for k, v in deltas.iteritems():
+    for k, v in deltas.items():
         errors.append("receiving transform from [%s] that differed from ROS time by %ss"%(k, v))
     return errors
 

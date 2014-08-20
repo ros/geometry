@@ -63,7 +63,7 @@ def rostime_delta(ctx):
                     deltas[callerid]  = secs
 
     errors = []
-    for k, v in deltas.iteritems():
+    for k, v in deltas.items():
         errors.append("receiving transform from [%s] that differed from ROS time by %ss"%(k, v))
     return errors
 
@@ -178,11 +178,11 @@ def roswtf_plugin_online(ctx):
     if not is_tf_active():
         return
     
-    print "running tf checks, this will take a second..."
+    print("running tf checks, this will take a second...")
     sub1 = rospy.Subscriber('/tf', tf.msg.tfMessage, _tf_handle)
     time.sleep(1.0)
     sub1.unregister()
-    print "... tf checks complete"    
+    print("... tf checks complete")
 
     for r in tf_warnings:
         warning_rule(r, r[0](ctx), ctx)

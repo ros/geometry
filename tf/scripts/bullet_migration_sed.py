@@ -40,6 +40,8 @@
 # If they are change the line below with the for loop to use the
 # namespaced_rules
 
+from __future__ import print_function
+
 import subprocess
 
 

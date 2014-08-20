@@ -68,6 +68,13 @@ int main(int argc, char ** argv)
   }
 
   ros::NodeHandle nh;
+
+  // read rate parameter
+  ros::NodeHandle p_nh("~");
+  double rate_hz;
+  p_nh.param("rate", rate_hz, 1.0);
+  ros::Rate rate(rate_hz);
+
   //Instantiate a local listener
   echoListener echoListener;
 
@@ -109,7 +116,7 @@ int main(int argc, char ** argv)
         std::cout << echoListener.tf.allFramesAsString()<<std::endl;
         
       }
-      sleep(1);
+      rate.sleep();
     }
 
   return 0;

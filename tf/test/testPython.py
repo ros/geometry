@@ -192,7 +192,7 @@ class TestPython(unittest.TestCase):
         try:
           tr.waitForTransform("PARENT", "THISFRAME", rospy.Time().from_sec(4.0), rospy.Duration(3.0))
           self.assertFalse("This should throw")
-        except tf.Exception, ex:
+        except tf.Exception as ex:
           print("successfully caught")
           pass 
         
@@ -204,7 +204,7 @@ class TestPython(unittest.TestCase):
         try:
           tr.waitForTransform("PARENT", "THISFRAME", rospy.Time().from_sec(4.0), rospy.Duration(3.0))
           self.assertFalse("This should throw")
-        except tf.Exception, ex:
+        except tf.Exception as ex:
           pass 
 
         m = geometry_msgs.msg.TransformStamped()
@@ -222,7 +222,7 @@ class TestPython(unittest.TestCase):
 
         try:
           tr.waitForTransform("PARENT", "THISFRAME", rospy.Time().from_sec(4.0), rospy.Duration(3.0))
-        except tf.Exception, ex:
+        except tf.Exception as ex:
           self.assertFalse("This should not throw")
 
 

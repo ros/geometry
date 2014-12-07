@@ -41,8 +41,9 @@ class TransformBroadcaster:
     :class:`TransformBroadcaster` is a convenient way to send transformation updates on the ``"/tf"`` message topic.
     """
 
-    def __init__(self):
-        self.pub_tf = rospy.Publisher("/tf", tf.msg.tfMessage, queue_size=1)
+    def __init__(self, queue_size=100):
+        self.pub_tf = rospy.Publisher("/tf", tf.msg.tfMessage,
+                queue_size=queue_size)
 
     def sendTransform(self, translation, rotation, time, child, parent):
         """

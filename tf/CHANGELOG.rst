@@ -2,8 +2,8 @@
 Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.11.4 (2014-12-23)
+-------------------
 * Install static lib and remove test for Android
 * Larger default queue size in broadcaster
   With queue_size=1 when two transforms are sent in quick succession,

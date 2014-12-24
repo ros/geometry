@@ -2,6 +2,19 @@
 Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Install static lib and remove test for Android
+* Larger default queue size in broadcaster
+  With queue_size=1 when two transforms are sent in quick succession,
+  the second is often lost. The C++ code uses a default queue_size of
+  100, so switch to that default here as well. If that is not appropriate,
+  a queue_size constructor argument is provided.
+* Update package.xml
+* add rate parameter to tf_echo
+* Added check for normalized quaternion in roswtf plugin
+* Contributors: David Lu!!, Gary Servin, Kevin Hallenbeck, Stephan Wirth, contradict
+
 1.11.3 (2014-05-07)
 -------------------
 * convert to boost signals2 following `ros/ros_comm#267 <https://github.com/ros/ros_comm/issues/267>`_ Fixes `#23 <https://github.com/ros/geometry/issues/23>`_. Requires `ros/geometry_experimental#61 <https://github.com/ros/geometry_experimental/issues/61>`_ as well.

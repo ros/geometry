@@ -2,6 +2,11 @@
 Changelog for package geometry
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Update package.xml
+* Contributors: David Lu!!
+
 1.11.3 (2014-05-07)
 -------------------
 

@@ -1503,6 +1503,10 @@ TEST(tf, getParent)
   children.push_back("f");
   parents.push_back("j");
 
+  // Issue #74.
+  children.push_back("/k");
+  parents.push_back("l");
+
   tf::Transformer mTR(true);
 
   for (uint64_t i = 0; i <  children.size(); i++)

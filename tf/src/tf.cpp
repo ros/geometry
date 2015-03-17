@@ -436,9 +436,9 @@ std::string Transformer::allFramesAsString() const
   return tf2_buffer_.allFramesAsString();
 }
 
-std::string Transformer::allFramesAsDot() const
+std::string Transformer::allFramesAsDot(double current_time) const
 {
-  return tf2_buffer_._allFramesAsDot();
+  return tf2_buffer_._allFramesAsDot(current_time);
 }
 
 

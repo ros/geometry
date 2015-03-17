@@ -294,7 +294,7 @@ public:
   /** \brief A way to see what frames have been cached
    * Useful for debugging
    */
-  std::string allFramesAsDot() const;
+  std::string allFramesAsDot(double current_time = 0) const;
 
   /** \brief A way to get a std::vector of available frame ids */
   void getFrameStrings(std::vector<std::string>& ids) const;

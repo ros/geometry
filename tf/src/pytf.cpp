@@ -139,10 +139,14 @@ static PyObject *getTFPrefix(PyObject *self, PyObject *args)
   return PyString_FromString(t->getTFPrefix().c_str());
 }
 
-static PyObject *allFramesAsDot(PyObject *self, PyObject *args)
+static PyObject *allFramesAsDot(PyObject *self, PyObject *args, PyObject *kw)
 {
   tf::Transformer *t = ((transformer_t*)self)->t;
-  return PyString_FromString(t->allFramesAsDot().c_str());
+  static const char *keywords[] = { "time", NULL };
+  ros::Time time;
+  if (!PyArg_ParseTupleAndKeywords(args, kw, "|O&", (char**)keywords, rostime_converter, &time))
+    return NULL;
+  return PyString_FromString(t->allFramesAsDot(time.toSec()).c_str());
 }
 
 static PyObject *allFramesAsString(PyObject *self, PyObject *args)
@@ -445,7 +449,7 @@ static PyObject *getFrameStrings(PyObject *self, PyObject *args)
 
 static struct PyMethodDef transformer_methods[] =
 {
-  {"allFramesAsDot", allFramesAsDot, METH_VARARGS},
+  {"allFramesAsDot", (PyCFunction)allFramesAsDot, METH_KEYWORDS},
   {"allFramesAsString", allFramesAsString, METH_VARARGS},
   {"setTransform", setTransform, METH_VARARGS},
   {"canTransform", (PyCFunction)canTransform, METH_KEYWORDS},

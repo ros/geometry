@@ -391,7 +391,7 @@ bool Transformer::getParent(const std::string& frame_id, ros::Time time, std::st
 
 bool Transformer::frameExists(const std::string& frame_id_str) const
 {
-  return tf2_buffer_._frameExists(frame_id_str);
+  return tf2_buffer_._frameExists(strip_leading_slash(frame_id_str));
 }
 
 void Transformer::setExtrapolationLimit(const ros::Duration& distance)

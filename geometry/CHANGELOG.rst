@@ -2,6 +2,9 @@
 Changelog for package geometry
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 1.11.4 (2014-12-23)
 -------------------
 * Update package.xml

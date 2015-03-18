@@ -2,6 +2,14 @@
 Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Strip leading slash get parent `#79 <https://github.com/ros/geometry/issues/79>`_ 
+* Make frameExists strip leading slash going into tf2.`#63 <https://github.com/ros/geometry/issues/63>`_
+* Update broadcaster.py,  Added ability to use TransformStamped
+* update view_frames to use AllFramesAsDot(rospy.time.now()) `#77 <https://github.com/ros/geometry/issues/77>`_
+* Contributors: David Lu!!, Gaël Ecorchard, Kei Okada, Tully Foote
+
 1.11.4 (2014-12-23)
 -------------------
 * Install static lib and remove test for Android

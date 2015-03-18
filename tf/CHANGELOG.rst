@@ -2,8 +2,8 @@
 Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.11.5 (2015-03-17)
+-------------------
 * Strip leading slash get parent `#79 <https://github.com/ros/geometry/issues/79>`_ 
 * Make frameExists strip leading slash going into tf2.`#63 <https://github.com/ros/geometry/issues/63>`_
 * Update broadcaster.py,  Added ability to use TransformStamped

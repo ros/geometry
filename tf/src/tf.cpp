@@ -385,7 +385,7 @@ bool Transformer::waitForTransform(const std::string& target_frame,const ros::Ti
 
 bool Transformer::getParent(const std::string& frame_id, ros::Time time, std::string& parent) const
 {
-  return tf2_buffer_._getParent(frame_id, time, parent);
+  return tf2_buffer_._getParent(strip_leading_slash(frame_id), time, parent);
 };
 
 

@@ -31,6 +31,8 @@
 #include "tf/transform_listener.h"
 #include "ros/ros.h"
 
+#define RADIAN 57.2957795
+
 class echoListener
 {
 public:
@@ -64,6 +66,8 @@ int main(int argc, char ** argv)
     printf("This will echo the transform from the coordinate frame of the source_frame\n");
     printf("to the coordinate frame of the target_frame. \n");
     printf("Note: This is the transform to get data from target_frame into the source_frame.\n");
+    printf("Private parameters:\n");
+    printf("\trate (default 1hz)\n\tdegrees - get RPY in degrees (default false)\n");
     return -1;
   }
 
@@ -72,7 +76,9 @@ int main(int argc, char ** argv)
   // read rate parameter
   ros::NodeHandle p_nh("~");
   double rate_hz;
+  bool in_degrees;
   p_nh.param("rate", rate_hz, 1.0);
+  p_nh.param("degrees", in_degrees, false);
   ros::Rate rate(rate_hz);
 
   //Instantiate a local listener
@@ -99,6 +105,11 @@ int main(int argc, char ** argv)
         std::cout << "At time " << echo_transform.stamp_.toSec() << std::endl;
         double yaw, pitch, roll;
         echo_transform.getBasis().getRPY(roll, pitch, yaw);
+        if (in_degrees) {
+            roll *= RADIAN;
+            pitch *= RADIAN;
+            yaw *= RADIAN;
+        }
         tf::Quaternion q = echo_transform.getRotation();
         tf::Vector3 v = echo_transform.getOrigin();
         std::cout << "- Translation: [" << v.getX() << ", " << v.getY() << ", " << v.getZ() << "]" << std::endl;

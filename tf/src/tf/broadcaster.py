@@ -69,9 +69,9 @@ class TransformBroadcaster:
         t.transform.rotation.z = rotation[2]
         t.transform.rotation.w = rotation[3]
         
-        self.sendTransform(t)
+        self.sendTransformMessage(t)
 
-    def sendTransform(self, transform):
+    def sendTransformMessage(self, transform):
         """
         :param transform: geometry_msgs.msg.TransformStamped
         Broadcast the transformation from tf frame child to parent on ROS topic ``"/tf"``.

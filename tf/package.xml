@@ -44,6 +44,8 @@ any desired point in time.
   <run_depend version_gte="0.4.5">tf2</run_depend>
   <run_depend version_gte="0.4.5">tf2_ros</run_depend>
 
+  <test_depend>unittest</test_depend>
+
   <export>
     <roswtf plugin="tf.tfwtf" />
     <rosdoc config="rosdoc.yaml" />

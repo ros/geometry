@@ -230,7 +230,7 @@ class TestPython(unittest.TestCase):
         t = tf.Transformer()
         self.assertEqual(t.getTFPrefix(), "")
 
-    def no_test_random(self):
+    def disabled_random(self):
         import networkx as nx
         for (r,h) in [ (2,2), (2,5), (3,5) ]:
             G = nx.balanced_tree(r, h)
@@ -248,6 +248,7 @@ class TestPython(unittest.TestCase):
                 for j in G.nodes():
                     ((x,_,_), _) = t.lookupTransform(str(i), str(j), rospy.Time())
                     self.assert_(abs(x) == abs(nx.shortest_path_length(G, 0, i) - nx.shortest_path_length(G, 0, j)))
+
 
 if __name__ == '__main__':
     rostest.unitrun('tf', 'directed', TestPython)

@@ -2,6 +2,12 @@
 Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* reenable python tests
+* Broadcaster: Rospy fix `#84 <https://github.com/ros/geometry/issues/84>`_. Add sendTransformMessage.
+* Contributors: Tully Foote, lsouchet
+
 1.11.5 (2015-03-17)
 -------------------
 * Strip leading slash get parent `#79 <https://github.com/ros/geometry/issues/79>`_ 

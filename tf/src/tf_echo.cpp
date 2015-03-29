@@ -31,6 +31,8 @@
 #include "tf/transform_listener.h"
 #include "ros/ros.h"
 
+#define RADIAN 57.2957795
+
 class echoListener
 {
 public:
@@ -64,6 +66,8 @@ int main(int argc, char ** argv)
     printf("This will echo the transform from the coordinate frame of the source_frame\n");
     printf("to the coordinate frame of the target_frame. \n");
     printf("Note: This is the transform to get data from target_frame into the source_frame.\n");
+    printf("Private parameters:\n");
+    printf("\trate (default 1hz)\n\tdegrees - get RPY in degrees (default false)\n");
     return -1;
   }
 
@@ -99,12 +103,15 @@ int main(int argc, char ** argv)
         std::cout << "At time " << echo_transform.stamp_.toSec() << std::endl;
         double yaw, pitch, roll;
         echo_transform.getBasis().getRPY(roll, pitch, yaw);
+
         tf::Quaternion q = echo_transform.getRotation();
         tf::Vector3 v = echo_transform.getOrigin();
         std::cout << "- Translation: [" << v.getX() << ", " << v.getY() << ", " << v.getZ() << "]" << std::endl;
         std::cout << "- Rotation: in Quaternion [" << q.getX() << ", " << q.getY() << ", " 
                   << q.getZ() << ", " << q.getW() << "]" << std::endl
-                  << "            in RPY [" <<  roll << ", " << pitch << ", " << yaw << "]" << std::endl;
+                  << "            in RPY [" <<  roll << ", " << pitch << ", " << yaw << "]" << std::endl
+                  << "  in RPY (degrees) [" << roll * RADIAN << ", "
+                  << pitch * RADIAN << ", " << yaw * RADIAN << "]" << std::endl;
 
         //print transform
       }

@@ -76,9 +76,7 @@ int main(int argc, char ** argv)
   // read rate parameter
   ros::NodeHandle p_nh("~");
   double rate_hz;
-  bool in_degrees;
   p_nh.param("rate", rate_hz, 1.0);
-  p_nh.param("degrees", in_degrees, false);
   ros::Rate rate(rate_hz);
 
   //Instantiate a local listener
@@ -105,17 +103,15 @@ int main(int argc, char ** argv)
         std::cout << "At time " << echo_transform.stamp_.toSec() << std::endl;
         double yaw, pitch, roll;
         echo_transform.getBasis().getRPY(roll, pitch, yaw);
-        if (in_degrees) {
-            roll *= RADIAN;
-            pitch *= RADIAN;
-            yaw *= RADIAN;
-        }
+
         tf::Quaternion q = echo_transform.getRotation();
         tf::Vector3 v = echo_transform.getOrigin();
         std::cout << "- Translation: [" << v.getX() << ", " << v.getY() << ", " << v.getZ() << "]" << std::endl;
         std::cout << "- Rotation: in Quaternion [" << q.getX() << ", " << q.getY() << ", " 
                   << q.getZ() << ", " << q.getW() << "]" << std::endl
-                  << "            in RPY [" <<  roll << ", " << pitch << ", " << yaw << "]" << std::endl;
+                  << "            in RPY [" <<  roll << ", " << pitch << ", " << yaw << "]" << std::endl
+                  << "  in RPY (degrees) [" << roll * RADIAN << ", "
+                  << pitch * RADIAN << ", " << yaw * RADIAN << "]" << std::endl;
 
         //print transform
       }

@@ -31,6 +31,7 @@
 #include "tf/transform_listener.h"
 #include "ros/ros.h"
 
+#define _USE_MATH_DEFINES
 class echoListener
 {
 public:
@@ -104,7 +105,8 @@ int main(int argc, char ** argv)
         std::cout << "- Translation: [" << v.getX() << ", " << v.getY() << ", " << v.getZ() << "]" << std::endl;
         std::cout << "- Rotation: in Quaternion [" << q.getX() << ", " << q.getY() << ", " 
                   << q.getZ() << ", " << q.getW() << "]" << std::endl
-                  << "            in RPY [" <<  roll << ", " << pitch << ", " << yaw << "]" << std::endl;
+                  << "            in RPY (radian) [" <<  roll << ", " << pitch << ", " << yaw << "]" << std::endl
+                  << "            in RPY (degree) [" <<  roll*180.0/M_PI << ", " << pitch*180.0/M_PI << ", " << yaw*180.0/M_PI << "]" << std::endl;
 
         //print transform
       }

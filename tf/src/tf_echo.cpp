@@ -57,14 +57,19 @@ int main(int argc, char ** argv)
 {
   //Initialize ROS
   ros::init(argc, argv, "tf_echo", ros::init_options::AnonymousName);
+  double default_rate = 1;
 
-  if (argc != 3)
+  if (argc < 3)
   {
     printf("Usage: tf_echo source_frame target_frame\n\n");
     printf("This will echo the transform from the coordinate frame of the source_frame\n");
     printf("to the coordinate frame of the target_frame. \n");
     printf("Note: This is the transform to get data from target_frame into the source_frame.\n");
     return -1;
+  }
+  if (argc == 4)
+  {
+      default_rate = atof(argv[3]);
   }
 
   ros::NodeHandle nh;

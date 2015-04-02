@@ -57,24 +57,34 @@ int main(int argc, char ** argv)
 {
   //Initialize ROS
   ros::init(argc, argv, "tf_echo", ros::init_options::AnonymousName);
-  double default_rate = 1;
 
-  if (argc < 3)
+  // Allow 2 or 3 command line arguments
+  if (argc < 3 || argc > 4)
   {
-    printf("Usage: tf_echo source_frame target_frame\n\n");
+    printf("Usage: tf_echo source_frame target_frame [echo_rate]\n\n");
     printf("This will echo the transform from the coordinate frame of the source_frame\n");
     printf("to the coordinate frame of the target_frame. \n");
     printf("Note: This is the transform to get data from target_frame into the source_frame.\n");
+    printf("Default echo rate is 1 if echo_rate is not given.\n");
     return -1;
-  }
-  if (argc == 4)
-  {
-      default_rate = atof(argv[3]);
   }
 
   ros::NodeHandle nh;
-  //Initiate a default rate of 500 Hz
-  ros::Rate rate(default_rate);
+
+  double rate_hz;
+  if (argc == 4)
+  {
+    // read rate from command line
+    rate_hz = atof(argv[3]);
+  }
+  else
+  {
+    // read rate parameter
+    ros::NodeHandle p_nh("~");
+    p_nh.param("rate", rate_hz, 1.0);
+  }
+  ros::Rate rate(rate_hz);
+
   //Instantiate a local listener
   echoListener echoListener;
 

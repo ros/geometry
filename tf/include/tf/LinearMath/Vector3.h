@@ -29,11 +29,13 @@ namespace tf{
 
 
 
-/**@brief Vector3 can be used to represent 3D points and vectors.
+/**
+ * @class Vector3
+ * @brief Vector3 can be used to represent 3D points and vectors.
  * It has an un-used w component to suit 16-byte alignment when Vector3 is stored in containers. This extra component can be used by derived classes (Quaternion?) or by user
  * Ideally, this class should be replaced by a platform optimized SIMD version that keeps the data in registers
  */
-ATTRIBUTE_ALIGNED16(class) Vector3
+class Vector3
 {
 public:
 
@@ -345,7 +347,7 @@ public:
 
 		TFSIMD_FORCE_INLINE	void	deSerializeDouble(const struct	Vector3DoubleData& dataIn);
 
-};
+} __attribute__ ((aligned(16)));
 
 /**@brief Return the sum of two vectors (Point symantics)*/
 TFSIMD_FORCE_INLINE Vector3 

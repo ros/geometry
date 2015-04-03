@@ -5,6 +5,7 @@ tf
     :maxdepth: 2
 
     tf_python
+    transformations
 
 Indices and tables
 ==================

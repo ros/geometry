@@ -1,3 +1,4 @@
 transformations
 ==============
-.. autodoc::tf.transformations
+.. automodule:: tf.transformations
+  :members:

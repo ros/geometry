@@ -111,9 +111,6 @@ public:
   typedef boost::function<void(const MConstPtr&, FilterFailureReason)> FailureCallback;
   typedef boost::signals2::signal<void(const MConstPtr&, FilterFailureReason)> FailureSignal;
 
-  // If you hit this assert your message does not have a header, or does not have the HasHeader trait defined for it
-  ROS_STATIC_ASSERT(ros::message_traits::HasHeader<M>::value);
-
   /**
    * \brief Constructor
    *
@@ -260,7 +257,11 @@ public:
       {
         ++dropped_message_count_;
         const MEvent& front = messages_.front();
-        TF_MESSAGEFILTER_DEBUG("Removed oldest message because buffer is full, count now %d (frame_id=%s, stamp=%f)", message_count_, front.getMessage()->header.frame_id.c_str(), front.getMessage()->header.stamp.toSec());
+        TF_MESSAGEFILTER_DEBUG(
+              "Removed oldest message because buffer is full, count now %d (frame_id=%s, stamp=%f)",
+              message_count_,
+              ros::message_traits::FrameId<M>::value(*front.getMessage()).c_str(),
+              ros::message_traits::TimeStamp<M>::value(*front.getMessage()).toSec());
         signalFailure(messages_.front(), filter_failure_reasons::Unknown);
 
         messages_.pop_front();
@@ -272,7 +273,11 @@ public:
       ++message_count_;
     }
 
-    TF_MESSAGEFILTER_DEBUG("Added message in frame %s at time %.3f, count now %d", evt.getMessage()->header.frame_id.c_str(), evt.getMessage()->header.stamp.toSec(), message_count_);
+    TF_MESSAGEFILTER_DEBUG(
+          "Added message in frame %s at time %.3f, count now %d",
+          ros::message_traits::FrameId<M>::value(*evt.getMessage()).c_str(),
+          ros::message_traits::TimeStamp<M>::value(*evt.getMessage()).toSec(),
+          message_count_);
 
     ++incoming_message_count_;
   }
@@ -369,7 +374,13 @@ private:
         {
           ++failed_out_the_back_count_;
           ++dropped_message_count_;
-          TF_MESSAGEFILTER_DEBUG("Discarding Message, in frame %s, Out of the back of Cache Time(stamp: %.3f + cache_length: %.3f < latest_transform_time %.3f.  Message Count now: %d", message->header.frame_id.c_str(), message->header.stamp.toSec(),  tf_.getCacheLength().toSec(), latest_transform_time.toSec(), message_count_);
+          TF_MESSAGEFILTER_DEBUG(
+                "Discarding Message, in frame %s, Out of the back of Cache Time "
+                "(stamp: %.3f + cache_length: %.3f < latest_transform_time %.3f. "
+                "Message Count now: %d",
+                ros::message_traits::FrameId<M>::value(*message).c_str(),
+                ros::message_traits::TimeStamp<M>::value(*message).toSec(),
+                tf_.getCacheLength().toSec(), latest_transform_time.toSec(), message_count_);
 
           last_out_the_back_stamp_ = stamp;
           last_out_the_back_frame_ = frame_id;

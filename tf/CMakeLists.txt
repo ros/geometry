@@ -70,10 +70,10 @@ add_rostest(test/transform_listener_unittest.launch)
 catkin_add_gtest(test_velocity test/velocity_test.cpp)
 target_link_libraries(test_velocity ${PROJECT_NAME})
 
-#add_executable(test_transform_twist test/transform_twist_test.cpp)
-#target_link_libraries(test_transform_twist ${PROJECT_NAME})
+add_executable(test_transform_twist test/transform_twist_test.cpp)
+target_link_libraries(test_transform_twist ${PROJECT_NAME} ${GTEST_LIBRARIES})
 #catkin_add_gtest_build_flags(test_transform_twist)
-#add_rostest(test/transform_twist_test.launch)
+add_rostest(test/transform_twist_test.launch)
 
 catkin_add_gtest(cache_unittest test/cache_unittest.cpp)
 target_link_libraries(cache_unittest ${PROJECT_NAME})

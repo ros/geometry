@@ -108,7 +108,7 @@ void TransformListener::transformPose(const std::string& target_frame,
   transformPose(target_frame, pin, pout);
   poseStampedTFToMsg(pout, msg_out);
 }
-/* http://www.ros.org/wiki/tf/Reviews/2010-03-12_API_Review
+// http://www.ros.org/wiki/tf/Reviews/2010-03-12_API_Review
 void TransformListener::transformTwist(const std::string& target_frame,
     const geometry_msgs::TwistStamped& msg_in,
     geometry_msgs::TwistStamped& msg_out) const
@@ -128,7 +128,11 @@ void TransformListener::transformTwist(const std::string& target_frame,
   tf::Vector3 out_vel = transform.getBasis()* twist_vel + transform.getOrigin().cross(out_rot);
 
   geometry_msgs::TwistStamped interframe_twist;
-  lookupVelocity(target_frame, msg_in.header.frame_id, msg_in.header.stamp, ros::Duration(0.1), interframe_twist); //\todo get rid of hard coded number
+  //lookupVelocity(target_frame, msg_in.header.frame_id, msg_in.header.stamp, ros::Duration(0.1), interframe_twist); //\todo get rid of hard coded number
+  const std::string observe_frame = msg_in.header.frame_id;
+  const ros::Time  ltime = msg_in.header.stamp;
+  const ros::Duration lduration = ros::Duration(0.1);
+  lookupTwist(target_frame, observe_frame, ltime, lduration, interframe_twist.twist); 
 
   msg_out.header.stamp = msg_in.header.stamp;
   msg_out.header.frame_id = target_frame;
@@ -139,7 +143,7 @@ void TransformListener::transformTwist(const std::string& target_frame,
   msg_out.twist.angular.y =  out_rot.y() + interframe_twist.twist.angular.y;
   msg_out.twist.angular.z =  out_rot.z() + interframe_twist.twist.angular.z;
 
-  }*/
+}
 
 void TransformListener::transformQuaternion(const std::string& target_frame, const ros::Time& target_time,
     const geometry_msgs::QuaternionStamped& msg_in,

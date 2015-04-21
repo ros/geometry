@@ -1,10 +1,7 @@
-import roslib
-roslib.load_manifest('tf')
 import rostest
 import rospy
-import numpy
 import unittest
-import sys
+import time
 
 import tf.transformations
 import geometry_msgs.msg
@@ -67,6 +64,32 @@ class TestPython(unittest.TestCase):
     def test_smoke(self):
         t = tf.Transformer()
         self.common(t)
+
+    def test_wait_for_transform(self):
+
+        def elapsed_time_within_epsilon(t, delta, epsilon):
+            self.assertGreater( t - epsilon,   delta)
+            self.assertLess( delta, t + epsilon)
+
+        t = tf.Transformer()
+        self.common(t)
+
+        timeout = rospy.Duration(0.1)
+        epsilon = 0.05
+
+        # Check for dedicated thread exception, existing frames
+        self.assertRaises(tf.Exception, lambda: t.waitForTransform("PARENT", "THISFRAME", rospy.Time(), timeout))
+        # Check for dedicated thread exception, non-existing frames
+        self.assertRaises(tf.Exception, lambda: t.waitForTransform("MANDALAY", "JUPITER", rospy.Time(), timeout))
+        t.setUsingDedicatedThread(True)
+
+        # This will no longer thorw
+        self.assertEqual(t.waitForTransform("PARENT", "THISFRAME", rospy.Time(), timeout), None)
+
+        # Verify exception stil thrown with non-existing frames near timeout
+        start = time.clock()
+        self.assertRaises(tf.Exception, lambda: t.waitForTransform("MANDALAY", "JUPITER", rospy.Time(), timeout))
+        elapsed_time_within_epsilon(start, timeout.to_sec(), epsilon)
 
     def test_cache_time(self):
         # Vary cache_time and confirm its effect on ExtrapolationException from lookupTransform().

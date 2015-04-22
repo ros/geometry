@@ -68,14 +68,14 @@ class TestPython(unittest.TestCase):
     def test_wait_for_transform(self):
 
         def elapsed_time_within_epsilon(t, delta, epsilon):
-            self.assertGreater( t - epsilon,   delta)
-            self.assertLess( delta, t + epsilon)
+            self.assertLess( t - epsilon,   delta)
+            self.assertGreater( delta, t + epsilon)
 
         t = tf.Transformer()
         self.common(t)
 
-        timeout = rospy.Duration(0.1)
-        epsilon = 0.05
+        timeout = rospy.Duration(1.1)
+        epsilon = 0.1
 
         # Check for dedicated thread exception, existing frames
         self.assertRaises(tf.Exception, lambda: t.waitForTransform("PARENT", "THISFRAME", rospy.Time(), timeout))
@@ -85,6 +85,12 @@ class TestPython(unittest.TestCase):
 
         # This will no longer thorw
         self.assertEqual(t.waitForTransform("PARENT", "THISFRAME", rospy.Time(), timeout), None)
+        self.assertEqual(t.waitForTransform("PARENT", "THISFRAME", rospy.Time(15), timeout), None)
+
+        # Verify exception still thrown with unavailable time near timeout
+        start = time.clock()
+        self.assertRaises(tf.Exception, lambda: t.waitForTransform("PARENT", "THISFRAME", rospy.Time(25), timeout))
+        elapsed_time_within_epsilon(start, timeout.to_sec(), epsilon)
 
         # Verify exception stil thrown with non-existing frames near timeout
         start = time.clock()

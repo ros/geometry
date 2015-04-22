@@ -2,8 +2,8 @@
 Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.11.7 (2015-04-21)
+-------------------
 * add a unit test for pytf wait_for_transform
 * removed msg serv installation from cmakelists
 * generated autodoc

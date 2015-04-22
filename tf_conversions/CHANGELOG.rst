@@ -2,6 +2,11 @@
 Changelog for package tf_conversions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Fixed Vector3 documentation
+* Contributors: Jackie Kay
+
 1.11.6 (2015-03-25)
 -------------------
 

@@ -2,6 +2,20 @@
 Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* add a unit test for pytf wait_for_transform
+* removed msg serv installation from cmakelists
+* generated autodoc
+* Fixed Vector3 documentation
+* display RPY in both radian and degree
+* Fixed command line arguments
+* using TimeStamp and FrameId in message filter
+  this allows to use tf::MessageFilter with pcl::PointCloud<T>
+  see `#55 <https://github.com/ros/geometry/issues/55>`_
+* Added and optional third argument to specify publishing frequency
+* Contributors: Adnan Munawar, Brice Rebsamen, Jackie Kay, Tully Foote, Ying Lu
+
 1.11.6 (2015-03-25)
 -------------------
 * reenable python tests

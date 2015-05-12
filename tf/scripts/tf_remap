@@ -42,7 +42,7 @@ from tf.msg import tfMessage
 
 class TfRemapper:
     def __init__(self):
-        self.pub = rospy.Publisher('/tf', tfMessage)
+        self.pub = rospy.Publisher('/tf', tfMessage, queue_size=1)
         mappings = rospy.get_param('~mappings', [])
         self.mappings = {}
         

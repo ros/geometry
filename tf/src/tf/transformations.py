@@ -1089,7 +1089,8 @@ def euler_from_matrix(matrix, axes='sxyz'):
 def euler_from_quaternion(quaternion, axes='sxyz'):
     """Return Euler angles from quaternion for specified axis sequence.
 
-    >>> angles = euler_from_quaternion([0.06146124, 0, 0, 0.99810947])
+    >>> angles = euler_from_quaternion([0.06146124, 0, 0, 0.99810947]), or
+                 euler_from_quaternion('geometry_msgs.msg._Quaternion.Quaternion)
     >>> numpy.allclose(angles, [0.123, 0, 0])
     True
 
@@ -1097,17 +1098,25 @@ def euler_from_quaternion(quaternion, axes='sxyz'):
     return euler_from_matrix(quaternion_matrix(quaternion), axes)
 
 
-def quaternion_from_euler(ai, aj, ak, axes='sxyz'):
+def quaternion_from_euler(a, aj=None, ak=None, axes='sxyz'):
     """Return quaternion from Euler angles and axis sequence.
 
     ai, aj, ak : Euler's roll, pitch and yaw angles
     axes : One of 24 axis sequences as string or encoded tuple
 
-    >>> q = quaternion_from_euler(1, 2, 3, 'ryxz')
+    >>> q = quaternion_from_euler(1, 2, 3, 'ryxz'), or
+            quaternion_from_euler([1,2,3], 'ryxz')
     >>> numpy.allclose(q, [0.310622, -0.718287, 0.444435, 0.435953])
     True
 
     """
+    #if the first argument is a list of length 3, re-assign ai, aj and ak
+    if len(a) == 3:
+        ai = a[0]
+        aj = a[1]
+        ak = a[2]
+    else:
+        ai = a
     try:
         firstaxis, parity, repetition, frame = _AXES2TUPLE[axes.lower()]
     except (AttributeError, KeyError):
@@ -1179,7 +1188,10 @@ def quaternion_matrix(quaternion):
     True
 
     """
-    q = numpy.array(quaternion[:4], dtype=numpy.float64, copy=True)
+    if isinstance(quaternion, list):
+        q = numpy.array(quaternion[:4], dtype=numpy.float64, copy=True)
+    else:
+        q = numpy.array([quaternion.x, quaternion.y, quaternion.z, quaternion.w], dtype=numpy.float64, copy=True)
     nq = numpy.dot(q, q)
     if nq < _EPS:
         return numpy.identity(4)

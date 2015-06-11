@@ -1111,7 +1111,7 @@ def quaternion_from_euler(a, aj=None, ak=None, axes='sxyz'):
 
     """
     #if the first argument is a list of length 3, re-assign ai, aj and ak
-    if len(a) == 3:
+    if isinstance(a, list):
         ai = a[0]
         aj = a[1]
         ak = a[2]

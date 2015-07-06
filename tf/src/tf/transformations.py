@@ -1245,8 +1245,22 @@ def quaternion_multiply(quaternion1, quaternion0):
     True
 
     """
-    x0, y0, z0, w0 = quaternion0
-    x1, y1, z1, w1 = quaternion1
+    if hasattr(quaternion0,"x") and hasattr(quaternion0,"y") and hasattr(quaternion0,"z") and hasattr(quaternion0,"w"):
+        x0 = quaternion0.x
+        y0 = quaternion0.y
+        z0 = quaternion0.z
+        w0 = quaternion0.w
+    else:
+        x0, y0, z0, w0 = quaternion1
+
+    if hasattr(quaternion1,"x") and hasattr(quaternion1,"y") and hasattr(quaternion1,"z") and hasattr(quaternion1,"w"):
+        x1 = quaternion1.x
+        y1 = quaternion1.y
+        z1 = quaternion1.z
+        w1 = quaternion1.w
+    else:
+        x1, y1, z1, w1 = quaternion1
+
     return numpy.array((
          x1*w0 + y1*z0 - z1*y0 + w1*x0,
         -x1*z0 + y1*w0 + z1*x0 + w1*y0,

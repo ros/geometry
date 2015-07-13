@@ -970,7 +970,7 @@ def euler_matrix(a, aj = None, ak = None, axes='sxyz'):
 
     ai, aj, ak : Euler's roll, pitch and yaw angles
     axes : One of 24 axis sequences as string or encoded tuple
-
+f
     >>> R = euler_matrix(1, 2, 3, 'syxz')
     >>> numpy.allclose(numpy.sum(R[0]), -1.34786452)
     True

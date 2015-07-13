@@ -965,7 +965,7 @@ def superimposition_matrix(v0, v1, scaling=False, usesvd=True):
     return M
 
 
-def euler_matrix(ai, aj, ak, axes='sxyz'):
+def euler_matrix(a, aj = None, ak = None, axes='sxyz'):
     """Return homogeneous rotation matrix from Euler angles and axis sequence.
 
     ai, aj, ak : Euler's roll, pitch and yaw angles
@@ -984,6 +984,13 @@ def euler_matrix(ai, aj, ak, axes='sxyz'):
     ...    R = euler_matrix(ai, aj, ak, axes)
 
     """
+    #if the first argument is a list of length 3, re-assign ai, aj and ak
+    if isinstance(a, list):
+        ai = a[0]
+        aj = a[1]
+        ak = a[2]
+    else:
+        ai = a
     try:
         firstaxis, parity, repetition, frame = _AXES2TUPLE[axes]
     except (AttributeError, KeyError):

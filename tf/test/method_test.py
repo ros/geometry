@@ -1,5 +1,3 @@
-import roslib; roslib.load_manifest("tf")
-
 import rospy
 import tf
 import time

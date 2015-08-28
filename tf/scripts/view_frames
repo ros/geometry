@@ -38,10 +38,6 @@
 
 from __future__ import with_statement
 
-PKG = 'tf' # this package name
-
-import roslib; roslib.load_manifest(PKG) 
-
 import sys, time
 import os
 import string

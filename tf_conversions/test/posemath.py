@@ -1,5 +1,3 @@
-import roslib
-roslib.load_manifest('tf_conversions')
 import rostest
 import rospy
 import numpy

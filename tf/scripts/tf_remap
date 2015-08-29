@@ -35,8 +35,6 @@
 
 ## remap a tf topic
 
-import roslib; roslib.load_manifest('tf')
-
 import rospy
 from tf.msg import tfMessage
 

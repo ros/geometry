@@ -392,6 +392,13 @@ protected:
 /** \brief Throw InvalidArgument if quaternion is malformed */
 inline void assertQuaternionValid(const tf::Quaternion & q)
 {
+  if(std::isnan(q.x()) || std::isnan(q.y()) || std::isnan(q.z()) || std::isnan(q.w()))
+  {
+    std::stringstream ss;
+    ss << "Quaternion contains a NaN" << std::endl;
+    throw tf::InvalidArgument(ss.str());
+  }
+
   if(std::fabs(q.x()*q.x() + q.y()*q.y() + q.z()*q.z() + q.w()*q.w() - 1) > 0.01)
   {
     std::stringstream ss;
@@ -403,6 +410,13 @@ inline void assertQuaternionValid(const tf::Quaternion & q)
 /** \brief Throw InvalidArgument if quaternion is malformed */
 inline void assertQuaternionValid(const geometry_msgs::Quaternion & q)
 {
+  if(std::isnan(q.x) || std::isnan(q.y) || std::isnan(q.z) || std::isnan(q.w))
+  {
+    std::stringstream ss;
+    ss << "Quaternion contains a NaN" << std::endl;
+    throw tf::InvalidArgument(ss.str());
+  }
+
   if(std::fabs(q.x*q.x + q.y*q.y + q.z*q.z + q.w*q.w - 1) > 0.01)
   {
     std::stringstream ss;

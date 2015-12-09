@@ -2390,6 +2390,23 @@ TEST(tf, assertQuaternionValid)
   q.setZ(sqrt(2.0)/2.0 - 0.01);
   EXPECT_TRUE(expectInvalidQuaternion(q));
 
+  // check NaNs
+  q.setValue(1,0,0,0);
+  q.setX(0.0/0.0);
+  EXPECT_TRUE(expectInvalidQuaternion(q));
+  q.setX(1.0);
+
+  q.setY(NAN);
+  EXPECT_TRUE(expectInvalidQuaternion(q));
+  q.setY(0.0);
+
+  q.setZ(0.0/0.0);
+  EXPECT_TRUE(expectInvalidQuaternion(q));
+  q.setZ(0.0);
+
+  q.setW(0.0/0.0);
+  EXPECT_TRUE(expectInvalidQuaternion(q));
+  q.setW(0.0);
 
   /*    Waiting for gtest 1.1 or later
     EXPECT_NO_THROW(tf::assertQuaternionValid(q));
@@ -2428,6 +2445,23 @@ TEST(tf, assertQuaternionMsgValid)
   q.z = sqrt(2.0)/2.0 - 0.01;
   EXPECT_TRUE(expectInvalidQuaternion(q));
 
+  // check NaNs
+  q.x = 1.0; q.y = 0.0; q.z = 0.0; q.w = 0.0;
+  q.x = 0.0/0.0;
+  EXPECT_TRUE(expectInvalidQuaternion(q));
+  q.x = 1.0;
+
+  q.y = NAN;
+  EXPECT_TRUE(expectInvalidQuaternion(q));
+  q.y = 0.0;
+
+  q.z = 0.0/0.0;
+  EXPECT_TRUE(expectInvalidQuaternion(q));
+  q.z = 0.0;
+
+  q.w = 0.0/0.0;
+  EXPECT_TRUE(expectInvalidQuaternion(q));
+  q.w = 0.0;
 
   /*    Waiting for gtest 1.1 or later
     EXPECT_NO_THROW(tf::assertQuaternionValid(q));

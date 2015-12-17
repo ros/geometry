@@ -46,33 +46,88 @@ void pointEigenToMsg(const Eigen::Vector3d &e, geometry_msgs::Point &m)
   m.z = e(2);
 }
 
+namespace {
+  template<typename T>
+  void poseMsgToEigenImpl(const geometry_msgs::Pose &m, T &e)
+  {
+    e = Eigen::Translation3d(m.position.x,
+                             m.position.y,
+                             m.position.z) *
+      Eigen::Quaterniond(m.orientation.w,
+                         m.orientation.x,
+                         m.orientation.y,
+                         m.orientation.z);
+  }
+
+  template<typename T>
+  void poseEigenToMsgImpl(const T &e, geometry_msgs::Pose &m)
+  {
+    m.position.x = e.translation()[0];
+    m.position.y = e.translation()[1];
+    m.position.z = e.translation()[2];
+    Eigen::Quaterniond q = (Eigen::Quaterniond)e.linear();
+    m.orientation.x = q.x();
+    m.orientation.y = q.y();
+    m.orientation.z = q.z();
+    m.orientation.w = q.w();
+    if (m.orientation.w < 0) {
+      m.orientation.x *= -1;
+      m.orientation.y *= -1;
+      m.orientation.z *= -1;
+      m.orientation.w *= -1;
+    }
+  }
+
+  template<typename T>
+  void transformMsgToEigenImpl(const geometry_msgs::Transform &m, T &e)
+  {
+    e = Eigen::Translation3d(m.translation.x,
+                             m.translation.y,
+                             m.translation.z) *
+      Eigen::Quaterniond(m.rotation.w,
+                         m.rotation.x,
+                         m.rotation.y,
+                         m.rotation.z);
+  }
+
+  template<typename T>
+  void transformEigenToMsgImpl(const T &e, geometry_msgs::Transform &m)
+  {
+    m.translation.x = e.translation()[0];
+    m.translation.y = e.translation()[1];
+    m.translation.z = e.translation()[2];
+    Eigen::Quaterniond q = (Eigen::Quaterniond)e.linear();
+    m.rotation.x = q.x();
+    m.rotation.y = q.y();
+    m.rotation.z = q.z();
+    m.rotation.w = q.w();
+    if (m.rotation.w < 0) {
+      m.rotation.x *= -1;
+      m.rotation.y *= -1;
+      m.rotation.z *= -1;
+      m.rotation.w *= -1;
+    }
+  }
+}
+
 void poseMsgToEigen(const geometry_msgs::Pose &m, Eigen::Affine3d &e)
 {
-  e = Eigen::Translation3d(m.position.x,
-                           m.position.y,
-                           m.position.z) *
-    Eigen::Quaterniond(m.orientation.w,
-                       m.orientation.x,
-                       m.orientation.y,
-                       m.orientation.z);
+  poseMsgToEigenImpl(m, e);
+}
+
+void poseMsgToEigen(const geometry_msgs::Pose &m, Eigen::Isometry3d &e)
+{
+  poseMsgToEigenImpl(m, e);
 }
 
 void poseEigenToMsg(const Eigen::Affine3d &e, geometry_msgs::Pose &m)
 {
-  m.position.x = e.translation()[0];
-  m.position.y = e.translation()[1];
-  m.position.z = e.translation()[2];
-  Eigen::Quaterniond q = (Eigen::Quaterniond)e.linear();
-  m.orientation.x = q.x();
-  m.orientation.y = q.y();
-  m.orientation.z = q.z();
-  m.orientation.w = q.w();
-  if (m.orientation.w < 0) {
-    m.orientation.x *= -1;
-    m.orientation.y *= -1;
-    m.orientation.z *= -1;
-    m.orientation.w *= -1;
-  }
+  poseEigenToMsgImpl(e, m);
+}
+
+void poseEigenToMsg(const Eigen::Isometry3d &e, geometry_msgs::Pose &m)
+{
+  poseEigenToMsgImpl(e, m);
 }
 
 void quaternionMsgToEigen(const geometry_msgs::Quaternion &m, Eigen::Quaterniond &e)
@@ -89,32 +144,23 @@ void quaternionEigenToMsg(const Eigen::Quaterniond &e, geometry_msgs::Quaternion
 }
 
 void transformMsgToEigen(const geometry_msgs::Transform &m, Eigen::Affine3d &e)
-{ 
-  e = Eigen::Translation3d(m.translation.x,
-                           m.translation.y,
-                           m.translation.z) *
-    Eigen::Quaterniond(m.rotation.w,
-                       m.rotation.x,
-                       m.rotation.y,
-                       m.rotation.z);
+{
+  transformMsgToEigenImpl(m, e);
+}
+
+void transformMsgToEigen(const geometry_msgs::Transform &m, Eigen::Isometry3d &e)
+{
+  transformMsgToEigenImpl(m, e);
 }
 
 void transformEigenToMsg(const Eigen::Affine3d &e, geometry_msgs::Transform &m)
-{  
-  m.translation.x = e.translation()[0];
-  m.translation.y = e.translation()[1];
-  m.translation.z = e.translation()[2];
-  Eigen::Quaterniond q = (Eigen::Quaterniond)e.linear();
-  m.rotation.x = q.x();
-  m.rotation.y = q.y();
-  m.rotation.z = q.z();
-  m.rotation.w = q.w();
-  if (m.rotation.w < 0) {
-    m.rotation.x *= -1;
-    m.rotation.y *= -1;
-    m.rotation.z *= -1;
-    m.rotation.w *= -1;
-  }
+{
+  transformEigenToMsgImpl(e, m);
+}
+
+void transformEigenToMsg(const Eigen::Isometry3d &e, geometry_msgs::Transform &m)
+{
+  transformEigenToMsgImpl(e, m);
 }
 
 void vectorMsgToEigen(const geometry_msgs::Vector3 &m, Eigen::Vector3d &e)

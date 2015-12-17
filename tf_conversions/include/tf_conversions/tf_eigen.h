@@ -47,8 +47,14 @@ void matrixEigenToTF(const Eigen::Matrix3d &e, tf::Matrix3x3 &t);
 /// Converts a tf Pose into an Eigen Affine3d
 void poseTFToEigen(const tf::Pose &t, Eigen::Affine3d &e);
 
+/// Converts a tf Pose into an Eigen Isometry3d
+void poseTFToEigen(const tf::Pose &t, Eigen::Isometry3d &e);
+
 /// Converts an Eigen Affine3d into a tf Transform
 void poseEigenToTF(const Eigen::Affine3d &e, tf::Pose &t);
+
+/// Converts an Eigen Isometry3d into a tf Transform
+void poseEigenToTF(const Eigen::Isometry3d &e, tf::Pose &t);
 
 /// Converts a tf Quaternion into an Eigen Quaternion
 void quaternionTFToEigen(const tf::Quaternion &t, Eigen::Quaterniond &e);
@@ -59,8 +65,14 @@ void quaternionEigenToTF(const Eigen::Quaterniond &e, tf::Quaternion &t);
 /// Converts a tf Transform into an Eigen Affine3d
 void transformTFToEigen(const tf::Transform &t, Eigen::Affine3d &e);
 
+/// Converts a tf Transform into an Eigen Isometry3d
+void transformTFToEigen(const tf::Transform &t, Eigen::Isometry3d &e);
+
 /// Converts an Eigen Affine3d into a tf Transform
 void transformEigenToTF(const Eigen::Affine3d &e, tf::Transform &t);
+
+/// Converts an Eigen Isometry3d into a tf Transform
+void transformEigenToTF(const Eigen::Isometry3d &e, tf::Transform &t);
 
 /// Converts a tf Vector3 into an Eigen Vector3d
 void vectorTFToEigen(const tf::Vector3 &t, Eigen::Vector3d &e);

@@ -85,43 +85,56 @@ TEST(TFEigenConversions, tf_eigen_transform)
   t.setOrigin(tf::Vector3(gen_rand(-10,10),gen_rand(-10,10),gen_rand(-10,10)));
   t.setRotation(tq);
 
-  Eigen::Affine3d k;
-  transformTFToEigen(t,k);
+  Eigen::Affine3d affine;
+  Eigen::Isometry3d isometry;
+  transformTFToEigen(t, affine);
+  transformTFToEigen(t, isometry);
 
   for(int i=0; i < 3; i++)
   {
-    ASSERT_NEAR(t.getOrigin()[i],k.matrix()(i,3),1e-6);
+    ASSERT_NEAR(t.getOrigin()[i],affine.matrix()(i,3),1e-6);
+    ASSERT_NEAR(t.getOrigin()[i],isometry.matrix()(i,3),1e-6);
     for(int j=0; j < 3; j++)
-    {      
-      ASSERT_NEAR(t.getBasis()[i][j],k.matrix()(i,j),1e-6);
+    {
+      ASSERT_NEAR(t.getBasis()[i][j],affine.matrix()(i,j),1e-6);
+      ASSERT_NEAR(t.getBasis()[i][j],isometry.matrix()(i,j),1e-6);
     }
   }
   for (int col = 0 ; col < 3; col ++)
-    ASSERT_NEAR(k.matrix()(3, col), 0, 1e-6);
-  ASSERT_NEAR(k.matrix()(3,3), 1, 1e-6);
-  
+  {
+    ASSERT_NEAR(affine.matrix()(3, col), 0, 1e-6);
+    ASSERT_NEAR(isometry.matrix()(3, col), 0, 1e-6);
+  }
+  ASSERT_NEAR(affine.matrix()(3,3), 1, 1e-6);
+  ASSERT_NEAR(isometry.matrix()(3,3), 1, 1e-6);
 }
 
 TEST(TFEigenConversions, eigen_tf_transform)
 {
-  tf::Transform t;
-  Eigen::Affine3d k;
+  tf::Transform t1;
+  tf::Transform t2;
+  Eigen::Affine3d affine;
+  Eigen::Isometry3d isometry;
   Eigen::Quaterniond kq;
   kq.coeffs()(0) = gen_rand(-1.0,1.0);
   kq.coeffs()(1) = gen_rand(-1.0,1.0);
   kq.coeffs()(2) = gen_rand(-1.0,1.0);
   kq.coeffs()(3) = gen_rand(-1.0,1.0);
   kq.normalize();
-  k.translate(Eigen::Vector3d(gen_rand(-10,10),gen_rand(-10,10),gen_rand(-10,10)));
-  k.rotate(kq);
+  isometry.translate(Eigen::Vector3d(gen_rand(-10,10),gen_rand(-10,10),gen_rand(-10,10)));
+  isometry.rotate(kq);
+  affine = isometry;
 
-  transformEigenToTF(k,t);
+  transformEigenToTF(affine,t1);
+  transformEigenToTF(isometry,t2);
   for(int i=0; i < 3; i++)
   {
-    ASSERT_NEAR(t.getOrigin()[i],k.matrix()(i,3),1e-6);
+    ASSERT_NEAR(t1.getOrigin()[i],affine.matrix()(i,3),1e-6);
+    ASSERT_NEAR(t2.getOrigin()[i],isometry.matrix()(i,3),1e-6);
     for(int j=0; j < 3; j++)
-    {      
-      ASSERT_NEAR(t.getBasis()[i][j],k.matrix()(i,j),1e-6);
+    {
+      ASSERT_NEAR(t1.getBasis()[i][j],affine.matrix()(i,j),1e-6);
+      ASSERT_NEAR(t2.getBasis()[i][j],isometry.matrix()(i,j),1e-6);
     }
   }
 }

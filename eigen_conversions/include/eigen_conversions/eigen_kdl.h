@@ -47,11 +47,17 @@ void quaternionKDLToEigen(const KDL::Rotation &k, Eigen::Quaterniond &e);
 /// Converts an Eigen quaternion into a KDL rotation
 void quaternionEigenToKDL(const Eigen::Quaterniond &e, KDL::Rotation &k);
 
-/// Converts a KDL frame into an Eigen transform
+/// Converts a KDL frame into an Eigen Affine3d
 void transformKDLToEigen(const KDL::Frame &k, Eigen::Affine3d &e);
 
-/// Converts an Eigen transform into a KDL frame
+/// Converts a KDL frame into an Eigen Isometry3d
+void transformKDLToEigen(const KDL::Frame &k, Eigen::Isometry3d &e);
+
+/// Converts an Eigen Affine3d into a KDL frame
 void transformEigenToKDL(const Eigen::Affine3d &e, KDL::Frame &k);
+
+/// Converts an Eigen Isometry3d into a KDL frame
+void transformEigenToKDL(const Eigen::Isometry3d &e, KDL::Frame &k);
 
 /// Converts a KDL twist into an Eigen matrix
 void twistKDLToEigen(const KDL::Twist &k, Eigen::Matrix<double, 6, 1> &e);

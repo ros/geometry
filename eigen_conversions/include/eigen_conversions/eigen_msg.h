@@ -54,11 +54,17 @@ void pointMsgToEigen(const geometry_msgs::Point &m, Eigen::Vector3d &e);
 /// Converts an Eigen Vector into a Point message
 void pointEigenToMsg(const Eigen::Vector3d &e, geometry_msgs::Point &m);
 
-/// Converts a Pose message into an Eigen Transform
+/// Converts a Pose message into an Eigen Affine3d
 void poseMsgToEigen(const geometry_msgs::Pose &m, Eigen::Affine3d &e);
 
-/// Converts an Eigen transform into a Pose message
+/// Converts a Pose message into an Eigen Isometry3d
+void poseMsgToEigen(const geometry_msgs::Pose &m, Eigen::Isometry3d &e);
+
+/// Converts an Eigen Affine3d into a Pose message
 void poseEigenToMsg(const Eigen::Affine3d &e, geometry_msgs::Pose &m);
+
+/// Converts an Eigen Isometry3d into a Pose message
+void poseEigenToMsg(const Eigen::Isometry3d &e, geometry_msgs::Pose &m);
 
 /// Converts a Quaternion message into an Eigen Quaternion
 void quaternionMsgToEigen(const geometry_msgs::Quaternion &m, Eigen::Quaterniond &e);
@@ -66,11 +72,17 @@ void quaternionMsgToEigen(const geometry_msgs::Quaternion &m, Eigen::Quaterniond
 /// Converts an Eigen Quaternion into a Quaternion message
 void quaternionEigenToMsg(const Eigen::Quaterniond &e, geometry_msgs::Quaternion &m);
 
-/// Converts a Transform message into an Eigen Transform
+/// Converts a Transform message into an Eigen Affine3d
 void transformMsgToEigen(const geometry_msgs::Transform &m, Eigen::Affine3d &e);
 
-/// Converts an Eigen transform into a Transform message
+/// Converts a Transform message into an Eigen Isometry3d
+void transformMsgToEigen(const geometry_msgs::Transform &m, Eigen::Isometry3d &e);
+
+/// Converts an Eigen Affine3d into a Transform message
 void transformEigenToMsg(const Eigen::Affine3d &e, geometry_msgs::Transform &m);
+
+/// Converts an Eigen Isometry3d into a Transform message
+void transformEigenToMsg(const Eigen::Isometry3d &e, geometry_msgs::Transform &m);
 
 /// Converts a Twist message into an Eigen matrix
 void twistMsgToEigen(const geometry_msgs::Twist &m, Eigen::Matrix<double,6,1> &e);

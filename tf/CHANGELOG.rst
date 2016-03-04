@@ -2,6 +2,13 @@
 Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Update assertQuaternionValid to check for NaNs
+* Remove outdated manifest loading in python files
+* update unit tests to catch https://github.com/ros/geometry_experimental/issues/102
+* Contributors: Chris Mansley, Michael Hwang, Tully Foote
+
 1.11.7 (2015-04-21)
 -------------------
 * add a unit test for pytf wait_for_transform

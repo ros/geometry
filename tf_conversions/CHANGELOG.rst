@@ -2,6 +2,12 @@
 Changelog for package tf_conversions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* tf_conversions: Add conversion functions for Eigen::Isometry3d
+* Remove outdated manifest loading in python files
+* Contributors: Maarten de Vries, Michael Hwang
+
 1.11.7 (2015-04-21)
 -------------------
 * Fixed Vector3 documentation

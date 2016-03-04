@@ -2,6 +2,11 @@
 Changelog for package eigen_conversions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* eigen_conversions: Add conversions for Eigen::Isometry3d
+* Contributors: Maarten de Vries
+
 1.11.7 (2015-04-21)
 -------------------
 

@@ -2,8 +2,8 @@
 Changelog for package tf_conversions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.11.8 (2016-03-04)
+-------------------
 * tf_conversions: Add conversion functions for Eigen::Isometry3d
 * Remove outdated manifest loading in python files
 * Contributors: Maarten de Vries, Michael Hwang

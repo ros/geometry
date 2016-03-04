@@ -2,8 +2,8 @@
 Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.11.8 (2016-03-04)
+-------------------
 * Update assertQuaternionValid to check for NaNs
 * Remove outdated manifest loading in python files
 * update unit tests to catch https://github.com/ros/geometry_experimental/issues/102

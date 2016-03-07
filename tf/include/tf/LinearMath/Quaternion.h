@@ -225,22 +225,21 @@ public:
 		else 
 			return tfAcos(dot(q) / s) * tfScalar(2.0);
 	}
-  /**@brief Return the angle of rotation represented by this quaternion */
+  	/**@brief Return the angle [0, 2Pi] of rotation represented by this quaternion */
 	tfScalar getAngle() const 
 	{
 		tfScalar s = tfScalar(2.) * tfAcos(m_floats[3]);
 		return s;
 	}
 
-	/**@brief Return the angle of rotation represented by this quaternion along the shortest path*/
+	/**@brief Return the angle [0, Pi] of rotation represented by this quaternion along the shortest path*/
 	tfScalar getAngleShortestPath() const 
 	{
-	tfScalar s;
-		if (dot(*this) < 0)
-			s = tfScalar(2.) * tfAcos(m_floats[3]);
+		tfScalar s;
+		if (m_floats[3] < 0)
+		    s = tfScalar(2.) * tfAcos(-m_floats[3]);
 		else
-			s = tfScalar(2.) * tfAcos(-m_floats[3]);
-
+		    s = tfScalar(2.) * tfAcos(m_floats[3]);
 		return s;
 	}
 

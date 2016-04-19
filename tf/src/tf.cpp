@@ -419,7 +419,7 @@ int Transformer::getLatestCommonTime(const std::string &source_frame, const std:
   CompactFrameID target_id = tf2_buffer_._lookupFrameNumber(strip_leading_slash(target_frame));
   CompactFrameID source_id = tf2_buffer_._lookupFrameNumber(strip_leading_slash(source_frame));
 
-  return tf2_buffer_._getLatestCommonTime(source_id, target_id, time, error_string);
+  return static_cast<int>(tf2_buffer_._getLatestCommonTime(source_id, target_id, time, error_string));
 }
 
 
@@ -572,10 +572,11 @@ void Transformer::transformPose(const std::string& target_frame, const ros::Time
 
 boost::signals2::connection Transformer::addTransformsChangedListener(boost::function<void(void)> callback)
 {
-  return tf2_buffer_._addTransformsChangedListener(callback);
+  //return tf2_buffer_._addTransformsChangedListener(callback);
+  return boost::signals2::connection();
 }
 
 void Transformer::removeTransformsChangedListener(boost::signals2::connection c)
 {
-  tf2_buffer_._removeTransformsChangedListener(c);
+  //tf2_buffer_._removeTransformsChangedListener(c);
 }

@@ -122,16 +122,16 @@ include_directories(${PYTHON_INCLUDE_PATH})
 # Dynamic linking with tf worked OK, except for exception propagation, which failed in the unit test.
 # so build with the objects directly instead.
 
-link_libraries(${PYTHON_LIBRARIES})
-add_library(pytf_py src/pytf.cpp src/tf.cpp src/transform_listener.cpp src/cache.cpp)
-add_dependencies(pytf_py ${PROJECT_NAME}_gencpp)
+#link_libraries(${PYTHON_LIBRARIES})
+#add_library(pytf_py src/pytf.cpp src/tf.cpp src/transform_listener.cpp src/cache.cpp)
+#add_dependencies(pytf_py ${PROJECT_NAME}_gencpp)
 
-find_package(PythonLibs REQUIRED)
-set_target_properties(pytf_py PROPERTIES OUTPUT_NAME tf PREFIX "_" SUFFIX ".so"
-  LIBRARY_OUTPUT_DIRECTORY ${CATKIN_DEVEL_PREFIX}/${PYTHON_INSTALL_DIR}/tf)
+#find_package(PythonLibs REQUIRED)
+#set_target_properties(pytf_py PROPERTIES OUTPUT_NAME tf PREFIX "_" SUFFIX ".so"
+#  LIBRARY_OUTPUT_DIRECTORY ${CATKIN_DEVEL_PREFIX}/${PYTHON_INSTALL_DIR}/tf)
 
 
-target_link_libraries(pytf_py ${Boost_LIBRARIES} ${catkin_LIBRARIES})
+#target_link_libraries(pytf_py ${Boost_LIBRARIES} ${catkin_LIBRARIES})
 endif()
 
 if(CATKIN_ENABLE_TESTING AND NOT ANDROID)
@@ -150,8 +150,8 @@ install(TARGETS ${PROJECT_NAME} tf_echo tf_empty_listener tf_change_notifier tf_
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 if(NOT ANDROID)
-install(TARGETS pytf_py
-  LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/${PYTHON_INSTALL_DIR}/tf)
+#install(TARGETS pytf_py
+#  LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/${PYTHON_INSTALL_DIR}/tf)
 endif()
 
 # Install rosrun-able scripts

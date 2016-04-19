@@ -43,6 +43,7 @@
 #include "tf/time_cache.h"
 #include <boost/unordered_map.hpp>
 #include <boost/signals2.hpp>
+#include "geometry_msgs/Twist.h"
 #include "geometry_msgs/TwistStamped.h"
 
 #include <tf2_ros/buffer.h>

@@ -9,6 +9,7 @@ include_directories(SYSTEM ${EIGEN_INCLUDE_DIRS})
 include_directories(include ${catkin_INCLUDE_DIRS} ${orocos_kdl_INCLUDE_DIRS})
 link_directories(${catkin_LIBRARY_DIRS})
 link_directories(${orocos_kdl_LIBRARY_DIRS})
+add_definitions(--std=c++11)
 
 catkin_package(
   INCLUDE_DIRS include ${EIGEN_INCLUDE_DIRS}

@@ -13,6 +13,7 @@ catkin_package(
 include_directories(include ${catkin_INCLUDE_DIRS} ${orocos_kdl_INCLUDE_DIRS})
 link_directories(${catkin_LIBRARY_DIRS})
 link_directories(${orocos_kdl_LIBRARY_DIRS})
+add_definitions(--std=c++11)
 
 add_library(${PROJECT_NAME}
   src/kdl_msg.cpp

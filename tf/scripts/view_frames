@@ -91,7 +91,7 @@ def generate(dot_graph):
             print "Warning: Could not execute `dot -V`.  Is graphviz installed?"
             sys.exit(-1)
         v = distutils.version.StrictVersion('2.16')
-        r = re.compile(".*version ([^ ]*).*")
+        r = re.compile(".*version (\d+\.?\d*)")
         print vstr
         m = r.search(vstr)
         if not m or not m.group(1):

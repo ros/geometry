@@ -516,15 +516,10 @@ public:
 	tfScalar	getW() const { return m_floats[3];}
 
 
-		TFSIMD_FORCE_INLINE int maxAxis4() const
+        TFSIMD_FORCE_INLINE int maxAxis4() const
 	{
-		int maxIndex = -1;
-		tfScalar maxVal = tfScalar(-TF_LARGE_FLOAT);
-		if (m_floats[0] > maxVal)
-		{
-			maxIndex = 0;
-			maxVal = m_floats[0];
-		}
+		int maxIndex = 0;
+		tfScalar maxVal = m_floats[0];
 		if (m_floats[1] > maxVal)
 		{
 			maxIndex = 1;
@@ -538,26 +533,15 @@ public:
 		if (m_floats[3] > maxVal)
 		{
 			maxIndex = 3;
-			maxVal = m_floats[3];
 		}
-		
-		
-		
-
 		return maxIndex;
-
 	}
 
 
 	TFSIMD_FORCE_INLINE int minAxis4() const
-	{
-		int minIndex = -1;
-		tfScalar minVal = tfScalar(TF_LARGE_FLOAT);
-		if (m_floats[0] < minVal)
 		{
-			minIndex = 0;
-			minVal = m_floats[0];
-		}
+		int minIndex = 0;
+		tfScalar minVal = m_floats[0];
 		if (m_floats[1] < minVal)
 		{
 			minIndex = 1;
@@ -566,16 +550,13 @@ public:
 		if (m_floats[2] < minVal)
 		{
 			minIndex = 2;
-			minVal =m_floats[2];
+			minVal = m_floats[2];
 		}
 		if (m_floats[3] < minVal)
 		{
 			minIndex = 3;
-			minVal = m_floats[3];
 		}
-		
 		return minIndex;
-
 	}
 
 

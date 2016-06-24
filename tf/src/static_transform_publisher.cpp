@@ -113,11 +113,33 @@ int main(int argc, char ** argv)
 
     return 0;
 
+  } 
+  else if (argc == 3)
+  {
+    ros::Duration sleeper(1.0);
+
+    if (strcmp(argv[1], argv[2]) == 0)
+      ROS_FATAL("target_frame and source frame are the same (%s, %s) this cannot work", argv[1], argv[2]);
+
+    TransformSender tf_sender(0,0,0, 0,0,0,
+                              ros::Time() + sleeper, //Future dating to allow slower sending w/o timeout
+                              argv[1], argv[2]);
+
+    while(tf_sender.node_.ok())
+    {
+      tf_sender.send(ros::Time::now() + sleeper);
+      ROS_DEBUG("Sending transform from %s with parent %s\n", argv[1], argv[2]);
+      sleeper.sleep();
+    }
+
+    return 0;
   }
   else
   {
     printf("A command line utility for manually sending a transform.\n");
     printf("It will periodicaly republish the given transform. \n");
+    printf("Usage: static_transform_publisher frame_id child_frame_id (publishes empty transform every second) \n");
+    printf("OR \n");
     printf("Usage: static_transform_publisher x y z yaw pitch roll frame_id child_frame_id  period(milliseconds) \n");
     printf("OR \n");
     printf("Usage: static_transform_publisher x y z qx qy qz qw frame_id child_frame_id  period(milliseconds) \n");

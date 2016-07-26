@@ -467,12 +467,12 @@ static struct PyMethodDef transformer_methods[] =
   {"lookupTwistFull", lookupTwistFull, METH_VARARGS},
   {"setUsingDedicatedThread", (PyCFunction)setUsingDedicatedThread, METH_VARARGS},
   {"getTFPrefix", (PyCFunction)getTFPrefix, METH_VARARGS},
-  {NULL,          NULL}
+  {NULL, NULL}
 };
 
 static PyMethodDef module_methods[] = {
   // {"Transformer", mkTransformer, METH_VARARGS},
-  {NULL, NULL, NULL},
+  {NULL, NULL}
 };
 
 extern "C" void init_tf()

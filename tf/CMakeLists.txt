@@ -8,7 +8,7 @@ find_package(catkin COMPONENTS angles geometry_msgs message_filters message_gene
 
 catkin_python_setup()
 
-include_directories(SYSTEM ${Boost_INCLUDE_DIR}
+include_directories(${Boost_INCLUDE_DIR}
                            ${catkin_INCLUDE_DIRS}
 )
 include_directories(include)

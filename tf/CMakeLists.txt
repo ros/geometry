@@ -42,6 +42,12 @@ target_link_libraries(tf_change_notifier ${PROJECT_NAME})
 add_executable(tf_monitor src/tf_monitor.cpp)
 target_link_libraries(tf_monitor ${PROJECT_NAME})
 
+add_executable(static_transform_publisher src/static_transform_publisher.cpp)
+target_link_libraries(static_transform_publisher ${PROJECT_NAME})
+
+# Tests
+if(CATKIN_ENABLE_TESTING)
+
 catkin_add_gtest(tf_unittest test/tf_unittest.cpp)
 target_link_libraries(tf_unittest ${PROJECT_NAME})
 
@@ -85,10 +91,11 @@ add_rostest(test/test_broadcaster.launch)
 
 add_executable(testBroadcaster test/testBroadcaster.cpp)
 target_link_libraries(testBroadcaster ${PROJECT_NAME})
-add_executable(static_transform_publisher src/static_transform_publisher.cpp)
-target_link_libraries(static_transform_publisher ${PROJECT_NAME})
+
+endif()
 
 
+#Python setup
 set(Python_ADDITIONAL_VERSIONS 2.7)
 find_package(PythonLibs REQUIRED)
 include_directories(${PYTHON_INCLUDE_PATH})
@@ -126,8 +133,10 @@ set_target_properties(pytf_py PROPERTIES OUTPUT_NAME tf PREFIX "_" SUFFIX ".so"
 # DOES PYUNIT WORK IN CATKIN?
 target_link_libraries(pytf_py ${Boost_LIBRARIES} ${catkin_LIBRARIES})
 
+if(CATKIN_ENABLE_TESTING)
 add_executable(tf_speed_test EXCLUDE_FROM_ALL test/speed_test.cpp)
 target_link_libraries(tf_speed_test ${PROJECT_NAME})
+endif()
 
 
 install(DIRECTORY include/${PROJECT_NAME}/

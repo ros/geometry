@@ -32,6 +32,11 @@ def setT(t, parent, frame, ti, x):
 
 class TestPython(unittest.TestCase):
 
+    @classmethod
+    def setUpClass(cls):
+        super(TestPython, cls).setUpClass()
+        rospy.rostime.set_rostime_initialized(True)
+
     def setUp(self):
         pass
 
@@ -281,5 +286,4 @@ class TestPython(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    rospy.init_node('tf_python_test', anonymous=True)
     rostest.unitrun('tf', 'directed', TestPython)

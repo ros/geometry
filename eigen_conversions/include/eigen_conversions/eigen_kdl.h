@@ -60,10 +60,10 @@ void twistKDLToEigen(const KDL::Twist &k, Eigen::Matrix<double, 6, 1> &e);
 void twistEigenToKDL(const Eigen::Matrix<double, 6, 1> &e, KDL::Twist &k);
 
 /// Converts a KDL vector into an Eigen matrix
-void vectorKDLToEigen(const KDL::Vector &k, Eigen::Matrix<double, 6, 1> &e);
+void vectorKDLToEigen(const KDL::Vector &k, Eigen::Matrix<double, 3, 1> &e);
 
 /// Converts an Eigen matrix into a KDL vector
-void vectorEigenToKDL(const Eigen::Matrix<double, 3, 1> &e, KDL::Twist &k);
+void vectorEigenToKDL(const Eigen::Matrix<double, 3, 1> &e, KDL::Vector &k);
 
 /// Converts a KDL wrench into an Eigen matrix
 void wrenchKDLToEigen(const KDL::Wrench &k, Eigen::Matrix<double, 6, 1> &e);

@@ -26,17 +26,14 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 import rospy
-import tf as TFX
-from tf import transformations
 import numpy
+import yaml
 
-from tf.msg import tfMessage
-import rosgraph.masterapi
 import geometry_msgs.msg
 import sensor_msgs.msg
-from tf.srv import FrameGraph,FrameGraphResponse
 
-import threading
+import tf2_ros
+from . import transformations
 
 def xyz_to_mat44(pos):
     return transformations.translation_matrix((pos.x, pos.y, pos.z))
@@ -44,9 +41,102 @@ def xyz_to_mat44(pos):
 def xyzw_to_mat44(ori):
     return transformations.quaternion_matrix((ori.x, ori.y, ori.z, ori.w))
 
+
+## Proxy Transformer class to call TF2 methods
+class Transformer(object):
+
+    def __init__(self, interpolate=True, cache_time=None):
+        self._buffer = tf2_ros.Buffer(cache_time, debug=False)
+
+    def allFramesAsDot(self, time=None):
+        data = yaml.load(self._buffer.all_frames_as_yaml())
+        if len(data) == 0:
+            return 'digraph G { "No tf data received" }'
+        dot = 'digraph G {\n'
+        for el in data:
+            map = data[el]
+            dot += '"'+map['parent']+'" -> "'+str(el)+'"'
+            dot += '[label=" '
+            dot += 'Broadcaster: '+map['broadcaster']+'\\n'
+            dot += 'Average rate: '+str(map['rate'])+'\\n'
+            dot += 'Buffer length: '+str(map['buffer_length'])+'\\n'
+            dot += 'Most recent transform: '+str(map['most_recent_transform'])+'\\n'
+            dot += 'Oldest transform: '+str(map['oldest_transform'])+'\\n'
+            dot += '"];\n'
+            if not map['parent'] in data:
+                root = map['parent']
+        dot += 'edge [style=invis];\n'
+        dot += ' subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";\n'
+        dot += '"Recorded at time: '+str(rospy.Time.now().to_sec())+'"[ shape=plaintext ] ;\n'
+        dot += '}->"'+root+'";\n}'
+        return dot
+
+    def allFramesAsString(self):
+        return self._buffer.all_frames_as_string()
+
+    def setTransform(self, transform, authority="default_authority"):
+        self._buffer.set_transform(transform, authority)
+
+    def canTransform(self, target_frame, source_frame, time):
+        return self._buffer.can_transform(target_frame, source_frame, time)
+
+    def canTransformFull(self, target_frame, target_time, source_frame, source_time, fixed_frame):
+        return self._buffer.can_transform_full(target_frame, target_time, source_frame, source_time, fixed_frame)
+
+    def waitForTransform(self, target_frame, source_frame, time, timeout, polling_sleep_duration=None):
+        can_transform, error_msg = self._buffer.can_transform(target_frame, source_frame, time, timeout, return_debug_tuple=True)
+        if not can_transform:
+            raise tf2_ros.TransformException(error_msg or "no such transformation: \"%s\" -> \"%s\"" % (source_frame, target_frame))
+
+    def waitForTransformFull(self, target_frame, target_time, source_frame, source_time, fixed_frame, timeout, polling_sleep_duration=None):
+        can_transform, error_msg = self._buffer.can_transform_full(target_frame, target_time, source_frame, source_time, fixed_frame, timeout, return_debug_tuple=True)
+        if not can_transform:
+            raise tf2_ros.TransformException(error_msg or "no such transformation: \"%s\" -> \"%s\"" % (source_frame, target_frame))
+
+    def chain(self, target_frame, target_time, source_frame, source_time, fixed_frame):
+        raise Exception("chain() is not implemented in tf2_py")
+
+    def clear(self):
+        self._buffer.clear()
+
+    def frameExists(self, frame_id):
+        raise tf2_ros.TransformException("frameExists() is not implemented in tf2_py")
+
+    def getFrameStrings(self):
+        raise tf2_ros.TransformException("getFrameStrings() is not implemented in tf2_py")
+
+    def getLatestCommonTime(self, source_frame, dest_frame):
+        raise tf2_ros.TransformException("getLatestCommonTime() is not implemented in tf2_py")
+
+    def lookupTransform(self, target_frame, source_frame, time):
+        msg = self._buffer.lookup_transform(target_frame, source_frame, time)
+        t = msg.transform.translation
+        r = msg.transform.rotation
+        return [t.x, t.y, t.z], [r.x, r.y, r.z, r.w]
+
+    def lookupTransformFull(self, target_frame, target_time, source_frame, source_time, fixed_frame):
+        msg = self._buffer.lookup_transform_full(target_frame, target_time, source_frame, source_time, fixed_frame)
+        t = msg.transform.translation
+        r = msg.transform.rotation
+        return [t.x, t.y, t.z], [r.x, r.y, r.z, r.w]
+
+    def lookupTwist(self, tracking_frame, observation_frame, time, averaging_interval):
+        return self.lookupTwistFull(tracking_frame, observation_frame, observation_frame, [0, 0, 0], tracking_frame, time, averaging_interval)
+
+    def lookupTwistFull(self, tracking_frame, observation_frame, reference_frame, ref_point, reference_point_frame, time, averaging_interval):
+        raise tf2_ros.TransformException("lookupTwistFull() is not implemented in tf2_py")
+
+    def setUsingDedicatedThread(self, value):
+        pass
+
+    def getTFPrefix(self):
+        # The tf2 resolver does not support TF prefixes, so we return the empty prefix here
+        return ""
+
+
 ## Extends tf's Transformer, adding transform methods for ROS message
 ## types PointStamped, QuaternionStamped and PoseStamped.
-class TransformerROS(TFX.Transformer):
+class TransformerROS(Transformer):
     """
     TransformerROS extends the base class :class:`tf.Transformer`,
     adding methods for handling ROS messages. 
@@ -221,40 +311,6 @@ class TransformerROS(TFX.Transformer):
         r.points = [xf(p) for p in point_cloud.points]
         return r
 
-## Extends TransformerROS, subscribes to the /tf topic and
-## updates the Transformer with the messages.
-
-class TransformListenerThread(threading.Thread):
-    def __init__(self, tl):
-        threading.Thread.__init__(self)
-        self.tl = tl
-    
-    def run(self):
-        self.last_update_ros_time = rospy.Time.now()
-        rospy.Subscriber("/tf",         tfMessage, self.transformlistener_callback)
-        #Check to see if the service has already been advertised in this node
-        try:
-            m = rosgraph.masterapi.Master(rospy.get_name())
-            m.lookupService('~tf_frames')
-        except (rosgraph.masterapi.Error, rosgraph.masterapi.Failure):
-            self.tl.frame_graph_server = rospy.Service('~tf_frames', FrameGraph, self.frame_graph_service)
-
-        rospy.spin()
-
-    def transformlistener_callback(self, data):
-        ros_dt = (rospy.Time.now() - self.last_update_ros_time).to_sec()
-        if ros_dt < -0.5:
-            rospy.logwarn("Saw a negative time change of %f seconds, clearing the tf buffer." % ros_dt)
-            self.tl.clear()
-        self.last_update_ros_time = rospy.Time.now()
-
-        who = data._connection_header.get('callerid', "default_authority")
-        for transform in data.transforms:
-            self.tl.setTransform(transform, who)
-
-    def frame_graph_service(self, req):
-        return FrameGraphResponse(self.tl.allFramesAsDot())
-
 
 class TransformListener(TransformerROS):
 
@@ -284,9 +340,6 @@ class TransformListener(TransformerROS):
                 ...
         
     """
-    def __init__(self, *args):
-        TransformerROS.__init__(self, *args)
-        thr = TransformListenerThread(self)
-        thr.setDaemon(True)
-        thr.start()
-        self.setUsingDedicatedThread(True)
+    def __init__(self, *args, **kwargs):
+        TransformerROS.__init__(self, *args, **kwargs)
+        self._listener = tf2_ros.TransformListener(self._buffer)

@@ -41,6 +41,8 @@ def xyz_to_mat44(pos):
 def xyzw_to_mat44(ori):
     return transformations.quaternion_matrix((ori.x, ori.y, ori.z, ori.w))
 
+def strip_leading_slash(s):
+    return s[1:] if s.startswith("/") else s
 
 ## Proxy Transformer class to call TF2 methods
 class Transformer(object):
@@ -78,18 +80,18 @@ class Transformer(object):
         self._buffer.set_transform(transform, authority)
 
     def canTransform(self, target_frame, source_frame, time):
-        return self._buffer.can_transform(target_frame, source_frame, time)
+        return self._buffer.can_transform(strip_leading_slash(target_frame), strip_leading_slash(source_frame), time)
 
     def canTransformFull(self, target_frame, target_time, source_frame, source_time, fixed_frame):
-        return self._buffer.can_transform_full(target_frame, target_time, source_frame, source_time, fixed_frame)
+        return self._buffer.can_transform_full(strip_leading_slash(target_frame), target_time, strip_leading_slash(source_frame), source_time, strip_leading_slash(fixed_frame))
 
     def waitForTransform(self, target_frame, source_frame, time, timeout, polling_sleep_duration=None):
-        can_transform, error_msg = self._buffer.can_transform(target_frame, source_frame, time, timeout, return_debug_tuple=True)
+        can_transform, error_msg = self._buffer.can_transform(strip_leading_slash(target_frame), strip_leading_slash(source_frame), time, timeout, return_debug_tuple=True)
         if not can_transform:
             raise tf2_ros.TransformException(error_msg or "no such transformation: \"%s\" -> \"%s\"" % (source_frame, target_frame))
 
     def waitForTransformFull(self, target_frame, target_time, source_frame, source_time, fixed_frame, timeout, polling_sleep_duration=None):
-        can_transform, error_msg = self._buffer.can_transform_full(target_frame, target_time, source_frame, source_time, fixed_frame, timeout, return_debug_tuple=True)
+        can_transform, error_msg = self._buffer.can_transform_full(strip_leading_slash(target_frame), target_time, strip_leading_slash(source_frame), source_time, strip_leading_slash(fixed_frame), timeout, return_debug_tuple=True)
         if not can_transform:
             raise tf2_ros.TransformException(error_msg or "no such transformation: \"%s\" -> \"%s\"" % (source_frame, target_frame))
 
@@ -106,16 +108,16 @@ class Transformer(object):
         raise tf2_ros.TransformException("getFrameStrings() is not implemented in tf2_py")
 
     def getLatestCommonTime(self, source_frame, dest_frame):
-        return self._buffer.get_latest_common_time(source_frame, dest_frame)
+        return self._buffer.get_latest_common_time(strip_leading_slash(source_frame), strip_leading_slash(dest_frame))
 
     def lookupTransform(self, target_frame, source_frame, time):
-        msg = self._buffer.lookup_transform(target_frame, source_frame, time)
+        msg = self._buffer.lookup_transform(strip_leading_slash(target_frame), strip_leading_slash(source_frame), time)
         t = msg.transform.translation
         r = msg.transform.rotation
         return [t.x, t.y, t.z], [r.x, r.y, r.z, r.w]
 
     def lookupTransformFull(self, target_frame, target_time, source_frame, source_time, fixed_frame):
-        msg = self._buffer.lookup_transform_full(target_frame, target_time, source_frame, source_time, fixed_frame)
+        msg = self._buffer.lookup_transform_full(strip_leading_slash(target_frame), target_time, strip_leading_slash(source_frame), source_time, strip_leading_slash(fixed_frame))
         t = msg.transform.translation
         r = msg.transform.rotation
         return [t.x, t.y, t.z], [r.x, r.y, r.z, r.w]

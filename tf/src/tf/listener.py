@@ -106,7 +106,7 @@ class Transformer(object):
         raise tf2_ros.TransformException("getFrameStrings() is not implemented in tf2_py")
 
     def getLatestCommonTime(self, source_frame, dest_frame):
-        raise tf2_ros.TransformException("getLatestCommonTime() is not implemented in tf2_py")
+        return self._buffer.get_latest_common_time(source_frame, dest_frame)
 
     def lookupTransform(self, target_frame, source_frame, time):
         msg = self._buffer.lookup_transform(target_frame, source_frame, time)

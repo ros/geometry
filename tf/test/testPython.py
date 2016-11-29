@@ -51,14 +51,14 @@ class TestPython(unittest.TestCase):
         self.assert_(len(afs) != 0)
         self.assert_("PARENT" in afs)
         self.assert_("THISFRAME" in afs)
-        ###self.assert_(t.getLatestCommonTime("THISFRAME", "PARENT").to_sec() == 0)
+        self.assert_(t.getLatestCommonTime("THISFRAME", "PARENT").to_sec() == 0)
         for ti in [3, 5, 10, 11, 19, 20, 21]:
             m.header.stamp.secs = ti
             t.setTransform(m)
-            ###self.assert_(t.getLatestCommonTime("THISFRAME", "PARENT").to_sec() == ti)
+            self.assert_(t.getLatestCommonTime("THISFRAME", "PARENT").to_sec() == ti)
 
         # Verify that getLatestCommonTime with nonexistent frames raise exception 
-        ###self.assertRaises(tf.Exception, lambda: t.getLatestCommonTime("MANDALAY", "JUPITER"))
+        self.assertRaises(tf.Exception, lambda: t.getLatestCommonTime("MANDALAY", "JUPITER"))
         self.assertRaises(tf.LookupException, lambda: t.lookupTransform("MANDALAY", "JUPITER", rospy.Time()))
 
         # Ask for transform for valid frames, but more than 10 seconds in the past.  Should raise ExtrapolationException
@@ -117,14 +117,14 @@ class TestPython(unittest.TestCase):
             self.assert_(len(afs) != 0)
             self.assert_("PARENT" in afs)
             self.assert_("THISFRAME" in afs)
-            ###self.assert_(t.getLatestCommonTime("THISFRAME", "PARENT").to_sec() == 0)
+            self.assert_(t.getLatestCommonTime("THISFRAME", "PARENT").to_sec() == 0)
 
             # Set transforms for time 0..100 inclusive
             for ti in range(101):
                 m.header.stamp = rospy.Time(ti)
                 t.setTransform(m)
-                ###self.assert_(t.getLatestCommonTime("THISFRAME", "PARENT").to_sec() == ti)
-            ###self.assertEqual(t.getLatestCommonTime("THISFRAME", "PARENT").to_sec(), 100)
+                self.assert_(t.getLatestCommonTime("THISFRAME", "PARENT").to_sec() == ti)
+            self.assertEqual(t.getLatestCommonTime("THISFRAME", "PARENT").to_sec(), 100)
 
             # (avoid time of 0 because that means 'latest')
 

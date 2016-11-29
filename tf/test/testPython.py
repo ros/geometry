@@ -142,7 +142,6 @@ class TestPython(unittest.TestCase):
         self.common(t)
         self.assert_(t.extra() == 77)
 
-    @unittest.skip("skipping twist tests")
     def test_twist(self):
         t = tf.Transformer()
 

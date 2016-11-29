@@ -121,10 +121,40 @@ class Transformer(object):
         return [t.x, t.y, t.z], [r.x, r.y, r.z, r.w]
 
     def lookupTwist(self, tracking_frame, observation_frame, time, averaging_interval):
-        return self.lookupTwistFull(tracking_frame, observation_frame, observation_frame, [0, 0, 0], tracking_frame, time, averaging_interval)
+        return self.lookupTwistFull(tracking_frame, observation_frame, observation_frame, (0, 0, 0), tracking_frame, time, averaging_interval)
 
     def lookupTwistFull(self, tracking_frame, observation_frame, reference_frame, ref_point, reference_point_frame, time, averaging_interval):
-        raise tf2_ros.TransformException("lookupTwistFull() is not implemented in tf2_py")
+        latest_time = self.getLatestCommonTime(observation_frame, tracking_frame)
+        target_time = time or latest_time
+        end_time = min(target_time + rospy.Duration(0.5 * averaging_interval.to_sec()), latest_time)
+        start_time = max(rospy.Time(0.0001) + averaging_interval, end_time) - averaging_interval
+        delta_t = (end_time - start_time).to_sec()
+
+        start_tr, start_rt = self.lookupTransform(observation_frame, tracking_frame, start_time)
+        end_tr, end_rt = self.lookupTransform(observation_frame, tracking_frame, end_time)
+        dR = numpy.dot(numpy.linalg.inv(transformations.quaternion_matrix(start_rt)), transformations.quaternion_matrix(end_rt))
+        ang, o, _ = transformations.rotation_from_matrix(dR)
+        delta_x, delta_y, delta_z = end_tr[0] - start_tr[0], end_tr[1] - start_tr[1], end_tr[2] - start_tr[2]
+
+        # Compute twist in observation_frame w.r.t. tracking_frame
+        vel0 = delta_x / delta_t, delta_y / delta_t, delta_z / delta_t
+        rot0 = o[0] * ang / delta_t, o[1] * ang / delta_t, o[2] * ang / delta_t
+
+        # Shift to reference_frame
+        inverse_tr, inverse_rt = self.lookupTransform(reference_frame, tracking_frame, target_time)
+        iR = transformations.quaternion_matrix(inverse_rt)[:3, :3]
+        rot = numpy.dot(iR, rot0)
+        vel = numpy.dot(iR, vel0) + numpy.cross(inverse_tr, rot)
+
+        # Correct for reference point
+        rp_orig = numpy.array((inverse_tr[0], inverse_tr[1], inverse_tr[2], 1))
+        rp_tr, rp_rt = self.lookupTransform(reference_frame, reference_point_frame, target_time)
+        T = numpy.dot(transformations.translation_matrix(rp_tr), transformations.quaternion_matrix(rp_rt))
+        rp_desired = numpy.dot(T, (rp_orig[0], rp_orig[1], rp_orig[2], 1))
+        delta = rp_desired - rp_orig
+        vel += numpy.dot(rot, delta[:3])
+
+        return (vel[0], vel[1], vel[2]), (rot[0], rot[1], rot[2])
 
     def setUsingDedicatedThread(self, value):
         pass

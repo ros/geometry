@@ -40,44 +40,33 @@ std::string tf::remap(const std::string& frame_id)
 {
   ros::NodeHandle n("~");
   return tf::resolve(getPrefixParam(n), frame_id);
-};
-
-
-TransformListener::TransformListener(ros::Duration max_cache_time, bool spin_thread):
-  Transformer(true, max_cache_time), tf2_listener_(Transformer::tf2_buffer_, node_, spin_thread)
-{
-  //Everything is done inside tf2 init
 }
 
-TransformListener::TransformListener(const ros::NodeHandle& nh, ros::Duration max_cache_time, bool spin_thread):
-  Transformer(true, max_cache_time), node_(nh), tf2_listener_(Transformer::tf2_buffer_, nh, spin_thread)
+
+TransformerHelper::TransformerHelper(ros::Duration max_cache_time)
+  : Transformer(true, max_cache_time)
 {
-  //Everything is done inside tf2 init
+
 }
 
-TransformListener::~TransformListener()
+TransformerHelper::~TransformerHelper()
 {
-  //Everything is done inside tf2 init
+
 }
 
-//Override Transformer::ok() for ticket:4882
-bool TransformListener::ok() const { return ros::ok(); }
-
-
-
-void TransformListener::transformQuaternion(const std::string& target_frame,
+void TransformerHelper::transformQuaternion(const std::string& target_frame,
     const geometry_msgs::QuaternionStamped& msg_in,
     geometry_msgs::QuaternionStamped& msg_out) const
 {
   tf::assertQuaternionValid(msg_in.quaternion);
 
   Stamped<Quaternion> pin, pout;
-  quaternionStampedMsgToTF(msg_in, pin);  
+  quaternionStampedMsgToTF(msg_in, pin);
   transformQuaternion(target_frame, pin, pout);
   quaternionStampedTFToMsg(pout, msg_out);
 }
 
-void TransformListener::transformVector(const std::string& target_frame,
+void TransformerHelper::transformVector(const std::string& target_frame,
     const geometry_msgs::Vector3Stamped& msg_in,
     geometry_msgs::Vector3Stamped& msg_out) const
 {
@@ -87,7 +76,7 @@ void TransformListener::transformVector(const std::string& target_frame,
   vector3StampedTFToMsg(pout, msg_out);
 }
 
-void TransformListener::transformPoint(const std::string& target_frame,
+void TransformerHelper::transformPoint(const std::string& target_frame,
     const geometry_msgs::PointStamped& msg_in,
     geometry_msgs::PointStamped& msg_out) const
 {
@@ -97,7 +86,7 @@ void TransformListener::transformPoint(const std::string& target_frame,
   pointStampedTFToMsg(pout, msg_out);
 }
 
-void TransformListener::transformPose(const std::string& target_frame,
+void TransformerHelper::transformPose(const std::string& target_frame,
     const geometry_msgs::PoseStamped& msg_in,
     geometry_msgs::PoseStamped& msg_out) const
 {
@@ -109,7 +98,7 @@ void TransformListener::transformPose(const std::string& target_frame,
   poseStampedTFToMsg(pout, msg_out);
 }
 /* http://www.ros.org/wiki/tf/Reviews/2010-03-12_API_Review
-void TransformListener::transformTwist(const std::string& target_frame,
+void TransformerHelper::transformTwist(const std::string& target_frame,
     const geometry_msgs::TwistStamped& msg_in,
     geometry_msgs::TwistStamped& msg_out) const
 {
@@ -141,7 +130,7 @@ void TransformListener::transformTwist(const std::string& target_frame,
 
   }*/
 
-void TransformListener::transformQuaternion(const std::string& target_frame, const ros::Time& target_time,
+void TransformerHelper::transformQuaternion(const std::string& target_frame, const ros::Time& target_time,
     const geometry_msgs::QuaternionStamped& msg_in,
     const std::string& fixed_frame, geometry_msgs::QuaternionStamped& msg_out) const
 {
@@ -152,7 +141,7 @@ void TransformListener::transformQuaternion(const std::string& target_frame, con
   quaternionStampedTFToMsg(pout, msg_out);
 }
 
-void TransformListener::transformVector(const std::string& target_frame, const ros::Time& target_time,
+void TransformerHelper::transformVector(const std::string& target_frame, const ros::Time& target_time,
     const geometry_msgs::Vector3Stamped& msg_in,
     const std::string& fixed_frame, geometry_msgs::Vector3Stamped& msg_out) const
 {
@@ -162,7 +151,7 @@ void TransformListener::transformVector(const std::string& target_frame, const r
   vector3StampedTFToMsg(pout, msg_out);
 }
 
-void TransformListener::transformPoint(const std::string& target_frame, const ros::Time& target_time,
+void TransformerHelper::transformPoint(const std::string& target_frame, const ros::Time& target_time,
     const geometry_msgs::PointStamped& msg_in,
     const std::string& fixed_frame, geometry_msgs::PointStamped& msg_out) const
 {
@@ -172,7 +161,7 @@ void TransformListener::transformPoint(const std::string& target_frame, const ro
   pointStampedTFToMsg(pout, msg_out);
 }
 
-void TransformListener::transformPose(const std::string& target_frame, const ros::Time& target_time,
+void TransformerHelper::transformPose(const std::string& target_frame, const ros::Time& target_time,
     const geometry_msgs::PoseStamped& msg_in,
     const std::string& fixed_frame, geometry_msgs::PoseStamped& msg_out) const
 {
@@ -184,14 +173,14 @@ void TransformListener::transformPose(const std::string& target_frame, const ros
   poseStampedTFToMsg(pout, msg_out);
 }
 
-void TransformListener::transformPointCloud(const std::string & target_frame, const sensor_msgs::PointCloud & cloudIn, sensor_msgs::PointCloud & cloudOut) const
+void TransformerHelper::transformPointCloud(const std::string & target_frame, const sensor_msgs::PointCloud & cloudIn, sensor_msgs::PointCloud & cloudOut) const
 {
   StampedTransform transform;
   lookupTransform(target_frame, cloudIn.header.frame_id, cloudIn.header.stamp, transform);
 
   transformPointCloud(target_frame, transform, cloudIn.header.stamp, cloudIn, cloudOut);
 }
-void TransformListener::transformPointCloud(const std::string& target_frame, const ros::Time& target_time, 
+void TransformerHelper::transformPointCloud(const std::string& target_frame, const ros::Time& target_time,
     const sensor_msgs::PointCloud& cloudIn,
     const std::string& fixed_frame, sensor_msgs::PointCloud& cloudOut) const
 {
@@ -212,13 +201,13 @@ inline void transformPointMatVec(const tf::Vector3 &origin, const tf::Matrix3x3 
   double x = basis[0].x() * in.x + basis[0].y() * in.y + basis[0].z() * in.z + origin.x();
   double y = basis[1].x() * in.x + basis[1].y() * in.y + basis[1].z() * in.z + origin.y();
   double z = basis[2].x() * in.x + basis[2].y() * in.y + basis[2].z() * in.z + origin.z();
-  
+
   out.x = x; out.y = y; out.z = z;
 }
 
 
-void TransformListener::transformPointCloud(const std::string & target_frame, const tf::Transform& net_transform,
-                                            const ros::Time& target_time, const sensor_msgs::PointCloud & cloudIn, 
+void TransformerHelper::transformPointCloud(const std::string & target_frame, const tf::Transform& net_transform,
+                                            const ros::Time& target_time, const sensor_msgs::PointCloud & cloudIn,
                                             sensor_msgs::PointCloud & cloudOut) const
 {
   tf::Vector3 origin = net_transform.getOrigin();
@@ -247,3 +236,22 @@ void TransformListener::transformPointCloud(const std::string & target_frame, co
 
 
 
+TransformListener::TransformListener(ros::Duration max_cache_time, bool spin_thread):
+  TransformerHelper(max_cache_time), tf2_listener_(Transformer::tf2_buffer_, node_, spin_thread)
+{
+  //Everything is done inside tf2 init
+}
+
+TransformListener::TransformListener(const ros::NodeHandle& nh, ros::Duration max_cache_time, bool spin_thread):
+  TransformerHelper(max_cache_time), node_(nh), tf2_listener_(Transformer::tf2_buffer_, nh, spin_thread)
+{
+  //Everything is done inside tf2 init
+}
+
+TransformListener::~TransformListener()
+{
+  //Everything is done inside tf2 init
+}
+
+//Override Transformer::ok() for ticket:4882
+bool TransformListener::ok() const { return ros::ok(); }

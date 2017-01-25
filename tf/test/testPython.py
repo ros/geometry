@@ -83,10 +83,10 @@ class TestPython(unittest.TestCase):
         epsilon = 0.1
 
         # Check for dedicated thread exception, existing frames
-        ###self.assertRaises(tf.Exception, lambda: t.waitForTransform("PARENT", "THISFRAME", rospy.Time(), timeout))
+        self.assertRaises(tf.Exception, lambda: t.waitForTransform("PARENT", "THISFRAME", rospy.Time(), timeout))
         # Check for dedicated thread exception, non-existing frames
-        ###self.assertRaises(tf.Exception, lambda: t.waitForTransform("MANDALAY", "JUPITER", rospy.Time(), timeout))
-        ###t.setUsingDedicatedThread(True)
+        self.assertRaises(tf.Exception, lambda: t.waitForTransform("MANDALAY", "JUPITER", rospy.Time(), timeout))
+        t.setUsingDedicatedThread(True)
 
         # This will no longer thorw
         self.assertEqual(t.waitForTransform("PARENT", "THISFRAME", rospy.Time(), timeout), None)

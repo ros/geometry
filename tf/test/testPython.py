@@ -79,7 +79,7 @@ class TestPython(unittest.TestCase):
         t = tf.Transformer()
         self.common(t)
 
-        timeout = rospy.Duration(1.1)
+        timeout = rospy.Duration(1)
         epsilon = 0.1
 
         # Check for dedicated thread exception, existing frames

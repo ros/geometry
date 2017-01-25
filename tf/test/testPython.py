@@ -95,12 +95,12 @@ class TestPython(unittest.TestCase):
         # Verify exception still thrown with unavailable time near timeout
         start = time.clock()
         self.assertRaises(tf.Exception, lambda: t.waitForTransform("PARENT", "THISFRAME", rospy.Time(25), timeout))
-        elapsed_time_within_epsilon(start, timeout.to_sec(), epsilon)
+        elapsed_time_within_epsilon(time.clock() - start, timeout.to_sec(), epsilon)
 
         # Verify exception stil thrown with non-existing frames near timeout
         start = time.clock()
         self.assertRaises(tf.Exception, lambda: t.waitForTransform("MANDALAY", "JUPITER", rospy.Time(), timeout))
-        elapsed_time_within_epsilon(start, timeout.to_sec(), epsilon)
+        elapsed_time_within_epsilon(time.clock() - start, timeout.to_sec(), epsilon)
 
     def test_cache_time(self):
         # Vary cache_time and confirm its effect on ExtrapolationException from lookupTransform().

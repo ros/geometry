@@ -46,7 +46,7 @@ any desired point in time.
   <test_depend>rosunit</test_depend>
 
   <export>
-    <!-- <roswtf plugin="tf.tfwtf" /> -->
+    <roswtf plugin="tf.tfwtf" />
     <rosdoc config="rosdoc.yaml" />
   </export>
 </package>

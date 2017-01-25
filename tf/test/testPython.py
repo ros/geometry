@@ -57,7 +57,7 @@ class TestPython(unittest.TestCase):
             t.setTransform(m)
             self.assert_(t.getLatestCommonTime("THISFRAME", "PARENT").to_sec() == ti)
 
-        # Verify that getLatestCommonTime with nonexistent frames raise exception 
+        # Verify that getLatestCommonTime with nonexistent frames raise exception
         self.assertRaises(tf.Exception, lambda: t.getLatestCommonTime("MANDALAY", "JUPITER"))
         self.assertRaises(tf.LookupException, lambda: t.lookupTransform("MANDALAY", "JUPITER", rospy.Time()))
 
@@ -228,18 +228,18 @@ class TestPython(unittest.TestCase):
           self.assertFalse("This should throw")
         except tf.Exception, ex:
           print "successfully caught"
-          pass 
-        
+          pass
+
 
     def test_transformer_wait_for_transform(self):
         tr = tf.Transformer()
         tr.setUsingDedicatedThread(1)
-        
+
         try:
           tr.waitForTransform("PARENT", "THISFRAME", rospy.Time().from_sec(4.0), rospy.Duration(3.0))
           self.assertFalse("This should throw")
         except tf.Exception, ex:
-          pass 
+          pass
 
         m = geometry_msgs.msg.TransformStamped()
         m.header.stamp = rospy.Time().from_sec(3.0)

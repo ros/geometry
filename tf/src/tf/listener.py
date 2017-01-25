@@ -49,6 +49,7 @@ class Transformer(object):
 
     def __init__(self, interpolate=True, cache_time=None):
         self._buffer = tf2_ros.Buffer(cache_time, debug=False)
+        self._using_dedicated_thread = False
 
     def allFramesAsDot(self, time=None):
         data = yaml.load(self._buffer.all_frames_as_yaml())
@@ -86,11 +87,15 @@ class Transformer(object):
         return self._buffer.can_transform_full(strip_leading_slash(target_frame), target_time, strip_leading_slash(source_frame), source_time, strip_leading_slash(fixed_frame))
 
     def waitForTransform(self, target_frame, source_frame, time, timeout, polling_sleep_duration=None):
+        if not self._using_dedicated_thread:
+            raise tf2_ros.TransformException("cannot wait for transform without a dedicated thread that listens to incoming TF messages")
         can_transform, error_msg = self._buffer.can_transform(strip_leading_slash(target_frame), strip_leading_slash(source_frame), time, timeout, return_debug_tuple=True)
         if not can_transform:
             raise tf2_ros.TransformException(error_msg or "no such transformation: \"%s\" -> \"%s\"" % (source_frame, target_frame))
 
     def waitForTransformFull(self, target_frame, target_time, source_frame, source_time, fixed_frame, timeout, polling_sleep_duration=None):
+        if not self._using_dedicated_thread:
+            raise tf2_ros.TransformException("cannot wait for transform without a dedicated thread that listens to incoming TF messages")
         can_transform, error_msg = self._buffer.can_transform_full(strip_leading_slash(target_frame), target_time, strip_leading_slash(source_frame), source_time, strip_leading_slash(fixed_frame), timeout, return_debug_tuple=True)
         if not can_transform:
             raise tf2_ros.TransformException(error_msg or "no such transformation: \"%s\" -> \"%s\"" % (source_frame, target_frame))
@@ -159,7 +164,7 @@ class Transformer(object):
         return (vel[0], vel[1], vel[2]), (rot[0], rot[1], rot[2])
 
     def setUsingDedicatedThread(self, value):
-        pass
+        self._using_dedicated_thread = value
 
     def getTFPrefix(self):
         # The tf2 resolver does not support TF prefixes, so we return the empty prefix here
@@ -375,3 +380,4 @@ class TransformListener(TransformerROS):
     def __init__(self, *args, **kwargs):
         TransformerROS.__init__(self, *args, **kwargs)
         self._listener = tf2_ros.TransformListener(self._buffer)
+        self.setUsingDedicatedThread(True)

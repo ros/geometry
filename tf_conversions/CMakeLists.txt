@@ -34,6 +34,9 @@ catkin_add_gtest(test_eigen_tf test/test_eigen_tf.cpp)
 target_link_libraries(test_eigen_tf ${PROJECT_NAME} ${orocos_kdl_LIBRARIES})
 
 catkin_add_gtest(test_kdl_tf test/test_kdl_tf.cpp)
+if(CMAKE_COMPILER_IS_GNUCXX)
+set_target_properties(test_kdl_tf PROPERTIES COMPILE_FLAGS "-Wno-deprecated-declarations")
+endif()
 target_link_libraries(test_kdl_tf ${PROJECT_NAME} ${orocos_kdl_LIBRARIES})
 
 catkin_add_nosetests(test/posemath.py)

@@ -101,7 +101,7 @@ class Transformer(object):
             raise tf2_ros.TransformException(error_msg or "no such transformation: \"%s\" -> \"%s\"" % (source_frame, target_frame))
 
     def chain(self, target_frame, target_time, source_frame, source_time, fixed_frame):
-        raise Exception("chain() is not implemented in tf2_py")
+        raise tf2_ros.TransformException("chain() is not implemented in tf2_py")
 
     def clear(self):
         self._buffer.clear()

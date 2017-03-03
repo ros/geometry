@@ -21,7 +21,7 @@ add_library(${PROJECT_NAME}
   src/eigen_msg.cpp
   src/eigen_kdl.cpp
 )
-add_dependencies(${PROJECT_NAME} geometry_msgs_gencpp)
+add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${orocos_kdl_LIBRARIES})
 
 install(DIRECTORY include/${PROJECT_NAME}/

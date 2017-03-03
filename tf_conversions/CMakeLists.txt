@@ -10,7 +10,7 @@ catkin_python_setup()
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES ${PROJECT_NAME}
-  DEPENDS Eigen orocos_kdl
+  DEPENDS EIGEN3 orocos_kdl
   CATKIN_DEPENDS geometry_msgs kdl_conversions tf
 )
 

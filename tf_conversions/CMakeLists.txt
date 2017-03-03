@@ -23,7 +23,7 @@ add_library(${PROJECT_NAME}
   src/tf_kdl.cpp
   src/tf_eigen.cpp
 )
-add_dependencies(${PROJECT_NAME} geometry_msgs_gencpp)
+add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${orocos_kdl_LIBRARIES})
 
 # Tests

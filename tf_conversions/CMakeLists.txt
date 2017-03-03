@@ -3,7 +3,7 @@ project(tf_conversions)
 
 find_package(orocos_kdl REQUIRED)
 find_package(catkin REQUIRED cmake_modules geometry_msgs kdl_conversions tf)
-find_package(Eigen REQUIRED)
+find_package(Eigen3 REQUIRED)
 
 catkin_python_setup()
 
@@ -14,7 +14,7 @@ catkin_package(
   CATKIN_DEPENDS geometry_msgs kdl_conversions tf
 )
 
-include_directories(include ${catkin_INCLUDE_DIRS} ${EIGEN_INCLUDE_DIRS} ${orocos_kdl_INCLUDE_DIRS})
+include_directories(include ${catkin_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS} ${orocos_kdl_INCLUDE_DIRS})
 
 # Needed due to no full filename in orocos_kdl pkg-config export
 link_directories(${orocos_kdl_LIBRARY_DIRS})

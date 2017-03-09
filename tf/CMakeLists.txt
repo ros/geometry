@@ -112,6 +112,10 @@ catkin_add_nosetests(test/testPython.py)
 add_executable(tf_speed_test EXCLUDE_FROM_ALL test/speed_test.cpp)
 target_link_libraries(tf_speed_test ${PROJECT_NAME})
 
+if(TARGET tests)
+    add_dependencies(tests testBroadcaster testListener transform_listener_unittest test_message_filter)
+endif()
+
 endif() # CATKIN_ENABLE_TESTING AND NOT ANDROID
 
 install(DIRECTORY include/${PROJECT_NAME}/
@@ -125,12 +129,9 @@ install(TARGETS ${PROJECT_NAME} tf_echo tf_empty_listener tf_change_notifier tf_
 )
 
 # Install rosrun-able scripts
-install(PROGRAMS 
+install(PROGRAMS
   scripts/bullet_migration_sed.py
   scripts/tf_remap
   scripts/view_frames
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION} )
 
-if(TARGET tests)
-  add_dependencies(tests testBroadcaster testListener transform_listener_unittest test_message_filter )
-endif()

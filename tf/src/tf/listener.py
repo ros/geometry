@@ -107,10 +107,13 @@ class Transformer(object):
         self._buffer.clear()
 
     def frameExists(self, frame_id):
-        raise tf2_ros.TransformException("frameExists() is not implemented in tf2_py")
+        """ Not a recommended API, only here for backwards compatibility """
+        return frame_id in self.getFrameStrings()
 
     def getFrameStrings(self):
-        raise tf2_ros.TransformException("getFrameStrings() is not implemented in tf2_py")
+        """ Not a recommended API, only here for backwards compatibility """
+        data = yaml.load(self._buffer.all_frames_as_yaml())
+        return [p for p, _ in data.items()]
 
     def getLatestCommonTime(self, source_frame, dest_frame):
         return self._buffer.get_latest_common_time(strip_leading_slash(source_frame), strip_leading_slash(dest_frame))

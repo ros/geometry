@@ -51,6 +51,15 @@ class TestPython(unittest.TestCase):
         self.assert_(len(afs) != 0)
         self.assert_("PARENT" in afs)
         self.assert_("THISFRAME" in afs)
+
+        # Test getFrameStrings
+        frames = t.getFrameStrings()
+        self.assert_("THISFRAME" in frames)
+        self.assert_("PARENT" not in frames)
+
+        self.assert_(t.frameExists("THISFRAME"))
+        self.assert_(not t.frameExists("PARENT"))
+
         self.assert_(t.getLatestCommonTime("THISFRAME", "PARENT").to_sec() == 0)
         for ti in [3, 5, 10, 11, 19, 20, 21]:
             m.header.stamp.secs = ti

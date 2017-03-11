@@ -51,28 +51,8 @@ class Transformer(object):
         self._buffer = tf2_ros.Buffer(cache_time, debug=False)
         self._using_dedicated_thread = False
 
-    def allFramesAsDot(self, time=None):
-        data = yaml.load(self._buffer.all_frames_as_yaml())
-        if len(data) == 0:
-            return 'digraph G { "No tf data received" }'
-        dot = 'digraph G {\n'
-        for el in data:
-            map = data[el]
-            dot += '"'+map['parent']+'" -> "'+str(el)+'"'
-            dot += '[label=" '
-            dot += 'Broadcaster: '+map['broadcaster']+'\\n'
-            dot += 'Average rate: '+str(map['rate'])+'\\n'
-            dot += 'Buffer length: '+str(map['buffer_length'])+'\\n'
-            dot += 'Most recent transform: '+str(map['most_recent_transform'])+'\\n'
-            dot += 'Oldest transform: '+str(map['oldest_transform'])+'\\n'
-            dot += '"];\n'
-            if not map['parent'] in data:
-                root = map['parent']
-        dot += 'edge [style=invis];\n'
-        dot += ' subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";\n'
-        dot += '"Recorded at time: '+str(rospy.Time.now().to_sec())+'"[ shape=plaintext ] ;\n'
-        dot += '}->"'+root+'";\n}'
-        return dot
+    def allFramesAsDot(self):
+        return self._buffer._allFramesAsDot()
 
     def allFramesAsString(self):
         return self._buffer.all_frames_as_string()
@@ -101,7 +81,7 @@ class Transformer(object):
             raise tf2_ros.TransformException(error_msg or "no such transformation: \"%s\" -> \"%s\"" % (source_frame, target_frame))
 
     def chain(self, target_frame, target_time, source_frame, source_time, fixed_frame):
-        raise tf2_ros.TransformException("chain() is not implemented in tf2_py")
+        return self._buffer._chain( target_frame, target_time, source_frame, source_time, fixed_frame)
 
     def clear(self):
         self._buffer.clear()

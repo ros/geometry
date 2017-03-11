@@ -60,6 +60,7 @@ class TestPython(unittest.TestCase):
         self.assert_(t.frameExists("THISFRAME"))
         self.assert_(not t.frameExists("PARENT"))
 
+
         self.assert_(t.getLatestCommonTime("THISFRAME", "PARENT").to_sec() == 0)
         for ti in [3, 5, 10, 11, 19, 20, 21]:
             m.header.stamp.secs = ti
@@ -78,6 +79,30 @@ class TestPython(unittest.TestCase):
     def test_smoke(self):
         t = tf.Transformer()
         self.common(t)
+
+    def test_chain(self):
+        t = tf.Transformer()
+        self.common(t)
+        m = geometry_msgs.msg.TransformStamped()
+        m.header.frame_id = "A"
+        m.child_frame_id = "B"
+        m.transform.translation.y = 5.0
+        m.transform.rotation = geometry_msgs.msg.Quaternion(*tf.transformations.quaternion_from_euler(0, 0, 0))
+        t.setTransform(m)
+
+        m.header.frame_id = "B"
+        m.child_frame_id = "C"
+        t.setTransform(m)
+
+        m.header.frame_id = "B"
+        m.child_frame_id = "C"
+        t.setTransform(m)
+
+        chain = t.chain("A", rospy.Time(0), "C", rospy.Time(0), "B")
+        print("Chain is %s" % chain)
+        self.assert_("C" in chain)
+        self.assert_("B" in chain)
+
 
     def test_wait_for_transform(self):
 

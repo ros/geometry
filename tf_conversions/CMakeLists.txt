@@ -14,8 +14,7 @@ catkin_package(
   CATKIN_DEPENDS geometry_msgs kdl_conversions tf
 )
 
-include_directories(SYSTEM ${EIGEN_INCLUDE_DIRS} ${orocos_kdl_INCLUDE_DIRS})
-include_directories(include ${catkin_INCLUDE_DIRS})
+include_directories(include ${catkin_INCLUDE_DIRS} ${EIGEN_INCLUDE_DIRS} ${orocos_kdl_INCLUDE_DIRS})
 
 # Needed due to no full filename in orocos_kdl pkg-config export
 link_directories(${orocos_kdl_LIBRARY_DIRS})

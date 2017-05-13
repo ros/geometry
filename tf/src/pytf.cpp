@@ -56,6 +56,7 @@
   } while (0)
 
 static PyObject *pModulerospy = NULL;
+static PyObject *pModulegeometrymsgs = NULL;
 static PyObject *tf_exception = NULL;
 static PyObject *tf_connectivityexception = NULL, *tf_lookupexception = NULL, *tf_extrapolationexception = NULL;
 
@@ -390,6 +391,18 @@ static PyObject *lookupTwistFull(PyObject *self, PyObject *args)
       twist.angular.x, twist.angular.y, twist.angular.z);
 }
 
+static inline int checkTranslationType(PyObject* o)
+{
+  PyTypeObject *translation_type = (PyTypeObject*) PyObject_GetAttrString(pModulegeometrymsgs, "Vector3");
+  return PyObject_TypeCheck(o, translation_type);
+}
+
+static inline int checkRotationType(PyObject* o)
+{
+  PyTypeObject *rotation_type = (PyTypeObject*) PyObject_GetAttrString(pModulegeometrymsgs, "Quaternion");
+  return PyObject_TypeCheck(o, rotation_type);
+}
+
 static PyObject *setTransform(PyObject *self, PyObject *args)
 {
   tf::Transformer *t = ((transformer_t*)self)->t;
@@ -407,10 +420,21 @@ static PyObject *setTransform(PyObject *self, PyObject *args)
 
   PyObject *mtransform = PyObject_BorrowAttrString(py_transform, "transform");
   PyObject *translation = PyObject_BorrowAttrString(mtransform, "translation");
+  if (!checkTranslationType(translation)) {
+    PyErr_SetString(PyExc_TypeError, "transform.translation must be of type Vector3");
+    return NULL;
+  }
+
   double tx = PyFloat_AsDouble(PyObject_BorrowAttrString(translation, "x"));
   double ty = PyFloat_AsDouble(PyObject_BorrowAttrString(translation, "y"));
   double tz = PyFloat_AsDouble(PyObject_BorrowAttrString(translation, "z"));
+
   PyObject *rotation = PyObject_BorrowAttrString(mtransform, "rotation");
+  if (!checkRotationType(rotation)) {
+    PyErr_SetString(PyExc_TypeError, "transform.rotation must be of type Quaternion");
+    return NULL;
+  }
+
   double qx = PyFloat_AsDouble(PyObject_BorrowAttrString(rotation, "x"));
   double qy = PyFloat_AsDouble(PyObject_BorrowAttrString(rotation, "y"));
   double qz = PyFloat_AsDouble(PyObject_BorrowAttrString(rotation, "z"));
@@ -492,6 +516,8 @@ extern "C" void init_tf()
 #endif
 
   pModulerospy = PyImport_Import(item= PyString_FromString("rospy")); Py_DECREF(item);
+  pModulegeometrymsgs = PyImport_Import(item=PyString_FromString("geometry_msgs.msg"));
+  Py_DECREF(pModulegeometrymsgs);
 
   transformer_Type.tp_alloc = PyType_GenericAlloc;
   transformer_Type.tp_new = PyType_GenericNew;

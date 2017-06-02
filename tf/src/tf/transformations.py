@@ -965,12 +965,12 @@ def superimposition_matrix(v0, v1, scaling=False, usesvd=True):
     return M
 
 
-def euler_matrix(ai, aj, ak, axes='sxyz'):
+def euler_matrix(a, aj = None, ak = None, axes='sxyz'):
     """Return homogeneous rotation matrix from Euler angles and axis sequence.
 
     ai, aj, ak : Euler's roll, pitch and yaw angles
     axes : One of 24 axis sequences as string or encoded tuple
-
+f
     >>> R = euler_matrix(1, 2, 3, 'syxz')
     >>> numpy.allclose(numpy.sum(R[0]), -1.34786452)
     True
@@ -984,6 +984,13 @@ def euler_matrix(ai, aj, ak, axes='sxyz'):
     ...    R = euler_matrix(ai, aj, ak, axes)
 
     """
+    #if the first argument is a list of length 3, re-assign ai, aj and ak
+    if isinstance(a, list):
+        ai = a[0]
+        aj = a[1]
+        ak = a[2]
+    else:
+        ai = a
     try:
         firstaxis, parity, repetition, frame = _AXES2TUPLE[axes]
     except (AttributeError, KeyError):
@@ -1089,7 +1096,8 @@ def euler_from_matrix(matrix, axes='sxyz'):
 def euler_from_quaternion(quaternion, axes='sxyz'):
     """Return Euler angles from quaternion for specified axis sequence.
 
-    >>> angles = euler_from_quaternion([0.06146124, 0, 0, 0.99810947])
+    >>> angles = euler_from_quaternion([0.06146124, 0, 0, 0.99810947]), or
+                 euler_from_quaternion('geometry_msgs.msg._Quaternion.Quaternion)
     >>> numpy.allclose(angles, [0.123, 0, 0])
     True
 
@@ -1097,17 +1105,25 @@ def euler_from_quaternion(quaternion, axes='sxyz'):
     return euler_from_matrix(quaternion_matrix(quaternion), axes)
 
 
-def quaternion_from_euler(ai, aj, ak, axes='sxyz'):
+def quaternion_from_euler(a, aj=None, ak=None, axes='sxyz'):
     """Return quaternion from Euler angles and axis sequence.
 
     ai, aj, ak : Euler's roll, pitch and yaw angles
     axes : One of 24 axis sequences as string or encoded tuple
 
-    >>> q = quaternion_from_euler(1, 2, 3, 'ryxz')
+    >>> q = quaternion_from_euler(1, 2, 3, 'ryxz'), or
+            quaternion_from_euler([1,2,3], 'ryxz')
     >>> numpy.allclose(q, [0.310622, -0.718287, 0.444435, 0.435953])
     True
 
     """
+    #if the first argument is a list of length 3, re-assign ai, aj and ak
+    if isinstance(a, list):
+        ai = a[0]
+        aj = a[1]
+        ak = a[2]
+    else:
+        ai = a
     try:
         firstaxis, parity, repetition, frame = _AXES2TUPLE[axes.lower()]
     except (AttributeError, KeyError):
@@ -1179,7 +1195,10 @@ def quaternion_matrix(quaternion):
     True
 
     """
-    q = numpy.array(quaternion[:4], dtype=numpy.float64, copy=True)
+    if isinstance(quaternion, list):
+        q = numpy.array(quaternion[:4], dtype=numpy.float64, copy=True)
+    else:
+        q = numpy.array([quaternion.x, quaternion.y, quaternion.z, quaternion.w], dtype=numpy.float64, copy=True)
     nq = numpy.dot(q, q)
     if nq < _EPS:
         return numpy.identity(4)
@@ -1233,8 +1252,22 @@ def quaternion_multiply(quaternion1, quaternion0):
     True
 
     """
-    x0, y0, z0, w0 = quaternion0
-    x1, y1, z1, w1 = quaternion1
+    if hasattr(quaternion0,"x") and hasattr(quaternion0,"y") and hasattr(quaternion0,"z") and hasattr(quaternion0,"w"):
+        x0 = quaternion0.x
+        y0 = quaternion0.y
+        z0 = quaternion0.z
+        w0 = quaternion0.w
+    else:
+        x0, y0, z0, w0 = quaternion1
+
+    if hasattr(quaternion1,"x") and hasattr(quaternion1,"y") and hasattr(quaternion1,"z") and hasattr(quaternion1,"w"):
+        x1 = quaternion1.x
+        y1 = quaternion1.y
+        z1 = quaternion1.z
+        w1 = quaternion1.w
+    else:
+        x1, y1, z1, w1 = quaternion1
+
     return numpy.array((
          x1*w0 + y1*z0 - z1*y0 + w1*x0,
         -x1*z0 + y1*w0 + z1*x0 + w1*y0,

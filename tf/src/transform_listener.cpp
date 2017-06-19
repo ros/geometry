@@ -31,9 +31,6 @@
 
 #include "tf/transform_listener.h"
 
-#include <boost/numeric/ublas/matrix.hpp>
-#include <boost/numeric/ublas/io.hpp>
-
 
 using namespace tf;
 std::string tf::remap(const std::string& frame_id)
@@ -243,7 +240,3 @@ void TransformListener::transformPointCloud(const std::string & target_frame, co
     transformPointMatVec(origin, basis, cloudIn.points[i], cloudOut.points[i]);
   }
 }
-
-
-
-

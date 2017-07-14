@@ -29,11 +29,10 @@ any desired point in time.
   <build_depend>message_generation</build_depend>
   <build_depend>rosconsole</build_depend>
   <build_depend>roscpp</build_depend>
-  <build_depend>rostest</build_depend>
+  <build_depend>rostime</build_depend>
   <build_depend>sensor_msgs</build_depend>
   <build_depend>std_msgs</build_depend>
-  <build_depend version_gte="0.5.8">tf2</build_depend>
-  <build_depend version_gte="0.5.4">tf2_ros</build_depend>
+  <build_depend version_gte="0.5.16">tf2_ros</build_depend>
 
   <run_depend>geometry_msgs</run_depend>
   <run_depend>graphviz</run_depend>
@@ -44,8 +43,10 @@ any desired point in time.
   <run_depend>roswtf</run_depend>
   <run_depend>sensor_msgs</run_depend>
   <run_depend>std_msgs</run_depend>
-  <run_depend version_gte="0.4.5">tf2</run_depend>
-  <run_depend version_gte="0.4.5">tf2_ros</run_depend>
+  <run_depend version_gte="0.5.16">tf2_ros</run_depend>
+
+  <test_depend>rostest</test_depend>
+  <test_depend>rosunit</test_depend>
 
   <export>
     <roswtf plugin="tf.tfwtf" />

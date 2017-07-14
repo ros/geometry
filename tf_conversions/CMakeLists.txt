@@ -3,18 +3,18 @@ project(tf_conversions)
 
 find_package(orocos_kdl REQUIRED)
 find_package(catkin REQUIRED cmake_modules geometry_msgs kdl_conversions tf)
-find_package(Eigen REQUIRED)
+find_package(Eigen3 REQUIRED)
 
 catkin_python_setup()
 
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES ${PROJECT_NAME}
-  DEPENDS Eigen orocos_kdl
+  DEPENDS EIGEN3 orocos_kdl
   CATKIN_DEPENDS geometry_msgs kdl_conversions tf
 )
 
-include_directories(include ${catkin_INCLUDE_DIRS} ${EIGEN_INCLUDE_DIRS} ${orocos_kdl_INCLUDE_DIRS})
+include_directories(include ${catkin_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS} ${orocos_kdl_INCLUDE_DIRS})
 
 # Needed due to no full filename in orocos_kdl pkg-config export
 link_directories(${orocos_kdl_LIBRARY_DIRS})
@@ -23,7 +23,7 @@ add_library(${PROJECT_NAME}
   src/tf_kdl.cpp
   src/tf_eigen.cpp
 )
-add_dependencies(${PROJECT_NAME} geometry_msgs_gencpp)
+add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${orocos_kdl_LIBRARIES})
 
 # Tests
@@ -34,6 +34,9 @@ catkin_add_gtest(test_eigen_tf test/test_eigen_tf.cpp)
 target_link_libraries(test_eigen_tf ${PROJECT_NAME} ${orocos_kdl_LIBRARIES})
 
 catkin_add_gtest(test_kdl_tf test/test_kdl_tf.cpp)
+if(CMAKE_COMPILER_IS_GNUCXX)
+set_target_properties(test_kdl_tf PROPERTIES COMPILE_FLAGS "-Wno-deprecated-declarations")
+endif()
 target_link_libraries(test_kdl_tf ${PROJECT_NAME} ${orocos_kdl_LIBRARIES})
 
 catkin_add_nosetests(test/posemath.py)

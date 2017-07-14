@@ -30,11 +30,8 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-import rospy
-import tf
-import tf.msg
 import geometry_msgs.msg
-import math
+import tf2_ros.transform_broadcaster
 
 class TransformBroadcaster:
     """
@@ -42,8 +39,7 @@ class TransformBroadcaster:
     """
 
     def __init__(self, queue_size=100):
-        self.pub_tf = rospy.Publisher("/tf", tf.msg.tfMessage,
-                queue_size=queue_size)
+        self.tf2_broadcaster = tf2_ros.transform_broadcaster.TransformBroadcaster()
 
     def sendTransform(self, translation, rotation, time, child, parent):
         """
@@ -68,7 +64,7 @@ class TransformBroadcaster:
         t.transform.rotation.y = rotation[1]
         t.transform.rotation.z = rotation[2]
         t.transform.rotation.w = rotation[3]
-        
+
         self.sendTransformMessage(t)
 
     def sendTransformMessage(self, transform):
@@ -76,10 +72,4 @@ class TransformBroadcaster:
         :param transform: geometry_msgs.msg.TransformStamped
         Broadcast the transformation from tf frame child to parent on ROS topic ``"/tf"``.
         """
-        tfm = tf.msg.tfMessage([transform])
-        self.pub_tf.publish(tfm)
-
-if __name__ == '__main__':
-    rospy.init_node('tf_turtle')
-    tfb = TurtleTFBroadcaster(rospy.get_param('~turtle'))
-    rospy.spin()
+        self.tf2_broadcaster.sendTransform([transform])

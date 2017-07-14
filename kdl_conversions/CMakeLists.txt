@@ -6,7 +6,7 @@ find_package(orocos_kdl REQUIRED)
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES ${PROJECT_NAME}
-  CATKIN_DEPENDS geometry_msgs 
+  CATKIN_DEPENDS geometry_msgs
   DEPENDS orocos_kdl
 )
 
@@ -17,7 +17,7 @@ link_directories(${orocos_kdl_LIBRARY_DIRS})
 add_library(${PROJECT_NAME}
   src/kdl_msg.cpp
 )
-add_dependencies(${PROJECT_NAME} geometry_msgs_gencpp)
+add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${orocos_kdl_LIBRARIES})
 
 install(DIRECTORY include/${PROJECT_NAME}/

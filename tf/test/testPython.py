@@ -32,6 +32,11 @@ def setT(t, parent, frame, ti, x):
 
 class TestPython(unittest.TestCase):
 
+    @classmethod
+    def setUpClass(cls):
+        super(TestPython, cls).setUpClass()
+        rospy.rostime.set_rostime_initialized(True)
+
     def setUp(self):
         pass
 
@@ -46,13 +51,23 @@ class TestPython(unittest.TestCase):
         self.assert_(len(afs) != 0)
         self.assert_("PARENT" in afs)
         self.assert_("THISFRAME" in afs)
+
+        # Test getFrameStrings
+        frames = t.getFrameStrings()
+        self.assert_("THISFRAME" in frames)
+        self.assert_("PARENT" not in frames)
+
+        self.assert_(t.frameExists("THISFRAME"))
+        self.assert_(not t.frameExists("PARENT"))
+
+
         self.assert_(t.getLatestCommonTime("THISFRAME", "PARENT").to_sec() == 0)
         for ti in [3, 5, 10, 11, 19, 20, 21]:
             m.header.stamp.secs = ti
             t.setTransform(m)
             self.assert_(t.getLatestCommonTime("THISFRAME", "PARENT").to_sec() == ti)
 
-        # Verify that getLatestCommonTime with nonexistent frames raise exception 
+        # Verify that getLatestCommonTime with nonexistent frames raise exception
         self.assertRaises(tf.Exception, lambda: t.getLatestCommonTime("MANDALAY", "JUPITER"))
         self.assertRaises(tf.LookupException, lambda: t.lookupTransform("MANDALAY", "JUPITER", rospy.Time()))
 
@@ -65,6 +80,30 @@ class TestPython(unittest.TestCase):
         t = tf.Transformer()
         self.common(t)
 
+    def test_chain(self):
+        t = tf.Transformer()
+        self.common(t)
+        m = geometry_msgs.msg.TransformStamped()
+        m.header.frame_id = "A"
+        m.child_frame_id = "B"
+        m.transform.translation.y = 5.0
+        m.transform.rotation = geometry_msgs.msg.Quaternion(*tf.transformations.quaternion_from_euler(0, 0, 0))
+        t.setTransform(m)
+
+        m.header.frame_id = "B"
+        m.child_frame_id = "C"
+        t.setTransform(m)
+
+        m.header.frame_id = "B"
+        m.child_frame_id = "C"
+        t.setTransform(m)
+
+        chain = t.chain("A", rospy.Time(0), "C", rospy.Time(0), "B")
+        print("Chain is %s" % chain)
+        self.assert_("C" in chain)
+        self.assert_("B" in chain)
+
+
     def test_wait_for_transform(self):
 
         def elapsed_time_within_epsilon(t, delta, epsilon):
@@ -74,7 +113,7 @@ class TestPython(unittest.TestCase):
         t = tf.Transformer()
         self.common(t)
 
-        timeout = rospy.Duration(1.1)
+        timeout = rospy.Duration(1)
         epsilon = 0.1
 
         # Check for dedicated thread exception, existing frames
@@ -90,12 +129,12 @@ class TestPython(unittest.TestCase):
         # Verify exception still thrown with unavailable time near timeout
         start = time.clock()
         self.assertRaises(tf.Exception, lambda: t.waitForTransform("PARENT", "THISFRAME", rospy.Time(25), timeout))
-        elapsed_time_within_epsilon(start, timeout.to_sec(), epsilon)
+        elapsed_time_within_epsilon(time.clock() - start, timeout.to_sec(), epsilon)
 
         # Verify exception stil thrown with non-existing frames near timeout
         start = time.clock()
         self.assertRaises(tf.Exception, lambda: t.waitForTransform("MANDALAY", "JUPITER", rospy.Time(), timeout))
-        elapsed_time_within_epsilon(start, timeout.to_sec(), epsilon)
+        elapsed_time_within_epsilon(time.clock() - start, timeout.to_sec(), epsilon)
 
     def test_cache_time(self):
         # Vary cache_time and confirm its effect on ExtrapolationException from lookupTransform().
@@ -223,18 +262,18 @@ class TestPython(unittest.TestCase):
           self.assertFalse("This should throw")
         except tf.Exception, ex:
           print "successfully caught"
-          pass 
-        
+          pass
+
 
     def test_transformer_wait_for_transform(self):
         tr = tf.Transformer()
         tr.setUsingDedicatedThread(1)
-        
+
         try:
           tr.waitForTransform("PARENT", "THISFRAME", rospy.Time().from_sec(4.0), rospy.Duration(3.0))
           self.assertFalse("This should throw")
         except tf.Exception, ex:
-          pass 
+          pass
 
         m = geometry_msgs.msg.TransformStamped()
         m.header.stamp = rospy.Time().from_sec(3.0)

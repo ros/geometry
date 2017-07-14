@@ -51,7 +51,9 @@ class Transformer(object):
         self._buffer = tf2_ros.Buffer(cache_time, debug=False)
         self._using_dedicated_thread = False
 
-    def allFramesAsDot(self):
+    def allFramesAsDot(self, current_time=None):
+        if current_time:
+            return self._buffer._allFramesAsDot(current_time)
         return self._buffer._allFramesAsDot()
 
     def allFramesAsString(self):

@@ -2,6 +2,11 @@
 Changelog for package kdl_conversions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Fix cmake dependency export usage
+* Contributors: Timo Röhling
+
 1.11.8 (2016-03-04)
 -------------------
 

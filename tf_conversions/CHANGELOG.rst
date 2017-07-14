@@ -2,6 +2,12 @@
 Changelog for package tf_conversions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Fix cmake dependency export usage
+* address gcc6 build error (`#143 <https://github.com/ros/geometry/issues/143>`_)
+* Contributors: Lukas Bulwahn, Tully Foote, Timo Röhling
+
 1.11.8 (2016-03-04)
 -------------------
 * tf_conversions: Add conversion functions for Eigen::Isometry3d

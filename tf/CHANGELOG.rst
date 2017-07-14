@@ -2,6 +2,23 @@
 Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Replace legacy python code with appropriate calls to tf2_ros (`#149 <https://github.com/ros/geometry/issues/149>`_) (`#134 <https://github.com/ros/geometry/issues/134>`_)
+* Replace deprecated Eigen module with Eigen3
+* Update minimum version for run dependency on tf2_ros
+* Add support for static_transforms in tf_monitor.
+  Fixes `#136 <https://github.com/ros/geometry/issues/136>`_ with `#134 <https://github.com/ros/geometry/issues/134>`_ for tf_echo and view_frames.
+* Pass through allFramesAsDot time argument optionally.
+* remove vestigial includes. Fixes `#146 <https://github.com/ros/geometry/issues/146>`_ (`#147 <https://github.com/ros/geometry/issues/147>`_)
+* Commented code caused error in documentation (`#142 <https://github.com/ros/geometry/issues/142>`_)
+* [doc] Add migration notice in manifest. (`#129 <https://github.com/ros/geometry/issues/129>`_)
+* Fix "stdlib.h: No such file or directory" errors in GCC-6
+* Fix error for null conversion.
+* Change version regex for graphviz in view_frames
+* fix for issue in getAngleShortestPath(), closes `#102 <https://github.com/ros/geometry/issues/102>`_
+* Contributors: AndyZe, Edward Venator, Hodorgasm, Isaac I.Y. Saito, Michael Korn, Mike Purvis, Tom Moore, Tully Foote, Timo Röhling
+
 1.11.8 (2016-03-04)
 -------------------
 * Update assertQuaternionValid to check for NaNs

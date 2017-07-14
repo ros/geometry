@@ -2,8 +2,8 @@
 Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.11.9 (2017-07-14)
+-------------------
 * Replace legacy python code with appropriate calls to tf2_ros (`#149 <https://github.com/ros/geometry/issues/149>`_) (`#134 <https://github.com/ros/geometry/issues/134>`_)
 * Replace deprecated Eigen module with Eigen3
 * Update minimum version for run dependency on tf2_ros

@@ -2,8 +2,8 @@
 Changelog for package tf_conversions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.11.9 (2017-07-14)
+-------------------
 * Fix cmake dependency export usage
 * address gcc6 build error (`#143 <https://github.com/ros/geometry/issues/143>`_)
 * Contributors: Lukas Bulwahn, Tully Foote, Timo Röhling

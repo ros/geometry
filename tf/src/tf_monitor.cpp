@@ -51,7 +51,7 @@ public:
   bool using_specific_chain_;
   
   ros::NodeHandle node_;
-  ros::Subscriber subscriber_tf_, subscriber_tf_message_;
+  ros::Subscriber subscriber_tf_, subscriber_tf_static_;
   std::vector<std::string> chain_;
   std::map<std::string, std::string> frame_authority_map;
   std::map<std::string, std::vector<double> > delay_map;
@@ -67,14 +67,34 @@ public:
   {
     const tf::tfMessage& message = *(msg_evt.getConstMessage());
     std::string authority = msg_evt.getPublisherName(); // lookup the authority 
+    process_callback(message, authority, false);
+  }
+  
+  void static_callback(const ros::MessageEvent<tf::tfMessage const>& msg_evt)
+  {
+    const tf::tfMessage& message = *(msg_evt.getConstMessage());
+    std::string authority = msg_evt.getPublisherName() + std::string("(static)"); // lookup the authority 
+    process_callback(message, authority, true);
+  }
 
+
+  void process_callback(const tf::tfMessage& message, const std::string & authority, bool is_static)
+  {
     double average_offset = 0;
-    boost::mutex::scoped_lock my_lock(map_lock_);  
+    boost::mutex::scoped_lock my_lock(map_lock_);
     for (unsigned int i = 0; i < message.transforms.size(); i++)
     {
       frame_authority_map[message.transforms[i].child_frame_id] = authority;
 
-      double offset = (ros::Time::now() - message.transforms[i].header.stamp).toSec();
+      double offset;
+      if (is_static)
+      {
+        offset = 0.0;
+      }
+      else
+      {
+        offset = (ros::Time::now() - message.transforms[i].header.stamp).toSec();
+      }
       average_offset  += offset;
       
       std::map<std::string, std::vector<double> >::iterator it = delay_map.find(message.transforms[i].child_frame_id);
@@ -149,7 +169,7 @@ public:
       cout <<endl;*/
     }
     subscriber_tf_ = node_.subscribe<tf::tfMessage>("tf", 100, boost::bind(&TFMonitor::callback, this, _1));
-    subscriber_tf_message_ = node_.subscribe<tf::tfMessage>("tf_message", 100, boost::bind(&TFMonitor::callback, this, _1));
+    subscriber_tf_static_ = node_.subscribe<tf::tfMessage>("tf_static", 100, boost::bind(&TFMonitor::static_callback, this, _1));
     
   }
 

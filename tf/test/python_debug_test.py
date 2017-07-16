@@ -152,6 +152,6 @@ try:
     print("done")
 
 except ValueError as e:
-    print("Exception %s Improperly thrown: %s"%(type(e), e))
+    print("Exception {} Improperly thrown: {}".format(type(e), e))
 
 

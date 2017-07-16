@@ -40,4 +40,4 @@ try:
     print(transform_stamped.transform)
     
 except ValueError as e:
-    print("Exception %s Improperly thrown: %s"%(type(e), e))
+    print("Exception {} Improperly thrown: {}".format(type(e), e))

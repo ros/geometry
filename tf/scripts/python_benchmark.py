@@ -91,7 +91,7 @@ for t in [tf.msg.tfMessage, tf.cMsg.tfMessage]:
     assert deserel_to_string(m2) == mstr, "deserel screwed up for type %s" % repr(t)
 
     m2 = t()
-    print("deserialize only ", 1e6 * Timer(lambda: m2.deserialize(mstr)).mean(), "us each")
+    print("deserialize only {} us each".format(1e6 * Timer(lambda: m2.deserialize(mstr)).mean())
 
 sys.exit(0)
 
@@ -100,7 +100,7 @@ for i in range(iterations):
     for m in tm.transforms:
         t.setTransform(m)
 took = time.time() - started
-print("setTransform only", iterations, "took", took, "%f us each" % (1e6 * took / iterations))
+print("setTransform only {} took {} us each".format(iterations, took, (1e6 * took / iterations)))
 
 started = time.time()
 for i in range(iterations):
@@ -109,6 +109,6 @@ for i in range(iterations):
     for m in m2.transforms:
         t.setTransform(m)
 took = time.time() - started
-print("deserialize+setTransform ", iterations, "took", took, "%f us each" % (1e6 * took / iterations))
+print("deserialize+setTransform {} took {} us each".format(iterations, took, (1e6 * took / iterations)))
 
 from tf import TransformListener

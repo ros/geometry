@@ -73,14 +73,14 @@ class Transformer(object):
             raise tf2_ros.TransformException("cannot wait for transform without a dedicated thread that listens to incoming TF messages")
         can_transform, error_msg = self._buffer.can_transform(strip_leading_slash(target_frame), strip_leading_slash(source_frame), time, timeout, return_debug_tuple=True)
         if not can_transform:
-            raise tf2_ros.TransformException(error_msg or "no such transformation: \"%s\" -> \"%s\"" % (source_frame, target_frame))
+            raise tf2_ros.TransformException(error_msg or "no such transformation: \"{}\" -> \"{}\"".format(source_frame, target_frame))
 
     def waitForTransformFull(self, target_frame, target_time, source_frame, source_time, fixed_frame, timeout, polling_sleep_duration=None):
         if not self._using_dedicated_thread:
             raise tf2_ros.TransformException("cannot wait for transform without a dedicated thread that listens to incoming TF messages")
         can_transform, error_msg = self._buffer.can_transform_full(strip_leading_slash(target_frame), target_time, strip_leading_slash(source_frame), source_time, strip_leading_slash(fixed_frame), timeout, return_debug_tuple=True)
         if not can_transform:
-            raise tf2_ros.TransformException(error_msg or "no such transformation: \"%s\" -> \"%s\"" % (source_frame, target_frame))
+            raise tf2_ros.TransformException(error_msg or "no such transformation: \"{}\" -> \"{}\"".format(source_frame, target_frame))
 
     def chain(self, target_frame, target_time, source_frame, source_time, fixed_frame):
         return self._buffer._chain( target_frame, target_time, source_frame, source_time, fixed_frame)

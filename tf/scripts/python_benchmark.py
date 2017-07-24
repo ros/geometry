@@ -30,13 +30,19 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+from __future__ import print_function
+
 import rostest
 import rospy
 import numpy
 import unittest
 import sys
 import time
-import StringIO
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from io import StringIO
+
 
 import tf.transformations
 import geometry_msgs.msg
@@ -59,7 +65,7 @@ def mkm():
 tm = tfMessage([mkm() for i in range(20)])
 
 def deserel_to_string(o):
-    s = StringIO.StringIO()
+    s = StringIO()
     o.serialize(s)
     return s.getvalue()
 
@@ -70,7 +76,7 @@ class Timer:
         self.func = func
     def mean(self, iterations = 1000000):
         started = time.time()
-        for i in xrange(iterations):
+        for i in range(iterations):
             self.func()
         took = time.time() - started
         return took / iterations
@@ -81,28 +87,28 @@ for t in [tf.msg.tfMessage, tf.cMsg.tfMessage]:
     m2 = t()
     m2.deserialize(mstr)
     for m in m2.transforms:
-        print type(m), sys.getrefcount(m)
+        print(type(m), sys.getrefcount(m))
     assert deserel_to_string(m2) == mstr, "deserel screwed up for type %s" % repr(t)
 
     m2 = t()
-    print "deserialize only ", 1e6 * Timer(lambda: m2.deserialize(mstr)).mean(), "us each"
+    print("deserialize only {} us each".format(1e6 * Timer(lambda: m2.deserialize(mstr)).mean())
 
 sys.exit(0)
 
 started = time.time()
-for i in xrange(iterations):
+for i in range(iterations):
     for m in tm.transforms:
         t.setTransform(m)
 took = time.time() - started
-print "setTransform only", iterations, "took", took, "%f us each" % (1e6 * took / iterations)
+print("setTransform only {} took {} us each".format(iterations, took, (1e6 * took / iterations)))
 
 started = time.time()
-for i in xrange(iterations):
+for i in range(iterations):
     m2 = tfMessage()
     m2.deserialize(mstr)
     for m in m2.transforms:
         t.setTransform(m)
 took = time.time() - started
-print "deserialize+setTransform ", iterations, "took", took, "%f us each" % (1e6 * took / iterations)
+print("deserialize+setTransform {} took {} us each".format(iterations, took, (1e6 * took / iterations)))
 
 from tf import TransformListener

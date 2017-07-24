@@ -35,6 +35,8 @@
 
 ## remap a tf topic
 
+from __future__ import print_function
+
 import rospy
 from tf.msg import tfMessage
 
@@ -43,12 +45,12 @@ class TfRemapper:
         self.pub = rospy.Publisher('/tf', tfMessage, queue_size=1)
         mappings = rospy.get_param('~mappings', [])
         self.mappings = {}
-        
+
         for i in mappings:
             if "old" in i and "new" in i:
                 self.mappings[i["old"]] = i["new"]
 
-        print "Applying the following mappings to incoming tf frame ids", self.mappings
+        print("Applying the following mappings to incoming tf frame ids", self.mappings)
         rospy.Subscriber("/tf_old", tfMessage, self.callback)
 
     def callback(self, tf_msg):
@@ -57,14 +59,13 @@ class TfRemapper:
                 transform.header.frame_id = self.mappings[transform.header.frame_id]
             if transform.child_frame_id  in self.mappings:
                 transform.child_frame_id = self.mappings[transform.child_frame_id]
-                
+
         self.pub.publish(tf_msg)
 
 def remap_tf():
-    
     pub.publish(Empty())
 
-        
+
 if __name__ == '__main__':
     rospy.init_node('tf_remapper')
     tfr = TfRemapper()

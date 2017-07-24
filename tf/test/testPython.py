@@ -99,7 +99,7 @@ class TestPython(unittest.TestCase):
         t.setTransform(m)
 
         chain = t.chain("A", rospy.Time(0), "C", rospy.Time(0), "B")
-        print("Chain is %s" % chain)
+        print("Chain is {}".format(chain))
         self.assert_("C" in chain)
         self.assert_("B" in chain)
 
@@ -214,9 +214,9 @@ class TestPython(unittest.TestCase):
 
         types = [ "Point", "Pose", "Quaternion", "Vector3" ]
         for t in types:
-            msg = getattr(geometry_msgs.msg, "%sStamped" % t)()
+            msg = getattr(geometry_msgs.msg, "{}Stamped".format(t))()
             msg.header.frame_id = "THISFRAME"
-            msg_t = getattr(tr, "transform%s" % t)("PARENT", msg)
+            msg_t = getattr(tr, "transform{}".format(t))("PARENT", msg)
             self.assertEqual(msg_t.header.frame_id, "PARENT")
 
         # PointCloud is a bit different, so smoke is different
@@ -260,10 +260,9 @@ class TestPython(unittest.TestCase):
         try:
           tr.waitForTransform("PARENT", "THISFRAME", rospy.Time().from_sec(4.0), rospy.Duration(3.0))
           self.assertFalse("This should throw")
-        except tf.Exception, ex:
-          print "successfully caught"
+        except tf.Exception as ex:
+          print("successfully caught")
           pass
-
 
     def test_transformer_wait_for_transform(self):
         tr = tf.Transformer()
@@ -272,7 +271,7 @@ class TestPython(unittest.TestCase):
         try:
           tr.waitForTransform("PARENT", "THISFRAME", rospy.Time().from_sec(4.0), rospy.Duration(3.0))
           self.assertFalse("This should throw")
-        except tf.Exception, ex:
+        except tf.Exception as ex:
           pass
 
         m = geometry_msgs.msg.TransformStamped()
@@ -290,7 +289,7 @@ class TestPython(unittest.TestCase):
 
         try:
           tr.waitForTransform("PARENT", "THISFRAME", rospy.Time().from_sec(4.0), rospy.Duration(3.0))
-        except tf.Exception, ex:
+        except tf.Exception as ex:
           self.assertFalse("This should not throw")
 
 

@@ -40,6 +40,8 @@
 # If they are change the line below with the for loop to use the
 # namespaced_rules
 
+from __future__ import print_function
+
 import subprocess
 
 
@@ -80,9 +82,9 @@ namespaced_rules = [
 
 for rule in rules + unnamespaced_rules: #change me if using files with namespace tf set
     full_cmd = cmd%locals()
-    print ("Running %s"%full_cmd)
+    print("Running {}".format(full_cmd))
     ret_code = subprocess.call(full_cmd, shell=True)
     if ret_code == 0:
-        print ("success")
+        print("success")
     else:
-        print ("failure")
+        print("failure")

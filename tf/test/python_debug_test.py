@@ -25,6 +25,8 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+from __future__ import print_function
+
 import rospy
 import tf
 import time
@@ -38,108 +40,108 @@ try:
     time.sleep(1)
 
     # View all frames
-    print "All frames are:\n", tfl.all_frames_as_string()
+    print("All frames are:\n", tfl.all_frames_as_string())
 
     # dot based introspection
-    print "All frame graph is:\n", tfl.all_frames_as_dot()
+    print("All frame graph is:\n", tfl.all_frames_as_dot())
 
     
     # test transforming pose
     po = tf.PoseStamped()
     po.frame_id = "base_link"
-    print "calling transform pose"
+    print("calling transform pose")
     po2 = tfl.transform_pose("/map", po)
 
-    print "po2.pose.this", po2.pose.this
-    print "po.pose.this", po.pose.this
+    print("po2.pose.this", po2.pose.this)
+    print("po.pose.this", po.pose.this)
 
     # test transforming point
     po = tf.PointStamped()
     po.frame_id = "base_link"
     po3 = tfl.transform_point("/map", po)
-    print "po3"
-    print po3.this
+    print("po3")
+    print(po3.this)
 
     # test transforming vector
     po = tf.VectorStamped()
     po.frame_id = "base_link"
     po4 = tfl.transform_vector("/map", po)
-    print po4.this
+    print(po4.this)
     
     # test transforming quaternion
     po = tf.QuaternionStamped()
     po.frame_id = "base_link"
     po5 = tfl.transform_quaternion("/map", po)
-    print "po5",  po5.this
+    print("po5",  po5.this)
     
     tr = tf.TransformStamped()
 
     lps = tf.PoseStamped()
     lps.pose.setIdentity()
-    print "setting stamp"
+    print("setting stamp")
     mytime = rospy.Time(10,20)
     lps.stamp = mytime
-    print mytime
-    print "getting stamp"
+    print(mytime)
+    print("getting stamp")
     output = lps.stamp
-    print output
-    print lps.pose
-    print "setting pose.positon to 1,2,3"
+    print(output)
+    print(lps.pose)
+    print("setting pose.positon to 1,2,3")
     lps.pose.setOrigin( bullet.Vector3(1,2,3))
-    print lps.pose.getOrigin()
-    print lps.pose    
+    print(lps.pose.getOrigin())
+    print(lps.pose)
 
     transform_stamped = tf.TransformStamped()
-    print "getting stamp"
-    print transform_stamped.stamp
+    print("getting stamp")
+    print(transform_stamped.stamp)
 #    mytime = rospy.Time().now()
     mytime = rospy.Time(10,20)
     transform_stamped.stamp = mytime
-    print mytime
-    print "getting stamp", transform_stamped.stamp
-    print "transform:", transform_stamped.transform
+    print(mytime)
+    print("getting stamp", transform_stamped.stamp)
+    print("transform:", transform_stamped.transform)
     transform_stamped.transform.setIdentity()
-    print "after setIdentity()", transform_stamped.transform
+    print("after setIdentity()", transform_stamped.transform)
     #    transform_stamped.transform.basis.setEulerZYX(0,0,0)
     quat = bullet.Quaternion(math.pi/2,0,0)
-    print "quaternion ", quat
+    print("quaternion ", quat)
     transform_stamped.transform.setRotation(quat)
-    print "setting rotation to PI/2",transform_stamped.transform
+    print("setting rotation to PI/2",transform_stamped.transform)
 
 
     pointstamped = tf.PointStamped()
-    print "getting stamp"
-    print pointstamped.stamp
+    print("getting stamp")
+    print(pointstamped.stamp)
 #    mytime = rospy.Time().now()
     mytime = rospy.Time(10,20)
     pointstamped.stamp = mytime
-    print mytime
-    print "getting stamp"
+    print(mytime)
+    print("getting stamp")
     output = pointstamped.stamp
-    print output
-    print pointstamped.point
-    print transform_stamped.transform * pointstamped.point
+    print(output)
+    print(pointstamped.point)
+    print(transform_stamped.transform * pointstamped.point)
 
     pose_only = bullet.Transform(transform_stamped.transform)
-    print "destructing pose_only", pose_only.this    
+    print("destructing pose_only", pose_only.this    )
     pose_only = []
 
     
-    print "Creating copy"
+    print("Creating copy")
     po2_copy = tf.PoseStamped(po2)
-    print "po2_copy.pose", po2_copy.pose.this
-    print "po2.pose", po2.pose.this
+    print("po2_copy.pose", po2_copy.pose.this)
+    print("po2.pose", po2.pose.this)
 
-    print "Creating copy2"
+    print("Creating copy2")
     po2_copy2 = tf.PoseStamped(po2)
-    print "po2_copy2.pose", po2_copy2.pose.this
+    print("po2_copy2.pose", po2_copy2.pose.this)
 
 
-    print "destructing po2  po2.pose is", po2.pose.this
+    print("destructing po2  po2.pose is", po2.pose.this)
     po2 = []
 
 
-    print "destructing po2_copy po2_copy.pose is", po2_copy.pose.this
+    print("destructing po2_copy po2_copy.pose is", po2_copy.pose.this)
     po2_copy = []    
 
     
@@ -147,9 +149,9 @@ try:
     
 
 
-    print "done"
+    print("done")
 
-except ValueError, e:
-    print "Exception %s Improperly thrown: %s"%(type(e), e)
+except ValueError as e:
+    print("Exception {} Improperly thrown: {}".format(type(e), e))
 
 

@@ -33,10 +33,7 @@
 #
 # Revision $Id: gossipbot.py 1013 2008-05-21 01:08:56Z sfkwc $
 
-## Simple demo of a rospy service client that calls a service to add
-## two integers. 
-
-from __future__ import with_statement
+from __future__ import print_function, with_statement
 
 import sys, time
 import os
@@ -54,59 +51,55 @@ import tf
 def listen(duration):
     rospy.init_node("view_frames", anonymous=True)
     tf_listener = tf.TransformListener()
-    print "Listening to /tf for %f seconds"%duration
+    print("Listening to /tf for {} seconds".format(duration))
     time.sleep(duration)
-    print "Done Listening"
+    print("Done Listening")
     return tf_listener.allFramesAsDot(rospy.Time.now())
-    
 
 def poll(node_name):
-    print "Waiting for service %s/tf_frames"%node_name
-    rospy.wait_for_service('%s/tf_frames'%node_name)
+    print("Waiting for service {}/tf_frames".format(node_name))
+    rospy.wait_for_service('{}/tf_frames'.format(node_name))
 
     try:
-        print "Polling service"
-        tf_frames_proxy = rospy.ServiceProxy('%s/tf_frames'%node_name, FrameGraph)
-
+        print("Polling service")
+        tf_frames_proxy = rospy.ServiceProxy('{}/tf_frames'.format(node_name), FrameGraph)
         output = tf_frames_proxy.call(FrameGraphRequest())
 
-    except rospy.ServiceException, e:
-        print "Service call failed: %s"%e
-        
+    except rospy.ServiceException as e:
+        print("Service call failed: {}".format(e))
+
     return output.dot_graph
 
 def generate(dot_graph):
 
-
     with open('frames.gv', 'w') as outfile:
         outfile.write(dot_graph)
-
 
     try:
         # Check version, make postscript if too old to make pdf
         args = ["dot", "-V"]
         try:
             vstr = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[1]
-        except OSError, ex:
-            print "Warning: Could not execute `dot -V`.  Is graphviz installed?"
+        except OSError as ex:
+            print("Warning: Could not execute `dot -V`.  Is graphviz installed?")
             sys.exit(-1)
         v = distutils.version.StrictVersion('2.16')
         r = re.compile(".*version (\d+\.?\d*)")
-        print vstr
+        print(vstr)
         m = r.search(vstr)
         if not m or not m.group(1):
-          print 'Warning: failed to determine your version of dot.  Assuming v2.16'
+          print('Warning: failed to determine your version of dot.  Assuming v2.16')
         else:
           version = distutils.version.StrictVersion(m.group(1))
-          print 'Detected dot version %s' % (version)
+          print('Detected dot version {}'.format(version))
         if version > distutils.version.StrictVersion('2.8'):
           subprocess.check_call(["dot", "-Tpdf", "frames.gv", "-o", "frames.pdf"])
-          print "frames.pdf generated"
+          print("frames.pdf generated")
         else:
           subprocess.check_call(["dot", "-Tps2", "frames.gv", "-o", "frames.ps"])
-          print "frames.ps generated"
+          print("frames.ps generated")
     except subprocess.CalledProcessError:
-        print >> sys.stderr, "failed to generate frames.pdf"        
+        print("failed to generate frames.pdf", file=sys.stderr)
 
 
 if __name__ == '__main__':
@@ -120,7 +113,7 @@ if __name__ == '__main__':
     if not options.node:
         dot_graph = listen(5.0)
     else:
-        print "Generating graph for node: ", options.node
+        print("Generating graph for node: ", options.node)
         dot_graph = poll(options.node)
 
     generate(dot_graph)

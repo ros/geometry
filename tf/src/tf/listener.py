@@ -95,7 +95,14 @@ class Transformer(object):
     def getFrameStrings(self):
         """ Not a recommended API, only here for backwards compatibility """
         data = yaml.load(self._buffer.all_frames_as_yaml()) or {}
-        return [p for p, _ in data.items()]
+        t = []
+        for i, j in data.items():
+            parent = j['parent']
+            if i not in t:
+                t.append(i)
+            if parent not in t:
+                t.append(parent)
+        return t
 
     def getLatestCommonTime(self, source_frame, dest_frame):
         return self._buffer.get_latest_common_time(strip_leading_slash(source_frame), strip_leading_slash(dest_frame))

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 project(tf_conversions)
 
 find_package(orocos_kdl REQUIRED)
-find_package(catkin REQUIRED cmake_modules geometry_msgs kdl_conversions tf)
+find_package(catkin REQUIRED geometry_msgs kdl_conversions tf)
 find_package(Eigen3 REQUIRED)
 
 catkin_python_setup()

@@ -21,7 +21,6 @@ the next major release cycle (see roadmap).
 
   <buildtool_depend version_gte="0.5.68">catkin</buildtool_depend>
 
-  <build_depend>cmake_modules</build_depend>
   <build_depend>eigen</build_depend>
   <build_depend>geometry_msgs</build_depend>
   <build_depend>kdl_conversions</build_depend>

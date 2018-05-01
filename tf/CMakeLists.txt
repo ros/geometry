@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8)
 project(tf)
 
+add_compile_options(-std=c++11)
+
 find_package(catkin REQUIRED COMPONENTS
     angles
     geometry_msgs
@@ -18,9 +20,9 @@ find_package(Boost REQUIRED COMPONENTS thread signals system)
 catkin_python_setup()
 
 include_directories(
+    include
     ${Boost_INCLUDE_DIR}
     ${catkin_INCLUDE_DIRS}
-    include
 )
 
 add_message_files(DIRECTORY msg FILES tfMessage.msg)

@@ -38,6 +38,7 @@
 #include <vector>
 #include <sstream>
 #include <map>
+#include <memory>
 
 #include <tf/exceptions.h>
 #include "tf/time_cache.h"
@@ -315,7 +316,7 @@ public:
   void setExtrapolationLimit(const ros::Duration& distance);
 
   /**@brief Get the duration over which this transformer will cache */
-  ros::Duration getCacheLength() { return tf2_buffer_.getCacheLength();}
+  ros::Duration getCacheLength() { return tf2_buffer_ptr_->getCacheLength();}
 
   /**
    * \brief Add a callback that happens when a new transform has arrived
@@ -333,9 +334,12 @@ public:
   std::string getTFPrefix() const { return tf_prefix_;};
 
   //Declare that it is safe to call waitForTransform
-  void setUsingDedicatedThread(bool value) { tf2_buffer_.setUsingDedicatedThread(value);};
+  void setUsingDedicatedThread(bool value) { tf2_buffer_ptr_->setUsingDedicatedThread(value);};
   // Get the state of using_dedicated_thread_ from the buffer
-  bool isUsingDedicatedThread() { return tf2_buffer_.isUsingDedicatedThread();};
+  bool isUsingDedicatedThread() { return tf2_buffer_ptr_->isUsingDedicatedThread();};
+
+  // Get a copy of the shared_ptr containing the tf2_ros::Buffer object
+  std::shared_ptr<tf2_ros::Buffer> getTF2BufferPtr() { return tf2_buffer_ptr_;};
 
 protected:
 
@@ -384,7 +388,7 @@ protected:
 
 
 protected:
-  tf2_ros::Buffer tf2_buffer_;
+  std::shared_ptr<tf2_ros::Buffer> tf2_buffer_ptr_;
 
 };
 

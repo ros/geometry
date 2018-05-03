@@ -2,8 +2,8 @@
 Changelog for package tf_conversions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.12.0 (2018-05-02)
+-------------------
 * Remove dependency on cmake_modules (`#157 <https://github.com/ros/geometry/issues/157>`_)
   This is not needed anymore with the move from Eigen to Eigen3 in 707eb41.
 * Make python scripts Python3 compatible. (`#151 <https://github.com/ros/geometry/issues/151>`_)

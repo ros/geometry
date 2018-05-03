@@ -2,8 +2,8 @@
 Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.12.0 (2018-05-02)
+-------------------
 * Adapt to new xmlrpcpp header location (`#164 <https://github.com/ros/geometry/issues/164>`_)
 * Maintain & expose tf2 Buffer in shared_ptr for tf (`#163 <https://github.com/ros/geometry/issues/163>`_)
   - Adds a tf2_ros::Buffer via a public accessor

@@ -2,6 +2,32 @@
 Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Adapt to new xmlrpcpp header location (`#164 <https://github.com/ros/geometry/issues/164>`_)
+* Maintain & expose tf2 Buffer in shared_ptr for tf (`#163 <https://github.com/ros/geometry/issues/163>`_)
+  - Adds a tf2_ros::Buffer via a public accessor
+  method to expose to customers of Transformer
+  - Maintains the tf2_ros::Buffer in a shared_ptr
+  to safely share access to the Buffer object
+  - As this is targeting Melodic, adds c++11 compile
+  flags to grant access to std::shared_ptr's
+  - Reorders the include_directories in the CMakeLists
+  to ensure the headers exposed in this package are
+  read *before* the system installed catkin_INCLUDE_DIRS
+  (otherwise changes to tf source headers are never detected
+  during a catkin_make on a system with ros-*-geometry
+  installed)
+* Prevent rates that result in core dump (0.0) or no limit on update rate at all (<0.0) `#159 <https://github.com/ros/geometry/issues/159>`_ (`#160 <https://github.com/ros/geometry/issues/160>`_)
+* Fix empty yaml parsing (`#153 <https://github.com/ros/geometry/issues/153>`_)
+  Fixes `#152 <https://github.com/ros/geometry/issues/152>`_
+  The empty yaml was coming through as a list not a dict so was breaking the expectations.
+  I used the shorthand `or {}` since I know any valid data won't evaluate to zero. A more complete solution is described here: https://stackoverflow.com/a/35777649/604099
+* Make python scripts Python3 compatible. (`#151 <https://github.com/ros/geometry/issues/151>`_)
+  * Python 3 fixes
+  * Prefer str.format over operator % and small python3 fixes.
+* Contributors: Ian McMahon, Lucas Walter, Maarten de Vries, Tully Foote
+
 1.11.9 (2017-07-14)
 -------------------
 * Replace legacy python code with appropriate calls to tf2_ros (`#149 <https://github.com/ros/geometry/issues/149>`_) (`#134 <https://github.com/ros/geometry/issues/134>`_)

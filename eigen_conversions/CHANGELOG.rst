@@ -2,6 +2,12 @@
 Changelog for package eigen_conversions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Remove dependency on cmake_modules (`#157 <https://github.com/ros/geometry/issues/157>`_)
+  This is not needed anymore with the move from Eigen to Eigen3 in 707eb41.
+* Contributors: Jochen Sprickerhof
+
 1.11.9 (2017-07-14)
 -------------------
 * Fix cmake dependency export usage

@@ -2,6 +2,15 @@
 Changelog for package tf_conversions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Remove dependency on cmake_modules (`#157 <https://github.com/ros/geometry/issues/157>`_)
+  This is not needed anymore with the move from Eigen to Eigen3 in 707eb41.
+* Make python scripts Python3 compatible. (`#151 <https://github.com/ros/geometry/issues/151>`_)
+  * Python 3 fixes
+  * Prefer str.format over operator % and small python3 fixes.
+* Contributors: Jochen Sprickerhof, Maarten de Vries
+
 1.11.9 (2017-07-14)
 -------------------
 * Fix cmake dependency export usage

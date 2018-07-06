@@ -623,7 +623,7 @@ public:
 TFSIMD_FORCE_INLINE void	tfSwapScalarEndian(const tfScalar& sourceVal, tfScalar& destVal)
 {
 	unsigned char* dest = (unsigned char*) &destVal;
-	unsigned char* src  = (unsigned char*) &sourceVal;
+	const unsigned char* src  = (const unsigned char*) &sourceVal;
 	dest[0] = src[7];
     dest[1] = src[6];
     dest[2] = src[5];

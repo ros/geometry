@@ -33,7 +33,6 @@
 class TransformSender
 {
 public:
-  ros::NodeHandle node_;
   //constructor
   TransformSender(double x, double y, double z, double yaw, double pitch, double roll, ros::Time time, const std::string& frame_id, const std::string& child_frame_id)
   { 
@@ -66,53 +65,64 @@ int main(int argc, char ** argv)
 {
   //Initialize ROS
   ros::init(argc, argv,"static_transform_publisher", ros::init_options::AnonymousName);
+  ros::NodeHandle node_("~");
+  TransformSender* tf_sender;
+
+  double x, y, z, yaw, pitch, roll, qx, qy, qz, qw, period;
+  std::string frame_id, child_frame_id;
+  bool use_rpy;
 
   if(argc == 11)
   {
-    ros::Duration sleeper(atof(argv[10])/1000.0);
-
-    if (strcmp(argv[8], argv[9]) == 0)
-      ROS_FATAL("target_frame and source frame are the same (%s, %s) this cannot work", argv[8], argv[9]);
-
-    TransformSender tf_sender(atof(argv[1]), atof(argv[2]), atof(argv[3]),
-                              atof(argv[4]), atof(argv[5]), atof(argv[6]), atof(argv[7]),
-                              ros::Time() + sleeper, //Future dating to allow slower sending w/o timeout
-                              argv[8], argv[9]);
-
-
-
-    while(tf_sender.node_.ok())
-    {
-      tf_sender.send(ros::Time::now() + sleeper);
-      ROS_DEBUG("Sending transform from %s with parent %s\n", argv[8], argv[9]);
-      sleeper.sleep();
-    }
-
-    return 0;
+    x               = atof(argv[1]);
+    y               = atof(argv[2]);
+    z               = atof(argv[3]);
+    qx              = atof(argv[4]);
+    qy              = atof(argv[5]);
+    qz              = atof(argv[6]);
+    qw              = atof(argv[7]);
+    period          = atof(argv[10]);
+    frame_id        = argv[8];
+    child_frame_id  = argv[9];
+    use_rpy = false;
   } 
   else if (argc == 10)
   {
-    ros::Duration sleeper(atof(argv[9])/1000.0);
-
-    if (strcmp(argv[7], argv[8]) == 0)
-      ROS_FATAL("target_frame and source frame are the same (%s, %s) this cannot work", argv[7], argv[8]);
-
-    TransformSender tf_sender(atof(argv[1]), atof(argv[2]), atof(argv[3]),
-                              atof(argv[4]), atof(argv[5]), atof(argv[6]),
-                              ros::Time() + sleeper, //Future dating to allow slower sending w/o timeout
-                              argv[7], argv[8]);
-
-
-
-    while(tf_sender.node_.ok())
-    {
-      tf_sender.send(ros::Time::now() + sleeper);
-      ROS_DEBUG("Sending transform from %s with parent %s\n", argv[7], argv[8]);
-      sleeper.sleep();
-    }
-
-    return 0;
-
+    x               = atof(argv[1]);
+    y               = atof(argv[2]);
+    z               = atof(argv[3]);
+    yaw             = atof(argv[4]);
+    pitch           = atof(argv[5]);
+    roll            = atof(argv[6]);
+    period          = atof(argv[9]);
+    frame_id        = argv[7];
+    child_frame_id  = argv[8];
+    use_rpy = true;
+  }
+  else if (node_.getParam("x", x) &&
+           node_.getParam("y", y) &&
+           node_.getParam("z", z) &&
+           node_.getParam("frame_id", frame_id) &&
+           node_.getParam("child_frame_id", child_frame_id) &&
+           node_.getParam("period", period) &&
+           node_.getParam("qx", qx) &&
+           node_.getParam("qy", qy) &&
+           node_.getParam("qz", qz) &&
+           node_.getParam("qw", qw))
+  {
+   use_rpy = false;
+  }
+  else if (node_.getParam("x", x) &&
+           node_.getParam("y", y) &&
+           node_.getParam("z", z) &&
+           node_.getParam("frame_id", frame_id) &&
+           node_.getParam("child_frame_id", child_frame_id) &&
+           node_.getParam("period", period) &&
+           node_.getParam("yaw", yaw) &&
+           node_.getParam("pitch", pitch) &&
+           node_.getParam("roll", roll))
+  {
+   use_rpy = true;
   }
   else
   {
@@ -121,12 +131,35 @@ int main(int argc, char ** argv)
     printf("Usage: static_transform_publisher x y z yaw pitch roll frame_id child_frame_id  period(milliseconds) \n");
     printf("OR \n");
     printf("Usage: static_transform_publisher x y z qx qy qz qw frame_id child_frame_id  period(milliseconds) \n");
+    printf("OR \n");
+    printf("Usage: static_transform_publisher (loading parameters from parameter server)\n");
     printf("\nThis transform is the transform of the coordinate frame from frame_id into the coordinate frame \n");
     printf("of the child_frame_id.  \n");
     ROS_ERROR("static_transform_publisher exited due to not having the right number of arguments");
     return -1;
   }
 
+  ros::Duration sleeper(period/1000.0);
 
+  if (frame_id.compare(child_frame_id) == 0)
+    ROS_FATAL("target_frame and source frame are the same (%s, %s) this cannot work", frame_id.c_str(), child_frame_id.c_str());
+
+  if (use_rpy)
+    tf_sender = new TransformSender(x, y, z, yaw, pitch, roll,
+                                    ros::Time() + sleeper, //Future dating to allow slower sending w/o timeout
+                                    frame_id, child_frame_id);
+  else
+    tf_sender = new TransformSender(x, y, z, qx, qy, qz, qw,
+                                    ros::Time() + sleeper, //Future dating to allow slower sending w/o timeout
+                                    frame_id, child_frame_id);
+
+  while(node_.ok())
+  {
+    tf_sender->send(ros::Time::now() + sleeper);
+    ROS_DEBUG("Sending transform from %s with parent %s\n", argv[8], argv[9]);
+    sleeper.sleep();
+  }
+
+  return 0;
 };
 

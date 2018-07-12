@@ -235,7 +235,7 @@ TEST_F(TransformTwistAngularTest, AngularVelocityAlone)
     EXPECT_NEAR(tw.twist.angular.y, 0.0, epsilon);
     EXPECT_NEAR(tw.twist.angular.z, 0.0, epsilon);
 
-    //    tf_.lookupVelocity("foo", "bar", ros::Time(2.5), ros::Duration(0.1), tw);
+    //tf_.lookupVelocity("foo", "bar", ros::Time(2.5), ros::Duration(0.1), tw);
     tw_in =tw_y;
     tw_in.header.stamp = ros::Time(2.5);
     tf_.transformTwist("foo", tw_in, tw);
@@ -268,7 +268,7 @@ TEST_F(TransformTwistAngularTest, AngularVelocityAlone)
     EXPECT_NEAR(tw.twist.angular.y, 0.0, epsilon);
     EXPECT_NEAR(tw.twist.angular.z, 2.0, epsilon);
 
-    //    tf_.lookupVelocity("foo", "bar", ros::Time(5.5), ros::Duration(0.1), tw);
+    //tf_.lookupVelocity("foo", "bar", ros::Time(5.5), ros::Duration(0.1), tw);
     tw_in =tw_z;
     tw_in.header.stamp = ros::Time(5.5);
     tf_.transformTwist("foo", tw_in, tw);

@@ -156,7 +156,14 @@ public:
    * This will compute the average velocity on the interval 
    * (time - duration/2, time+duration/2). If that is too close to the most
    * recent reading, in which case it will shift the interval up to
-   * duration/2 to prevent extrapolation.  Possible exceptions
+   * duration/2 to prevent extrapolation. The observation_frame is the same with
+   * reference_frame, the observation_frame helps when we express the twist with
+   * respect to a point, which is NOT the origin of the tracking_frame. A simple
+   * example is: in order to get the wrist at a corner of a box, instead of the
+   * center of the box, which is the origin of the tracking_frame locates, we need
+   * to get the transform from the desired point (a corner of box) to origin of tracking
+   * frame (center of box), and then from the tracking frame to the reference frame
+   * Possible exceptions
    * tf::LookupException, tf::ConnectivityException,
    * tf::MaxDepthException, tf::ExtrapolationException
    * 

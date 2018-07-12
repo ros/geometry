@@ -106,7 +106,7 @@ public:
   /* \brief Transform a Stamped Twist Message into the target frame 
    * This can throw all that lookupTransform can throw as well as tf::InvalidTransform */
   // http://www.ros.org/wiki/tf/Reviews/2010-03-12_API_Review
-  //  void transformTwist(const std::string& target_frame, const geometry_msgs::TwistStamped& stamped_in, geometry_msgs::TwistStamped& stamped_out) const;
+  void transformTwist(const std::string& target_frame, const geometry_msgs::TwistStamped& stamped_in, geometry_msgs::TwistStamped& stamped_out) const;
 
   /** \brief Transform a Stamped Quaternion Message into the target frame
    * This can throw all that lookupTransform can throw as well as tf::InvalidTransform */

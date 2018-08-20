@@ -57,7 +57,7 @@ def fromTf(tf):
         ((668.5, 0.0, 0.0), (0.0, 0.0, 0.0, 1.0))
         >>> import tf_conversions.posemath as pm
         >>> p = pm.fromTf(t.lookupTransform('THISFRAME', 'CHILD', rospy.Time(0)))
-        >>> print pm.toMsg(p * p)
+        >>> print(pm.toMsg(p * p))
         position: 
           x: 1337.0
           y: 0.0

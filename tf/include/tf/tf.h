@@ -57,7 +57,7 @@ std::string resolve(const std::string& prefix, const std::string& frame_name);
 std::string strip_leading_slash(const std::string& frame_name);
 
 /** \deprecated This has been renamed to tf::resolve */
-__attribute__((deprecated)) static inline std::string remap(const std::string& prefix, const std::string& frame_name) { return tf::resolve(prefix, frame_name);} ;
+__attribute__((deprecated)) static inline std::string remap(const std::string& prefix, const std::string& frame_name) { return tf::resolve(prefix, frame_name);}
 
 enum ErrorValues { NO_ERROR = 0, LOOKUP_ERROR, CONNECTIVITY_ERROR, EXTRAPOLATION_ERROR};
 
@@ -409,7 +409,7 @@ inline void assertQuaternionValid(const tf::Quaternion & q)
     ss << "Quaternion malformed, magnitude: " << q.x()*q.x() + q.y()*q.y() + q.z()*q.z() + q.w()*q.w() << " should be 1.0" <<std::endl;
     throw tf::InvalidArgument(ss.str());
   }  //  ROS_ASSERT(std::fabs(q.x()*q.x() + q.y()*q.y() + q.z*q.z() + q.w()*q.w() - 1 < 0.01));
-};
+}
 
 /** \brief Throw InvalidArgument if quaternion is malformed */
 inline void assertQuaternionValid(const geometry_msgs::Quaternion & q)
@@ -427,6 +427,6 @@ inline void assertQuaternionValid(const geometry_msgs::Quaternion & q)
     ss << "Quaternion malformed, magnitude: " << q.x*q.x + q.y*q.y + q.z*q.z + q.w*q.w << " should be 1.0" <<std::endl;
     throw tf::InvalidArgument(ss.str());
   }  //  ROS_ASSERT(std::fabs(q.x()*q.x() + q.y()*q.y() + q.z*q.z() + q.w()*q.w() - 1 < 0.01));
-};
+}
 }
 #endif //TF_TF_H

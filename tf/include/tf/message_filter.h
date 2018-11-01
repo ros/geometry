@@ -427,7 +427,7 @@ private:
   {
     if (!messages_.empty() && getTargetFramesString() == " ")
     {
-      ROS_WARN_NAMED("message_notifier", "MessageFilter [target=%s]: empty target frame", getTargetFramesString().c_str());
+      ROS_WARN_NAMED("message_filter", "MessageFilter [target=%s]: empty target frame", getTargetFramesString().c_str());
     }
 
     int i = 0;
@@ -493,7 +493,7 @@ private:
       double dropped_pct = (double)dropped_message_count_ / (double)(incoming_message_count_ - message_count_);
       if (dropped_pct > 0.95)
       {
-        TF_MESSAGEFILTER_WARN("Dropped %.2f%% of messages so far. Please turn the [%s.message_notifier] rosconsole logger to DEBUG for more information.", dropped_pct*100, ROSCONSOLE_DEFAULT_NAME);
+        TF_MESSAGEFILTER_WARN("Dropped %.2f%% of messages so far. Please turn the [%s.message_filter] rosconsole logger to DEBUG for more information.", dropped_pct*100, ROSCONSOLE_DEFAULT_NAME);
         next_failure_warning_ = ros::Time::now() + ros::Duration(60);
 
         if ((double)failed_out_the_back_count_ / (double)dropped_message_count_ > 0.5)

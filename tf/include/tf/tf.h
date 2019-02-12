@@ -48,6 +48,12 @@
 
 #include <tf2_ros/buffer.h>
 
+// Boost winapi.h includes winerror.h. Subsequently NO_ERROR gets defined
+// and which conflicts with tf::NO_ERROR.
+#if defined(_WIN32) && defined(NO_ERROR)
+  #undef NO_ERROR
+#endif
+
 namespace tf
 {
 /** \brief resolve tf names */

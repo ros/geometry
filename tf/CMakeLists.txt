@@ -137,8 +137,6 @@ install(TARGETS ${PROJECT_NAME}
 
 # Install executable
 install(TARGETS tf_echo tf_empty_listener tf_change_notifier tf_monitor static_transform_publisher
-    ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
     RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

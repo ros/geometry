@@ -38,6 +38,7 @@
 #include "tf/tf.h"
 #include "ros/ros.h"
 #include "ros/callback_queue.h"
+#include "ros/macros.h"
 
 #include "tf/FrameGraph.h" //frame graph service
 #include "boost/thread.hpp"
@@ -63,7 +64,7 @@ inline std::string getPrefixParam(ros::NodeHandle & nh) {
 
 /** \brief resolve names 
  * \deprecated Use TransformListener::remap  instead */
-std::string remap(const std::string& frame_id) __attribute__((deprecated));
+ROS_DEPRECATED std::string remap(const std::string& frame_id);
 
 /** \brief This class inherits from Transformer and automatically subscribes to ROS transform messages */
 class TransformListener : public Transformer { //subscribes to message and automatically stores incoming data

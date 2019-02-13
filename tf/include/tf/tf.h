@@ -47,6 +47,7 @@
 #include "geometry_msgs/TwistStamped.h"
 
 #include <tf2_ros/buffer.h>
+#include <ros/macros.h>
 
 namespace tf
 {
@@ -57,7 +58,7 @@ std::string resolve(const std::string& prefix, const std::string& frame_name);
 std::string strip_leading_slash(const std::string& frame_name);
 
 /** \deprecated This has been renamed to tf::resolve */
-__attribute__((deprecated)) static inline std::string remap(const std::string& prefix, const std::string& frame_name) { return tf::resolve(prefix, frame_name);} ;
+ROS_DEPRECATED static inline std::string remap(const std::string& prefix, const std::string& frame_name) { return tf::resolve(prefix, frame_name);} ;
 
 enum ErrorValues { NO_ERROR = 0, LOOKUP_ERROR, CONNECTIVITY_ERROR, EXTRAPOLATION_ERROR};
 

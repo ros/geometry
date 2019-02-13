@@ -31,7 +31,7 @@
 
 #include "tf/tf.h"
 #ifdef _WIN32
-#include <time.h>
+#include <ctime>
 #else
 #include <sys/time.h>
 #endif

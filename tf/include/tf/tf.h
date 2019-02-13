@@ -49,6 +49,17 @@
 #include <tf2_ros/buffer.h>
 #include <ros/macros.h>
 
+// Import/export for windows dll's and visibility for gcc shared libraries.
+#ifdef ROS_BUILD_SHARED_LIBS // ros is being built around shared libraries
+  #ifdef tf_EXPORTS // we are building a shared lib/dll
+    #define TF_DECL ROS_HELPER_EXPORT
+  #else // we are using shared lib/dll
+    #define TF_DECL ROS_HELPER_IMPORT
+  #endif
+#else // ros is being built around static libraries
+  #define TF_DECL
+#endif
+
 namespace tf
 {
 /** \brief resolve tf names */
@@ -89,7 +100,7 @@ typedef struct
  *
  * All function calls which pass frame ids can potentially throw the exception tf::LookupException
  */
-class Transformer
+class TF_DECL Transformer
 {
 public:
   /************* Constants ***********************/

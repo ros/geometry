@@ -1,7 +1,11 @@
 cmake_minimum_required(VERSION 2.8)
 project(tf)
 
-add_compile_options(-std=c++11)
+include(CheckCXXCompilerFlag)
+check_cxx_compiler_flag("-std=c++11" COMPILER_SUPPORTS_CXX11)
+if(COMPILER_SUPPORTS_CXX11)
+  add_compile_options(-std=c++11)
+endif()
 
 find_package(catkin REQUIRED COMPONENTS
     angles
@@ -124,10 +128,12 @@ install(DIRECTORY include/${PROJECT_NAME}/
     DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
 )
 
-install(TARGETS ${PROJECT_NAME} tf_echo tf_empty_listener tf_change_notifier tf_monitor static_transform_publisher
-    ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+install(TARGETS ${PROJECT_NAME}
+    DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+)
+
+install(TARGETS tf_echo tf_empty_listener tf_change_notifier tf_monitor static_transform_publisher
+    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
 # Install rosrun-able scripts

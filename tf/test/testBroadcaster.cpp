@@ -54,7 +54,7 @@ public:
     else
       count ++;
     //std::cerr<<count<<std::endl;
-  };
+  }
 
   // A function to call to send data periodically
   void test_vector () {
@@ -71,7 +71,7 @@ public:
     else
       count1 ++;
     //std::cerr<<count1<<std::endl;
-  };
+  }
 private:
   int count;
   int count1;
@@ -96,5 +96,5 @@ int main(int argc, char ** argv)
   }
 
   return 0;
-};
+}
 

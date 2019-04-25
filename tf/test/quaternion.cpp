@@ -43,7 +43,7 @@ void seed_rand()
   timeval temp_time_struct;
   gettimeofday(&temp_time_struct,NULL);
   srand(temp_time_struct.tv_usec);
-};
+}
 
 void testQuatRPY(tf::Quaternion q_baseline)
 {

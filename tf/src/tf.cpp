@@ -154,7 +154,7 @@ std::string assert_resolved(const std::string& prefix, const std::string& frame_
 {
   ROS_DEBUG("tf::assert_resolved just calls tf::resolve");
   return tf::resolve(prefix, frame_id);
-};
+}
 
 std::string tf::resolve(const std::string& prefix, const std::string& frame_name)
 {
@@ -189,7 +189,7 @@ std::string tf::resolve(const std::string& prefix, const std::string& frame_name
     composite.append(frame_name);
     return composite;
   }
-};
+}
 
 
 std::string tf::strip_leading_slash(const std::string& frame_name)
@@ -217,7 +217,7 @@ Transformer::Transformer(bool interpolating,
 Transformer::~Transformer()
 {
 
-};
+}
 
 
 void Transformer::clear()
@@ -232,7 +232,7 @@ bool Transformer::setTransform(const StampedTransform& transform, const std::str
   transformStampedTFToMsg(transform, msgtf);
   return tf2_buffer_ptr_->setTransform(msgtf, authority);
   
-};
+}
 
 
 void Transformer::lookupTransform(const std::string& target_frame, const std::string& source_frame,
@@ -243,7 +243,7 @@ void Transformer::lookupTransform(const std::string& target_frame, const std::st
                                 strip_leading_slash(source_frame), time);
   transformStampedMsgToTF(output, transform);
   return;
-};
+}
 
 
 void Transformer::lookupTransform(const std::string& target_frame,const ros::Time& target_time, const std::string& source_frame,
@@ -254,7 +254,7 @@ void Transformer::lookupTransform(const std::string& target_frame,const ros::Tim
                                 strip_leading_slash(source_frame), source_time,
                                 strip_leading_slash(fixed_frame));
   transformStampedMsgToTF(output, transform);
-};
+}
 
 
 void Transformer::lookupTwist(const std::string& tracking_frame, const std::string& observation_frame,
@@ -263,7 +263,7 @@ void Transformer::lookupTwist(const std::string& tracking_frame, const std::stri
 {
   // ref point is origin of tracking_frame, ref_frame = obs_frame
   lookupTwist(tracking_frame, observation_frame, observation_frame, tf::Point(0,0,0), tracking_frame, time, averaging_interval, twist);
-};
+}
 
 
 
@@ -343,7 +343,7 @@ void Transformer::lookupTwist(const std::string& tracking_frame, const std::stri
   twist.angular.y =  out_rot.y();
   twist.angular.z =  out_rot.z();
 
-};
+}
 
 bool Transformer::waitForTransform(const std::string& target_frame, const std::string& source_frame,
                                    const ros::Time& time,
@@ -370,7 +370,7 @@ bool Transformer::canTransform(const std::string& target_frame,const ros::Time& 
   return tf2_buffer_ptr_->canTransform(strip_leading_slash(target_frame), target_time,
                                   strip_leading_slash(source_frame), source_time,
                                   strip_leading_slash(fixed_frame), error_msg);
-};
+}
 
 bool Transformer::waitForTransform(const std::string& target_frame,const ros::Time& target_time, const std::string& source_frame,
                                    const ros::Time& source_time, const std::string& fixed_frame,
@@ -380,13 +380,13 @@ bool Transformer::waitForTransform(const std::string& target_frame,const ros::Ti
   return tf2_buffer_ptr_->canTransform(strip_leading_slash(target_frame), target_time,
                                   strip_leading_slash(source_frame), source_time,
                                   strip_leading_slash(fixed_frame), timeout, error_msg);
-};
+}
 
 
 bool Transformer::getParent(const std::string& frame_id, ros::Time time, std::string& parent) const
 {
   return tf2_buffer_ptr_->_getParent(strip_leading_slash(frame_id), time, parent);
-};
+}
 
 
 bool Transformer::frameExists(const std::string& frame_id_str) const
@@ -460,7 +460,7 @@ void Transformer::transformQuaternion(const std::string& target_frame, const Sta
   stamped_out.setData( transform * stamped_in);
   stamped_out.stamp_ = transform.stamp_;
   stamped_out.frame_id_ = target_frame;
-};
+}
 
 
 void Transformer::transformVector(const std::string& target_frame,
@@ -478,7 +478,7 @@ void Transformer::transformVector(const std::string& target_frame,
 
   stamped_out.stamp_ = transform.stamp_;
   stamped_out.frame_id_ = target_frame;
-};
+}
 
 
 void Transformer::transformPoint(const std::string& target_frame, const Stamped<Point>& stamped_in, Stamped<Point>& stamped_out) const
@@ -489,7 +489,7 @@ void Transformer::transformPoint(const std::string& target_frame, const Stamped<
   stamped_out.setData(transform * stamped_in);
   stamped_out.stamp_ = transform.stamp_;
   stamped_out.frame_id_ = target_frame;
-};
+}
 
 void Transformer::transformPose(const std::string& target_frame, const Stamped<Pose>& stamped_in, Stamped<Pose>& stamped_out) const
 {
@@ -499,7 +499,7 @@ void Transformer::transformPose(const std::string& target_frame, const Stamped<P
   stamped_out.setData(transform * stamped_in);
   stamped_out.stamp_ = transform.stamp_;
   stamped_out.frame_id_ = target_frame;
-};
+}
 
 
 void Transformer::transformQuaternion(const std::string& target_frame, const ros::Time& target_time,
@@ -516,7 +516,7 @@ void Transformer::transformQuaternion(const std::string& target_frame, const ros
   stamped_out.setData( transform * stamped_in);
   stamped_out.stamp_ = transform.stamp_;
   stamped_out.frame_id_ = target_frame;
-};
+}
 
 
 void Transformer::transformVector(const std::string& target_frame, const ros::Time& target_time,
@@ -537,7 +537,7 @@ void Transformer::transformVector(const std::string& target_frame, const ros::Ti
 
   stamped_out.stamp_ = transform.stamp_;
   stamped_out.frame_id_ = target_frame;
-};
+}
 
 
 void Transformer::transformPoint(const std::string& target_frame, const ros::Time& target_time,
@@ -553,7 +553,7 @@ void Transformer::transformPoint(const std::string& target_frame, const ros::Tim
   stamped_out.setData(transform * stamped_in);
   stamped_out.stamp_ = transform.stamp_;
   stamped_out.frame_id_ = target_frame;
-};
+}
 
 void Transformer::transformPose(const std::string& target_frame, const ros::Time& target_time,
                                 const Stamped<Pose>& stamped_in,
@@ -568,7 +568,7 @@ void Transformer::transformPose(const std::string& target_frame, const ros::Time
   stamped_out.setData(transform * stamped_in);
   stamped_out.stamp_ = transform.stamp_;
   stamped_out.frame_id_ = target_frame;
-};
+}
 
 boost::signals2::connection Transformer::addTransformsChangedListener(boost::function<void(void)> callback)
 {

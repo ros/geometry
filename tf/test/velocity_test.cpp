@@ -172,7 +172,7 @@ TEST_F(LinearVelocitySquareTest, LinearVelocityToThreeFrames)
       EXPECT_STREQ("", ex.what());
     }
   }
-};
+}
 
 TEST_F(AngularVelocitySquareTest, AngularVelocityAlone)
 {
@@ -232,7 +232,7 @@ TEST_F(AngularVelocitySquareTest, AngularVelocityAlone)
   {
     EXPECT_STREQ("", ex.what());
   }
-};
+}
 
 TEST_F(AngularVelocitySquareTest, AngularVelocityOffsetChildFrameInX)
 {
@@ -292,7 +292,7 @@ TEST_F(AngularVelocitySquareTest, AngularVelocityOffsetChildFrameInX)
   {
     EXPECT_STREQ("", ex.what());
   }
-};
+}
 
 TEST_F(AngularVelocitySquareTest, AngularVelocityOffsetParentFrameInZ)
 {
@@ -352,7 +352,7 @@ TEST_F(AngularVelocitySquareTest, AngularVelocityOffsetParentFrameInZ)
   {
     EXPECT_STREQ("", ex.what());
   }
-};
+}
 
 
 int main(int argc, char **argv){

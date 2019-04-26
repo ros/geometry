@@ -44,7 +44,7 @@ namespace tf {
 TransformBroadcaster::TransformBroadcaster():
   tf2_broadcaster_()
 {
-};
+}
 
 void TransformBroadcaster::sendTransform(const geometry_msgs::TransformStamped & msgtf)
 {

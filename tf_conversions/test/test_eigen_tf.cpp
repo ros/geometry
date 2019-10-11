@@ -121,6 +121,7 @@ TEST(TFEigenConversions, eigen_tf_transform)
   kq.coeffs()(2) = gen_rand(-1.0,1.0);
   kq.coeffs()(3) = gen_rand(-1.0,1.0);
   kq.normalize();
+  isometry.setIdentity();
   isometry.translate(Eigen::Vector3d(gen_rand(-10,10),gen_rand(-10,10),gen_rand(-10,10)));
   isometry.rotate(kq);
   affine = isometry;

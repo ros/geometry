@@ -73,6 +73,7 @@ target_link_libraries(static_transform_publisher ${PROJECT_NAME})
 
 # Tests
 if(CATKIN_ENABLE_TESTING AND NOT ANDROID)
+
 find_package(rostest REQUIRED)
 
 catkin_add_gtest(tf_unittest test/tf_unittest.cpp)

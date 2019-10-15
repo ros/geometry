@@ -77,6 +77,7 @@ if(CATKIN_ENABLE_TESTING AND NOT ANDROID)
 find_package(rostest REQUIRED)
 
 catkin_add_gtest(tf_unittest test/tf_unittest.cpp)
+target_include_directories(tf_unittest PRIVATE ${rostest_INCLUDE_DIRS})
 target_link_libraries(tf_unittest ${PROJECT_NAME})
 
 catkin_add_gtest(tf_quaternion_unittest test/quaternion.cpp)

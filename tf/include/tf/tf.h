@@ -310,9 +310,10 @@ public:
   bool frameExists(const std::string& frame_id_str) const;
 
   /**@brief Set the distance which tf is allow to extrapolate
+   * \deprecated Deprecated since integration with tf2. Use MessageFilter instead
    * \param distance How far to extrapolate before throwing an exception
    * default is zero */
-  void setExtrapolationLimit(const ros::Duration& distance);
+  void setExtrapolationLimit(const ros::Duration& distance) __attribute__((deprecated));
 
   /**@brief Get the duration over which this transformer will cache */
   ros::Duration getCacheLength() { return tf2_buffer_.getCacheLength();}

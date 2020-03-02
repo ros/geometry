@@ -62,6 +62,9 @@ class Transformer(object):
     def setTransform(self, transform, authority="default_authority"):
         self._buffer.set_transform(transform, authority)
 
+    def setTransformStatic(self, transform, authority="default_authority"):
+        self._buffer.set_transform_static(transform, authority)
+
     def canTransform(self, target_frame, source_frame, time):
         return self._buffer.can_transform(strip_leading_slash(target_frame), strip_leading_slash(source_frame), time)
 

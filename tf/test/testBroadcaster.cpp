@@ -27,6 +27,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <chrono>
+#include <thread>
 #include "tf/transform_broadcaster.h"
 #include "ros/ros.h"
 
@@ -92,7 +94,7 @@ int main(int argc, char ** argv)
       //Send some data
       myTestBroadcaster.test();
       myTestBroadcaster.test_vector();
-      usleep(1000);
+      std::this_thread::sleep_for(std::chrono::microseconds(1000));
   }
 
   return 0;

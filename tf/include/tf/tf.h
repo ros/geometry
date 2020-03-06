@@ -49,6 +49,12 @@
 #include <tf2_ros/buffer.h>
 #include <ros/macros.h>
 
+// Boost winapi.h includes winerror.h. Subsequently NO_ERROR gets defined
+// and which conflicts with tf::NO_ERROR.
+#if defined(_WIN32) && defined(NO_ERROR)
+  #undef NO_ERROR
+#endif
+
 // Import/export for windows dll's and visibility for gcc shared libraries.
 #ifdef ROS_BUILD_SHARED_LIBS // ros is being built around shared libraries
   #ifdef tf_EXPORTS // we are building a shared lib/dll

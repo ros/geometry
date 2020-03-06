@@ -30,7 +30,6 @@
 /** \author Tully Foote */
 
 #include "tf/tf.h"
-#include <sys/time.h>
 #include "ros/assert.h"
 #include "ros/ros.h"
 #include <angles/angles.h>

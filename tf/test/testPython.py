@@ -9,6 +9,16 @@ import sensor_msgs.msg
 
 import tf
 
+
+def process_time():
+    try:
+        # Available in Python >= 3.3 required in Python >= 3.8
+        return time.process_time()
+    except AttributeError:
+        # Python < 3.3 compatibility
+        return time.clock()
+
+
 class Mock:
   pass
 
@@ -127,14 +137,14 @@ class TestPython(unittest.TestCase):
         self.assertEqual(t.waitForTransform("PARENT", "THISFRAME", rospy.Time(15), timeout), None)
 
         # Verify exception still thrown with unavailable time near timeout
-        start = time.clock()
+        start = process_time()
         self.assertRaises(tf.Exception, lambda: t.waitForTransform("PARENT", "THISFRAME", rospy.Time(25), timeout))
-        elapsed_time_within_epsilon(time.clock() - start, timeout.to_sec(), epsilon)
+        elapsed_time_within_epsilon(process_time() - start, timeout.to_sec(), epsilon)
 
         # Verify exception stil thrown with non-existing frames near timeout
-        start = time.clock()
+        start = process_time()
         self.assertRaises(tf.Exception, lambda: t.waitForTransform("MANDALAY", "JUPITER", rospy.Time(), timeout))
-        elapsed_time_within_epsilon(time.clock() - start, timeout.to_sec(), epsilon)
+        elapsed_time_within_epsilon(process_time() - start, timeout.to_sec(), epsilon)
 
     def test_cache_time(self):
         # Vary cache_time and confirm its effect on ExtrapolationException from lookupTransform().

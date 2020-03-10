@@ -2,8 +2,8 @@
 Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.12.1 (2020-03-10)
+-------------------
 * Use process_time() for Python 3.8 compatibility (`#205 <https://github.com/ros/geometry/issues/205>`_)
 * Bump CMake version to avoid CMP0048 warning (`#204 <https://github.com/ros/geometry/issues/204>`_)
 * Add rostest include dirs (`#195 <https://github.com/ros/geometry/issues/195>`_)

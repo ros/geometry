@@ -2,8 +2,8 @@
 Changelog for package tf_conversions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.13.0 (2020-03-10)
+-------------------
 * Replace kdl packages with rosdep keys (`#206 <https://github.com/ros/geometry/issues/206>`_)
 * Contributors: Shane Loretz
 

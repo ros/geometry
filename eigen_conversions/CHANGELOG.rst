@@ -2,6 +2,11 @@
 Changelog for package eigen_conversions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Replace kdl packages with rosdep keys (`#206 <https://github.com/ros/geometry/issues/206>`_)
+* Contributors: Shane Loretz
+
 1.12.1 (2020-03-10)
 -------------------
 * Bump CMake version to avoid CMP0048 warning (`#204 <https://github.com/ros/geometry/issues/204>`_)

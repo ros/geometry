@@ -2,6 +2,12 @@
 Changelog for package kdl_conversions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Bump CMake version to avoid CMP0048 warning (`#204 <https://github.com/ros/geometry/issues/204>`_)
+* windows bring up, use ROS_DEPRECATED
+* Contributors: James Xu, Shane Loretz
+
 1.12.0 (2018-05-02)
 -------------------
 

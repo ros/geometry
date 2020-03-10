@@ -2,6 +2,13 @@
 Changelog for package tf_conversions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Bump CMake version to avoid CMP0048 warning (`#204 <https://github.com/ros/geometry/issues/204>`_)
+* initialize the test values (`#194 <https://github.com/ros/geometry/issues/194>`_)
+* windows bring up, use ROS_DEPRECATED
+* Contributors: James Xu, Shane Loretz, Tully Foote
+
 1.12.0 (2018-05-02)
 -------------------
 * Remove dependency on cmake_modules (`#157 <https://github.com/ros/geometry/issues/157>`_)

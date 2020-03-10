@@ -2,6 +2,29 @@
 Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Use process_time() for Python 3.8 compatibility (`#205 <https://github.com/ros/geometry/issues/205>`_)
+* Bump CMake version to avoid CMP0048 warning (`#204 <https://github.com/ros/geometry/issues/204>`_)
+* Add rostest include dirs (`#195 <https://github.com/ros/geometry/issues/195>`_)
+* Remove trailing semicolons from tf sources (`#187 <https://github.com/ros/geometry/issues/187>`_)
+  * [tf] Removed trailing semicolons after functions from all sources
+  Used the -Wpedantic compiler flag to find all occurrences
+* Allow to choose output precision in tf_echo (`#186 <https://github.com/ros/geometry/issues/186>`_)
+  * Allow to choose output precision in tf_echo
+* update how c++11 requirement is added (`#184 <https://github.com/ros/geometry/issues/184>`_)
+* update install destination in CMakeLists.txt (`#183 <https://github.com/ros/geometry/issues/183>`_)
+  * export binary to right locations
+  * specify archive and runtime destinations, update whitespace (`#5 <https://github.com/ros/geometry/issues/5>`_)
+* add visibility macro
+* windows bring up, use ROS_DEPRECATED
+* Remove `signals` from find_package(Boost COMPONENTS ...)
+* fixing error of casting away constness in  method void tfSwapScalarEndian(const tfScalar& sourceVal, tfScalar& destVal) in line 626 of Vector3.h (`#179 <https://github.com/ros/geometry/issues/179>`_)
+* Fix log output typo: message_notifier -> message_filter (`#177 <https://github.com/ros/geometry/issues/177>`_)
+  Almost all the log outputs use message_filter, except one. The warning
+  text still referred to message_notifier. This commit fixes that.
+* Contributors: C-NR, James Xu, Maarten de Vries, Martin Günther, Shane Loretz, Victor Lamoine, Yoshua Nava
+
 1.12.0 (2018-05-02)
 -------------------
 * Adapt to new xmlrpcpp header location (`#164 <https://github.com/ros/geometry/issues/164>`_)

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0.2)
 project(kdl_conversions)
 
 find_package(catkin REQUIRED geometry_msgs)

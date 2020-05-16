@@ -2,8 +2,8 @@
 Changelog for package eigen_conversions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.13.1 (2020-05-15)
+-------------------
 * Format 2 and build_export_depend orocos kdl (`#210 <https://github.com/ros/geometry/issues/210>`_)
 * Contributors: Shane Loretz
 

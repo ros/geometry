@@ -1,4 +1,4 @@
-<package>
+<package format="2">
   <name>eigen_conversions</name>
   <version>1.13.0</version>
   <description>
@@ -22,8 +22,10 @@
   <build_depend>liborocos-kdl-dev</build_depend>
   <build_depend>std_msgs</build_depend>
 
-  <run_depend>geometry_msgs</run_depend>
-  <run_depend>eigen</run_depend>
-  <run_depend>liborocos-kdl</run_depend>
-  <run_depend>std_msgs</run_depend>
+  <build_export_depend>liborocos-kdl-dev</build_export_depend>
+
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>eigen</exec_depend>
+  <exec_depend>liborocos-kdl</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
 </package>

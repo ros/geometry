@@ -1,4 +1,4 @@
-<package>
+<package format="2">
   <name>tf_conversions</name>
   <version>1.13.0</version>
   <description>
@@ -27,12 +27,14 @@ the next major release cycle (see roadmap).
   <build_depend>liborocos-kdl-dev</build_depend>
   <build_depend>tf</build_depend>
 
-  <run_depend>eigen</run_depend>
-  <run_depend>geometry_msgs</run_depend>
-  <run_depend>kdl_conversions</run_depend>
-  <run_depend>liborocos-kdl</run_depend>
-  <run_depend>python3-pykdl</run_depend>
-  <run_depend>tf</run_depend>
+  <build_export_depend>liborocos-kdl-dev</build_export_depend>
+
+  <exec_depend>eigen</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>kdl_conversions</exec_depend>
+  <exec_depend>liborocos-kdl</exec_depend>
+  <exec_depend>python3-pykdl</exec_depend>
+  <exec_depend>tf</exec_depend>
 
   <export>
     <rosdoc config="rosdoc.yaml" />

@@ -217,11 +217,11 @@ void setupTree(tf::Transformer& mTR, const std::string& mode, const ros::Time & 
           else
             ts.stamp_ = ros::Time();
 
-          ts.frame_id_ = frame_prefix + frames[i-1];
+          ts.child_frame_id_ = frame_prefix + frames[i];
           if (i > 1)
-            ts.child_frame_id_ = frame_prefix + frames[i];
+            ts.frame_id_ = frame_prefix + frames[i-1];
           else
-            ts.child_frame_id_ = frames[i]; // connect first frame
+            ts.frame_id_ = frames[i-1]; // connect first frame
           
           EXPECT_TRUE(mTR.setTransform(ts, "authority"));
           if (interpolation_space > ros::Duration())

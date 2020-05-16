@@ -2,6 +2,13 @@
 Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Fix ring45 test expectations (`#211 <https://github.com/ros/geometry/issues/211>`_)
+  Copying https://github.com/ros/geometry2/commit/04625380bdff3f3e9e860fc0e85f71674ddd1587
+* import setup from setuptools instead of distutils-core (`#209 <https://github.com/ros/geometry/issues/209>`_)
+* Contributors: Alejandro Hernández Cordero, Shane Loretz
+
 1.13.0 (2020-03-10)
 -------------------
 

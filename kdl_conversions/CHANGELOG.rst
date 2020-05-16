@@ -2,6 +2,11 @@
 Changelog for package kdl_conversions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Format 2 and build_export_depend orocos kdl (`#210 <https://github.com/ros/geometry/issues/210>`_)
+* Contributors: Shane Loretz
+
 1.13.0 (2020-03-10)
 -------------------
 * Replace kdl packages with rosdep keys (`#206 <https://github.com/ros/geometry/issues/206>`_)

@@ -2,6 +2,12 @@
 Changelog for package tf_conversions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Format 2 and build_export_depend orocos kdl (`#210 <https://github.com/ros/geometry/issues/210>`_)
+* import setup from setuptools instead of distutils-core (`#209 <https://github.com/ros/geometry/issues/209>`_)
+* Contributors: Alejandro Hernández Cordero, Shane Loretz
+
 1.13.0 (2020-03-10)
 -------------------
 * Replace kdl packages with rosdep keys (`#206 <https://github.com/ros/geometry/issues/206>`_)

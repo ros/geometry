@@ -148,7 +148,7 @@ install(TARGETS tf_echo tf_empty_listener tf_change_notifier tf_monitor static_t
 )
 
 # Install rosrun-able scripts
-install(PROGRAMS
+catkin_install_python(PROGRAMS
   scripts/bullet_migration_sed.py
   scripts/tf_remap
   scripts/view_frames

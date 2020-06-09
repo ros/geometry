@@ -2,6 +2,11 @@
 Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* fix shebang line for python3 (`#212 <https://github.com/ros/geometry/issues/212>`_)
+* Contributors: Mikael Arguedas
+
 1.13.1 (2020-05-15)
 -------------------
 * Fix ring45 test expectations (`#211 <https://github.com/ros/geometry/issues/211>`_)

@@ -2,8 +2,8 @@
 Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.13.2 (2020-06-08)
+-------------------
 * fix shebang line for python3 (`#212 <https://github.com/ros/geometry/issues/212>`_)
 * Contributors: Mikael Arguedas
 

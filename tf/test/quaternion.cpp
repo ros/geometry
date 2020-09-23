@@ -28,8 +28,9 @@
  */
 
 #include <vector>
-#include <sys/time.h>
 #include <cstdio>
+#include <ctime>
+#include <cstdlib>
 #include <gtest/gtest.h>
 
 #include "tf/LinearMath/Transform.h"
@@ -40,9 +41,7 @@ double epsilon = 10E-6;
 void seed_rand()
 {
   //Seed random number generator with current microseond count
-  timeval temp_time_struct;
-  gettimeofday(&temp_time_struct,NULL);
-  srand(temp_time_struct.tv_usec);
+  std::srand(std::time(0));
 }
 
 void testQuatRPY(tf::Quaternion q_baseline)
@@ -82,9 +81,9 @@ TEST(tf, Quaternion)
   std::vector<double> xvalues(runs), yvalues(runs), zvalues(runs);
   for ( unsigned int i = 0; i < runs ; i++ )
   {
-    xvalues[i] = 1.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
-    yvalues[i] = 1.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
-    zvalues[i] = 1.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
+    xvalues[i] = 1.0 * ((double) std::rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
+    yvalues[i] = 1.0 * ((double) std::rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
+    zvalues[i] = 1.0 * ((double) std::rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
   }
   
   

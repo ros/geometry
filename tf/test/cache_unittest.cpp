@@ -27,9 +27,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <ctime>
+#include <cstdlib>
 #include <gtest/gtest.h>
 #include <tf/tf.h>
-#include <sys/time.h>
 #include "tf/LinearMath/Vector3.h"
 #include "tf/LinearMath/Matrix3x3.h"
 
@@ -37,9 +38,7 @@
 void seed_rand()
 {
   //Seed random number generator with current microseond count
-  timeval temp_time_struct;
-  gettimeofday(&temp_time_struct,NULL);
-  srand(temp_time_struct.tv_usec);
+  std::srand(std::time(0));
 }
 
 using namespace tf;
@@ -59,7 +58,7 @@ TEST(TimeCache, Repeatability)
   
   for ( uint64_t i = 1; i < runs ; i++ )
   {
-    values[i] = 10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
+    values[i] = 10.0 * ((double) std::rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
     std::stringstream ss;
     ss << values[i];
     t.frame_id_ = ss.str();
@@ -95,7 +94,7 @@ TEST(TimeCache, RepeatabilityReverseInsertOrder)
   
   for ( int i = runs -1; i >= 0 ; i-- )
   {
-    values[i] = 10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
+    values[i] = 10.0 * ((double) std::rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
     t.stamp_ = ros::Time().fromNSec(i);
 
     TransformStorage stor(t, i, 0);
@@ -127,7 +126,7 @@ TEST(TimeCache, RepeatabilityRandomInsertOrder)
 
   for ( uint64_t i = 0; i <runs ; i++ )
   {
-    values[i] = 10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
+    values[i] = 10.0 * ((double) std::rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
     t.stamp_ = ros::Time().fromNSec(i);
 
     TransformStorage stor(t, i, 0);
@@ -158,7 +157,7 @@ TEST(TimeCache, ZeroAtFront)
   
   for ( uint64_t i = 0; i <runs ; i++ )
   {
-    values[i] = 10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
+    values[i] = 10.0 * ((double) std::rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
     t.stamp_ = ros::Time().fromNSec(i);
 
     TransformStorage stor(t, i, 0);
@@ -212,9 +211,9 @@ TEST(TimeCache, CartesianInterpolation)
   {
     for (uint64_t step = 0; step < 2 ; step++)
     {
-      xvalues[step] = 10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
-      yvalues[step] = 10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
-      zvalues[step] = 10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
+      xvalues[step] = 10.0 * ((double) std::rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
+      yvalues[step] = 10.0 * ((double) std::rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
+      zvalues[step] = 10.0 * ((double) std::rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
     
       t.setOrigin(tf::Vector3(xvalues[step], yvalues[step], zvalues[step]));
       t.stamp_ = ros::Time().fromNSec(step * 100 + offset);
@@ -257,9 +256,9 @@ TEST(TimeCache, ReparentingInterpolationProtection)
 
   for (uint64_t step = 0; step < 2 ; step++)
   {
-    xvalues[step] = 10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
-    yvalues[step] = 10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
-    zvalues[step] = 10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
+    xvalues[step] = 10.0 * ((double) std::rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
+    yvalues[step] = 10.0 * ((double) std::rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
+    zvalues[step] = 10.0 * ((double) std::rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
     
     t.setOrigin(tf::Vector3(xvalues[step], yvalues[step], zvalues[step]));
     t.stamp_ = ros::Time().fromNSec(step * 100 + offset);
@@ -312,9 +311,9 @@ TEST(TimeCache, CartesianExtrapolation)
   {
     for (uint64_t step = 0; step < 2 ; step++)
     {
-      xvalues[step] = 10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
-      yvalues[step] = 10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
-      zvalues[step] = 10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
+      xvalues[step] = 10.0 * ((double) std::rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
+      yvalues[step] = 10.0 * ((double) std::rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
+      zvalues[step] = 10.0 * ((double) std::rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
     
       t.setOrigin(tf::Vector3(xvalues[step], yvalues[step], zvalues[step]));
       t.stamp_ = ros::Time().fromNSec(step * 100 + offset);
@@ -349,9 +348,9 @@ TEST(Bullet, Slerp)
   
   for (uint64_t i = 0 ; i < runs ; i++)
   {
-    q2.setEuler(1.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX,
-                1.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX,
-                1.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX);
+    q2.setEuler(1.0 * ((double) std::rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX,
+                1.0 * ((double) std::rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX,
+                1.0 * ((double) std::rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX);
     
     
     tf::Quaternion q3 = slerp(q1,q2,0.5);
@@ -383,9 +382,9 @@ TEST(TimeCache, AngularInterpolation)
   {
     for (uint64_t step = 0; step < 2 ; step++)
     {
-      yawvalues[step] = 10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX / 100.0;
-      pitchvalues[step] = 0;//10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
-      rollvalues[step] = 0;//10.0 * ((double) rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
+      yawvalues[step] = 10.0 * ((double) std::rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX / 100.0;
+      pitchvalues[step] = 0;//10.0 * ((double) std::rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
+      rollvalues[step] = 0;//10.0 * ((double) std::rand() - (double)RAND_MAX /2.0) /(double)RAND_MAX;
       quats[step].setRPY(yawvalues[step], pitchvalues[step], rollvalues[step]);
       t.setRotation(quats[step]);
       t.stamp_ = ros::Time().fromNSec(offset + (step * 100)); //step = 0 or 1

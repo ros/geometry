@@ -29,7 +29,6 @@
 
 #include <gtest/gtest.h>
 #include <tf/tf.h>
-#include <sys/time.h>
 
 #include "tf/LinearMath/Vector3.h"
 

@@ -35,7 +35,7 @@ using namespace tf;
 
 double gen_rand(double min, double max)
 {
-  int rand_num = rand()%100+1;
+  int rand_num = std::rand()%100+1;
   double result = min + (double)((max-min)*rand_num)/101.0;
   return result;
 }

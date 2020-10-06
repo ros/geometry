@@ -146,31 +146,30 @@ def toMatrix(f):
 
 
 # from camera parameters
-def fromCameraParams(cv, rvec, tvec):
+def fromCameraParams(cv2, rvec, tvec):
     """
     :param cv: OpenCV module
-    :param rvec: A Rodrigues rotation vector - see :func:`Rodrigues2`
-    :type rvec: 3x1 :class:`CvMat`
-    :param tvec: A translation vector 
-    :type tvec: 3x1 :class:`CvMat`
+    :param rvec: A Rodrigues rotation vector - see :func:`Rodrigues`
+    :type rvec: 3x1 :class:`numpy.array`
+    :param tvec: A translation vector
+    :type tvec: 3x1 :class:`numpy.array`
     :return: New :class:`PyKDL.Frame` object
     
-    For use with :func:`FindExtrinsicCameraParams2`::
+    For use with :func:`solvePnP`::
 
-        import cv
+        import cv2
         import tf_conversions.posemath as pm
         ...
-        rvec = cv.CreateMat(3, 1, cv.CV_32FC1)
-        tvec = cv.CreateMat(3, 1, cv.CV_32FC1)
-        cv.FindExtrinsicCameraParams2(model, corners, intrinsic_matrix, kc, rvec, tvec)
-        pose = pm.fromCameraParams(cv, rvec, tvec)
+        _ret, rvec, tvec = cv2.solvePnP(model, corners, intrinsic_matrix, kc)
+        pose = pm.fromCameraParams(cv2, rvec, tvec)
 
     """
     m = numpy.array([ [ 0, 0, 0, tvec[0,0] ],
                       [ 0, 0, 0, tvec[1,0] ], 
                       [ 0, 0, 0, tvec[2,0] ], 
                       [ 0, 0, 0, 1.0       ] ], dtype = numpy.float32)
-    cv.Rodrigues2(rvec, m[:3,:3])
+    m[:3,:3] = cv2.Rodrigues(rvec)[:3:3][0]
+
     return fromMatrix(m)
 
 

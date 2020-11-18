@@ -24,7 +24,7 @@ catkin_python_setup()
 
 include_directories(
     include
-    ${Boost_INCLUDE_DIR}
+    ${Boost_INCLUDEDIR}
     ${catkin_INCLUDE_DIRS}
 )
 

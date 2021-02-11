@@ -76,30 +76,10 @@ def generate(dot_graph):
         outfile.write(dot_graph)
 
     try:
-        # Check version, make postscript if too old to make pdf
-        args = ["dot", "-V"]
-        try:
-            vstr = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[1]
-        except OSError as ex:
-            print("Warning: Could not execute `dot -V`.  Is graphviz installed?")
-            sys.exit(-1)
-        v = distutils.version.StrictVersion('2.16')
-        r = re.compile(".*version (\d+\.?\d*)")
-        print(vstr)
-        m = r.search(vstr)
-        if not m or not m.group(1):
-          print('Warning: failed to determine your version of dot.  Assuming v2.16')
-        else:
-          version = distutils.version.StrictVersion(m.group(1))
-          print('Detected dot version {}'.format(version))
-        if version > distutils.version.StrictVersion('2.8'):
-          subprocess.check_call(["dot", "-Tpdf", "frames.gv", "-o", "frames.pdf"])
-          print("frames.pdf generated")
-        else:
-          subprocess.check_call(["dot", "-Tps2", "frames.gv", "-o", "frames.ps"])
-          print("frames.ps generated")
+        subprocess.check_call(["dot", "-Tpdf", "frames.gv", "-o", "frames.pdf"])
+        print("frames.pdf generated")
     except subprocess.CalledProcessError:
-        print("failed to generate frames.pdf", file=sys.stderr)
+        print("Failed to generate frames.pdf. Is graphviz installed?", file=sys.stderr)
 
 
 if __name__ == '__main__':

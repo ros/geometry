@@ -90,7 +90,7 @@ public:
   /** \brief Default constructor only to be used for preallocation */
   StampedTransform() { };
 
-  /** \brief Set the inherited Traonsform data */
+  /** \brief Set the inherited Transform data */
   void setData(const tf::Transform& input){*static_cast<tf::Transform*>(this) = input;};
 
 };

@@ -86,6 +86,7 @@ def generate(dot_graph):
         v = distutils.version.StrictVersion('2.16')
         r = re.compile(".*version (\d+\.?\d*)")
         print(vstr)
+        vstr = str(vstr)
         m = r.search(vstr)
         if not m or not m.group(1):
           print('Warning: failed to determine your version of dot.  Assuming v2.16')

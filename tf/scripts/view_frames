@@ -51,6 +51,7 @@ import tf
 def listen(duration):
     rospy.init_node("view_frames", anonymous=True)
     tf_listener = tf.TransformListener()
+    print("WARNING: tf view_frames is deprecated. Use tf2_tools view_frames.py instead.")
     print("Listening to /tf for {} seconds".format(duration))
     time.sleep(duration)
     print("Done Listening")

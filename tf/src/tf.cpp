@@ -169,7 +169,10 @@ std::string tf::resolve(const std::string& prefix, const std::string& frame_name
     if (prefix[0] == '/')
     {
       std::string composite = strip_leading_slash(prefix);
-      composite.append("/");
+      if (!composite.empty()) 
+      {
+        composite.append("/");
+      }
       composite.append(frame_name);
       return composite;
     }

@@ -1122,7 +1122,11 @@ def quaternion_from_euler(ai, aj, ak, axes='sxyz'):
         ai, ak = ak, ai
     if parity:
         aj = -aj
-
+        
+    ai = ai.copy()
+    aj = aj.copy()
+    ak = ak.copy()
+    
     ai /= 2.0
     aj /= 2.0
     ak /= 2.0

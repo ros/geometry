@@ -67,7 +67,7 @@ class Stamped : public T{
     T (input), stamp_ ( timestamp ), frame_id_ (frame_id){ } ;
   
   /** Set the data element */
-  void setData(const T& input){*static_cast<T*>(this) = input;};
+  void setData(const T& input){*static_cast<T*>(this) = input;}
 };
 
 /** \brief Comparison Operator for Stamped datatypes */
@@ -91,7 +91,7 @@ public:
   StampedTransform() { };
 
   /** \brief Set the inherited Transform data */
-  void setData(const tf::Transform& input){*static_cast<tf::Transform*>(this) = input;};
+  void setData(const tf::Transform& input){*static_cast<tf::Transform*>(this) = input;}
 
 };
 

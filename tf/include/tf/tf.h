@@ -343,15 +343,15 @@ public:
   /** 
    * \brief Get the tf_prefix this is running with
    */
-  std::string getTFPrefix() const { return tf_prefix_;};
+  std::string getTFPrefix() const { return tf_prefix_;}
 
   //Declare that it is safe to call waitForTransform
-  void setUsingDedicatedThread(bool value) { tf2_buffer_ptr_->setUsingDedicatedThread(value);};
+  void setUsingDedicatedThread(bool value) { tf2_buffer_ptr_->setUsingDedicatedThread(value);}
   // Get the state of using_dedicated_thread_ from the buffer
-  bool isUsingDedicatedThread() { return tf2_buffer_ptr_->isUsingDedicatedThread();};
+  bool isUsingDedicatedThread() { return tf2_buffer_ptr_->isUsingDedicatedThread();}
 
   // Get a copy of the shared_ptr containing the tf2_ros::Buffer object
-  std::shared_ptr<tf2_ros::Buffer> getTF2BufferPtr() { return tf2_buffer_ptr_;};
+  std::shared_ptr<tf2_ros::Buffer> getTF2BufferPtr() { return tf2_buffer_ptr_;}
 
 protected:
 

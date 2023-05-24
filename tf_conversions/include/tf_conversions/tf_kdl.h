@@ -73,35 +73,35 @@ ROS_DEPRECATED geometry_msgs::Pose addDelta(const geometry_msgs::Pose &pose, con
 
 /// Converts a tf Pose into a KDL Frame
 ROS_DEPRECATED void PoseTFToKDL(const tf::Pose &t, KDL::Frame &k);
-void inline PoseTFToKDL(const tf::Pose &t, KDL::Frame &k) {poseTFToKDL(t, k);};
+void inline PoseTFToKDL(const tf::Pose &t, KDL::Frame &k) {poseTFToKDL(t, k);}
 
 /// Converts a KDL Frame into a tf Pose
 ROS_DEPRECATED void PoseKDLToTF(const KDL::Frame &k, tf::Pose &t);
-void inline PoseKDLToTF(const KDL::Frame &k, tf::Pose &t) {poseKDLToTF(k, t);};
+void inline PoseKDLToTF(const KDL::Frame &k, tf::Pose &t) {poseKDLToTF(k, t);}
 
 /// Converts a tf Quaternion into a KDL Rotation
 ROS_DEPRECATED void QuaternionTFToKDL(const tf::Quaternion &t, KDL::Rotation &k);
-void inline QuaternionTFToKDL(const tf::Quaternion &t, KDL::Rotation &k) {quaternionTFToKDL(t, k);};
+void inline QuaternionTFToKDL(const tf::Quaternion &t, KDL::Rotation &k) {quaternionTFToKDL(t, k);}
 
 /// Converts a tf Quaternion into a KDL Rotation
 ROS_DEPRECATED void QuaternionKDLToTF(const KDL::Rotation &k, tf::Quaternion &t);
-void inline QuaternionKDLToTF(const KDL::Rotation &k, tf::Quaternion &t) {quaternionKDLToTF(k, t);};
+void inline QuaternionKDLToTF(const KDL::Rotation &k, tf::Quaternion &t) {quaternionKDLToTF(k, t);}
 
 /// Converts a tf Transform into a KDL Frame
 ROS_DEPRECATED void TransformTFToKDL(const tf::Transform &t, KDL::Frame &k);
-void inline TransformTFToKDL(const tf::Transform &t, KDL::Frame &k) {transformTFToKDL(t, k);};
+void inline TransformTFToKDL(const tf::Transform &t, KDL::Frame &k) {transformTFToKDL(t, k);}
 
 /// Converts a KDL Frame into a tf Transform
 ROS_DEPRECATED void TransformKDLToTF(const KDL::Frame &k, tf::Transform &t);
-void inline TransformKDLToTF(const KDL::Frame &k, tf::Transform &t)  {transformKDLToTF(k, t);};
+void inline TransformKDLToTF(const KDL::Frame &k, tf::Transform &t)  {transformKDLToTF(k, t);}
 
 /// Converts a tf Vector3 into a KDL Vector
 ROS_DEPRECATED void VectorTFToKDL(const tf::Vector3 &t, KDL::Vector &k);
-void inline VectorTFToKDL(const tf::Vector3 &t, KDL::Vector &k) {vectorTFToKDL(t, k);};
+void inline VectorTFToKDL(const tf::Vector3 &t, KDL::Vector &k) {vectorTFToKDL(t, k);}
 
 /// Converts a tf Vector3 into a KDL Vector
 ROS_DEPRECATED void VectorKDLToTF(const KDL::Vector &k, tf::Vector3 &t);
-void inline VectorKDLToTF(const KDL::Vector &k, tf::Vector3 &t) {vectorKDLToTF(k, t);};
+void inline VectorKDLToTF(const KDL::Vector &k, tf::Vector3 &t) {vectorKDLToTF(k, t);}
 
 
 } // namespace tf

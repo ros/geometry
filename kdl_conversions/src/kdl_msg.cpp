@@ -155,10 +155,10 @@ void PoseMsgToKDL(const geometry_msgs::Pose &m, KDL::Frame &k) { poseMsgToKDL(m,
 void PoseKDLToMsg(const KDL::Frame &k, geometry_msgs::Pose &m) { poseKDLToMsg(k, m);}
 
 /// Converts a Twist message into a KDL Twist
-void TwistMsgToKDL(const geometry_msgs::Twist &m, KDL::Twist &k) {twistMsgToKDL(m, k);};
+void TwistMsgToKDL(const geometry_msgs::Twist &m, KDL::Twist &k) {twistMsgToKDL(m, k);}
 
 /// Converts a KDL Twist into a Twist message
-void TwistKDLToMsg(const KDL::Twist &k, geometry_msgs::Twist &m){twistKDLToMsg(k, m);};
+void TwistKDLToMsg(const KDL::Twist &k, geometry_msgs::Twist &m){twistKDLToMsg(k, m);}
 
 
 }  // namespace tf

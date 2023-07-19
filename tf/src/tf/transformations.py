@@ -1118,18 +1118,14 @@ def quaternion_from_euler(ai, aj, ak, axes='sxyz'):
     j = _NEXT_AXIS[i+parity]
     k = _NEXT_AXIS[i-parity+1]
 
-    ai = float(ai)
-    aj = float(aj)
-    ak = float(ak)
-
     if frame:
         ai, ak = ak, ai
     if parity:
         aj = -aj
 
-    ai /= 2.0
-    aj /= 2.0
-    ak /= 2.0
+    ai = ai / 2.0
+    aj = aj / 2.0
+    ak = ak / 2.0
     ci = math.cos(ai)
     si = math.sin(ai)
     cj = math.cos(aj)

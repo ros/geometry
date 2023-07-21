@@ -63,9 +63,9 @@ void help()
 {
   printf("A command line utility for manually sending a transform.\n");
   printf("It will periodicaly republish the given transform. \n");
-  printf("Usage: static_transform_publisher x y z yaw pitch roll frame_id child_frame_id period(seconds) \n");
+  printf("Usage: static_transform_publisher x y z yaw pitch roll frame_id child_frame_id period(milliseconds) \n");
   printf("OR \n");
-  printf("Usage: static_transform_publisher x y z qx qy qz qw frame_id child_frame_id period(seconds) \n");
+  printf("Usage: static_transform_publisher x y z qx qy qz qw frame_id child_frame_id period(milliseconds) \n");
   printf("As an alternative, you may supply these arguments as ROS parameters (names as above). \n");
   printf("\nThis transform is the transform of the coordinate frame from frame_id into the coordinate frame \n");
   printf("of the child_frame_id. \n");

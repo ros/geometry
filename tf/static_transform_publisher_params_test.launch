@@ -1,0 +1,14 @@
+<launch>
+
+    <node pkg="tf" type="static_transform_publisher" name="static_transform_publisher_params_test"
+          args="0 1 2 0.653 0.270 0.653 0.270 map test 10"/>
+    
+    <node pkg="tf" type="static_transform_publisher" name="static_transform_publisher_params_test2">
+
+        <rosparam command="load" file="$(find tf)/static_transform_publisher_params_test.yaml"/>
+        <param name="frame_id" value="test"/>
+        <param name="child_frame_id" value="map_identity"/>
+        <param name="period" value="10"/>
+    </node>
+
+</launch>

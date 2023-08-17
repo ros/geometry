@@ -63,13 +63,13 @@ protected:
   /**@brief Return the z value */
 		TFSIMD_FORCE_INLINE const tfScalar& getZ() const { return m_floats[2]; }
   /**@brief Set the x value */
-		TFSIMD_FORCE_INLINE void	setX(tfScalar x) { m_floats[0] = x;};
+		TFSIMD_FORCE_INLINE void	setX(tfScalar x) { m_floats[0] = x;}
   /**@brief Set the y value */
-		TFSIMD_FORCE_INLINE void	setY(tfScalar y) { m_floats[1] = y;};
+		TFSIMD_FORCE_INLINE void	setY(tfScalar y) { m_floats[1] = y;}
   /**@brief Set the z value */
-		TFSIMD_FORCE_INLINE void	setZ(tfScalar z) { m_floats[2] = z;};
+		TFSIMD_FORCE_INLINE void	setZ(tfScalar z) { m_floats[2] = z;}
   /**@brief Set the w value */
-		TFSIMD_FORCE_INLINE void	setW(tfScalar w) { m_floats[3] = w;};
+		TFSIMD_FORCE_INLINE void	setW(tfScalar w) { m_floats[3] = w;}
   /**@brief Return the x value */
 		TFSIMD_FORCE_INLINE const tfScalar& x() const { return m_floats[0]; }
   /**@brief Return the y value */

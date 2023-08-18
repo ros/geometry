@@ -35,7 +35,7 @@
 #include "tf/tf.h"
 #include "tf/transform_listener.h"
 #include <string>
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 #include <boost/thread.hpp>
 #include "ros/ros.h"
 
@@ -168,8 +168,8 @@ public:
       }
       cout <<endl;*/
     }
-    subscriber_tf_ = node_.subscribe<tf::tfMessage>("tf", 100, boost::bind(&TFMonitor::callback, this, _1));
-    subscriber_tf_static_ = node_.subscribe<tf::tfMessage>("tf_static", 100, boost::bind(&TFMonitor::static_callback, this, _1));
+    subscriber_tf_ = node_.subscribe<tf::tfMessage>("tf", 100, boost::bind(&TFMonitor::callback, this, boost::placeholders::_1));
+    subscriber_tf_static_ = node_.subscribe<tf::tfMessage>("tf_static", 100, boost::bind(&TFMonitor::static_callback, this, boost::placeholders::_1));
     
   }
 

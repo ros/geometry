@@ -2,8 +2,8 @@
 Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.13.3 (2025-04-10)
+-------------------
 * Drop nonexistent rosmake doc builder. (`#235 <https://github.com/ros/geometry/issues/235>`_)
 * Removes extra semicolon for function definitions (`#240 <https://github.com/ros/geometry/issues/240>`_)
 * Fix quaternion_from_euler modifying the input in some cases (`#241 <https://github.com/ros/geometry/issues/241>`_)

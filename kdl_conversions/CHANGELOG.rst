@@ -2,8 +2,8 @@
 Changelog for package kdl_conversions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.13.3 (2025-04-10)
+-------------------
 * Remove extra semicolon for function definitions (`#240 <https://github.com/ros/geometry/issues/240>`_)
 * Update library install for better portability. (`#208 <https://github.com/ros/geometry/issues/208>`_) (`#214 <https://github.com/ros/geometry/issues/214>`_)
 * Contributors: Kenji Brameld (TRACLabs), Tully Foote

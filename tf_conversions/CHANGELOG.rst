@@ -2,6 +2,13 @@
 Changelog for package tf_conversions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Drop nonexistent rosmake doc builder. (`#235 <https://github.com/ros/geometry/issues/235>`_)
+* Remove extra semicolon for function definitions (`#240 <https://github.com/ros/geometry/issues/240>`_)
+* Updated library install for better portability. (`#208 <https://github.com/ros/geometry/issues/208>`_) (`#214 <https://github.com/ros/geometry/issues/214>`_)
+* Contributors: Kenji Brameld (TRACLabs), Mike Purvis, Tully Foote
+
 1.13.2 (2020-06-08)
 -------------------
 

@@ -2,6 +2,16 @@
 Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Drop nonexistent rosmake doc builder. (`#235 <https://github.com/ros/geometry/issues/235>`_)
+* Removes extra semicolon for function definitions (`#240 <https://github.com/ros/geometry/issues/240>`_)
+* Fix quaternion_from_euler modifying the input in some cases (`#241 <https://github.com/ros/geometry/issues/241>`_)
+* Add deprecation warning to tf view_frames. (`#217 <https://github.com/ros/geometry/issues/217>`_)
+* Fixed typo Traonsform -> Transform (`#224 <https://github.com/ros/geometry/issues/224>`_)
+* Fix view_frames by removing legacy version check. (`#222 <https://github.com/ros/geometry/issues/222>`_)
+* Contributors: Artur Miller, Kenji Brameld (TRACLabs), Michael Grupp, Mike Purvis, Salih Marangoz, lauralindzey
+
 1.13.2 (2020-06-08)
 -------------------
 * fix shebang line for python3 (`#212 <https://github.com/ros/geometry/issues/212>`_)

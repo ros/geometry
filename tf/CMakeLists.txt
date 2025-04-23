@@ -1,18 +1,6 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(tf)
 
-include(CheckCXXCompilerFlag)
-unset(COMPILER_SUPPORTS_CXX11 CACHE)
-if(MSVC)
-  # https://docs.microsoft.com/en-us/cpp/build/reference/std-specify-language-standard-version
-  # MSVC has c++14 enabled by default, no need to specify c++11
-else()
-  check_cxx_compiler_flag(-std=c++11 COMPILER_SUPPORTS_CXX11)
-  if(COMPILER_SUPPORTS_CXX11)
-    add_compile_options(-std=c++11)
-  endif()
-endif()
-
 find_package(catkin REQUIRED COMPONENTS
     angles
     geometry_msgs

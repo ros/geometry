@@ -40,7 +40,7 @@
 #include <list>
 #include <vector>
 #include <boost/function.hpp>
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 #include <boost/thread.hpp>
@@ -302,7 +302,7 @@ public:
   message_filters::Connection registerFailureCallback(const FailureCallback& callback)
   {
     boost::mutex::scoped_lock lock(failure_signal_mutex_);
-    return message_filters::Connection(boost::bind(&MessageFilter::disconnectFailure, this, _1), failure_signal_.connect(callback));
+    return message_filters::Connection(boost::bind(&MessageFilter::disconnectFailure, this, boost::placeholders::_1), failure_signal_.connect(callback));
   }
 
   virtual void setQueueSize( uint32_t new_queue_size )

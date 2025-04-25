@@ -2,6 +2,9 @@
 Changelog for package kdl_conversions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 1.13.3 (2025-04-10)
 -------------------
 * Remove extra semicolon for function definitions (`#240 <https://github.com/ros/geometry/issues/240>`_)

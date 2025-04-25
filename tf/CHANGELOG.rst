@@ -2,6 +2,11 @@
 Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Updates for Ubuntu 22 (`#233 <https://github.com/ros/geometry/issues/233>`_)
+* Contributors: Jochen Sprickerhof
+
 1.13.3 (2025-04-10)
 -------------------
 * Drop nonexistent rosmake doc builder. (`#235 <https://github.com/ros/geometry/issues/235>`_)

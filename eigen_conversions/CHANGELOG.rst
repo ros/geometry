@@ -2,6 +2,9 @@
 Changelog for package eigen_conversions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 1.13.3 (2025-04-10)
 -------------------
 * Updated library install for better portability (`#208 <https://github.com/ros/geometry/issues/208>`_) (`#214 <https://github.com/ros/geometry/issues/214>`_)

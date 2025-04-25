@@ -2,8 +2,8 @@
 Changelog for package tf
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.13.4 (2025-04-25)
+-------------------
 * Updates for Ubuntu 22 (`#233 <https://github.com/ros/geometry/issues/233>`_)
 * Contributors: Jochen Sprickerhof
 
